@@ -1,13 +1,14 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <conio.h>
 #include <string.h>
-//#include "Defines.h"
+#include "y.tab.h"
+#include "Defines.h"
 
 FILE  *yyin;
 char aux[COTA_STR],aux2[COTA_STR];
 double f;
-int n_lineas;
 %}
 
 %option noyywrap  
@@ -17,8 +18,8 @@ DIGITO			[0-9]
 LETRA			[a-zA-Z]
 OTRO			.
 
-C_SIMPLE		"-/"({LETRA}|{DIGITO}|{COMA}|{OTRO})+"/-"
-COMENTARIO		"-/"({LETRA}|{DIGITO}|{OTRO})*{C_SIMPLE}+"/-"
+C_SIMPLE		"-/"{OTRO}*"/-"
+COMENTARIO		"-/"{OTRO}*{C_SIMPLE}+{OTRO}*"/-"
 
 CONST_STR 		"\""({LETRA}|{DIGITO}|{OTRO})*"\""
 CONST_FLOAT     {DIGITO}+"."{DIGITO}*|"."{DIGITO}+
@@ -113,7 +114,7 @@ PUT				["WRITE"]
 								strcat(aux,yytext);
 								printf( "Genero aux para TS: (%s)\n",aux);
 								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
-								//agregarATS(aux,"-",VRBL,0,0);//hay que mandar el id y los datos necesarios para agregar
+								agregarATS(aux,"-",VRBL,0,0);//hay que mandar el id y los datos necesarios para agregar
 								return TOKEN_ID;
 							}
 				}
@@ -132,7 +133,7 @@ PUT				["WRITE"]
 								strcat(aux,yytext);
 								printf( "Genero aux para TS: (%s)\n",aux);
 								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
-								//agregarATS(aux,"-",CTE_INT,0,atoi(yytext));
+								agregarATS(aux,"-",CTE_INT,0,atoi(yytext));
 								return CONST_INT;
 							}
 				}
@@ -152,7 +153,7 @@ PUT				["WRITE"]
 								strcat(aux,aux2);
 								printf( "Genero aux para TS: (%s)\n",aux);
 								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
-								//agregarATS(aux,yytext,CTE_STR,strlen(aux2),0);
+								agregarATS(aux,yytext,CTE_STR,strlen(aux2),0);
 								return CONST_STR;
 							}
 				}
@@ -171,7 +172,7 @@ PUT				["WRITE"]
 								strcat(aux,yytext);
 								printf( "Genero aux para TS: (%s)\n",aux);
 								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
-								//agregarATS(aux,"-",CTE_FLT,0,f);
+								agregarATS(aux,"-",CTE_FLT,0,f);
 								return CONST_FLOAT;
 							}
 				}
@@ -180,20 +181,7 @@ PUT				["WRITE"]
 
 
 
-"\n"     		{++n_lineas;}
+"\n"      		
 "\t"
 
 %%
-
-main( argc, argv )
-	   int argc;
-	   char **argv;
-	       {
-	       ++argv, --argc;	/* skip over program name */
-	       if ( argc > 0 )
-		       yyin = fopen( argv[0], "r" );
-	       else
-		       yyin = stdin;
-
-	       yylex();
-	       }
