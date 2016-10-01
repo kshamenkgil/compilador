@@ -464,18 +464,18 @@ int topeTS = 0;
 
 /* De no existir el Token en la tabla de simbolos lo agrega */
 
-void agregarTokenTS(char *name,char *valueString,int type, int long, double value)
+void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 {	int pos_token_ts;
 	printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);
-	pos_token_ts = existeTokenEnTS(name);
+	pos_token_ts = existeTokenEnTS(n);
 	if(pos_token_ts==topeTS)
 	{
 			printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);
 
-			strcpy(tabla[topeTS].nombre,name);
+			strcpy(tabla[topeTS].nombre,n);
 			strcpy(tabla[topeTS].valorString,valueString);
 			tabla[topeTS].tipo=type;
-			tabla[topeTS].longitud=long;
+			tabla[topeTS].longitud=l;
 			tabla[topeTS].valor=value;
 			topeTS++;
 	}
@@ -560,7 +560,8 @@ int main(int argc,char *argv[])
 
   for(i=0;i<topeTS;i++)
 	{	fprintf(pfTablaSimbolos,"%d", "Pos:",i);
-		fprintf(pfTablaSimbolos,"\t\t "tabla[i].nombre);
+		fprintf(pfTablaSimbolos,"\t\t ");
+		fprintf(pfTablaSimbolos,tabla[i].nombre);
 		fprintf(pfTablaSimbolos,"\t\t %d",tabla[i].tipo);
 		fprintf(pfTablaSimbolos,"\t\t %d",tabla[i].longitud);
 		if(tabla[i].tipo==CTE_FLT)
@@ -571,7 +572,8 @@ int main(int argc,char *argv[])
 		{
 			fprintf(pfTablaSimbolos,"\t\t %ld",tabla[i].valor);
 		}
-		fprintf(pfTablaSimbolos,"\t\t "tabla[i].valorString);
+		fprintf(pfTablaSimbolos,"\t\t ");
+		fprintf(pfTablaSimbolos,tabla[i].valorString);
 		fprintf(pfTablaSimbolos,"\n\n");
 	
 	}
