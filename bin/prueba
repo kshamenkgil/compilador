@@ -1,9 +1,0 @@
-DECVAR
-	a1,b1:FLOAT
-	c,b:STRING
-ENDDEC
-BEGIN
-	c := "cadena."
-	b := "hola"
-	d:=c++b
-END

@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "y.tab.h"
 #include "constantes.h"
 
@@ -76,247 +77,233 @@ char *str_val;
 
 %%
 
+/*OK!*/
 pgm: programa 
 {
- printf("Start symbol\n");
- printf("\n");
- printf("COMPILACION EXITOSA\n");
- printf("-------------------\n");
+ printf("Start symbol - ¡Compilación exitosa!. \n");
+ printf("-------------------. \n");
 };
 
 programa: PR_BEGIN lista_sentencia PR_END 
 {
-	printf("Programa sin variables declaradas\n");
+	printf("Programa donde no hubo declaración de variables. \n");
 };
 
 programa: dec_var PR_BEGIN lista_sentencia PR_END 
 {
-	printf ("Programa con variables declaradas\n");
+	printf ("Programa con variables declaradas previamente. \n");
 };
 
 /*Declaración de Variables*/
 dec_var: PR_VAR lista_dec_var PR_ENDVAR
 {
- printf ("Modulo declaracion de variables\n");
+ printf ("Bloque con declaracion de las variables. \n");
 };
 
 lista_dec_var: linea_dec_var | lista_dec_var linea_dec_var
 {
-	printf("Múltiples declaraciones de variables\n");
+	printf("Múltiples líneas con declaraciones de las variables. \n");
 }
-
 
 linea_dec_var:  lista_variables DOSPUNTOS tipo
 {
- printf ("Declaracion de tipos\n");
+ printf ("Declaracion de variables de cierto tipo. \n");
 };
 
 
 tipo: PR_INT | PR_FLOAT | PR_STRING
 {
-	printf("Tipo de variable\n");
+	printf("Tipo de variable. \n");
 }
 
-/* VER SI PARA ESTA ENTREGA VOLAMOS ESTA REGLA */
-/* KSH */
-lista_variables: TOKEN_ID | TOKEN_ID COMA lista_variables
+lista_variables: TOKEN_ID |   lista_variables COMA TOKEN_ID
 {
-	printf("Lista de variables\n");
+	printf("Variable o lista de variables. \n");
 }
 
 /*Sentencias*/
 
 lista_sentencia: sentencia
 {
- printf ("Sentencia Simple\n");                            
+ printf ("Sentencia única. \n");                            
 };
 
 lista_sentencia: sentencia lista_sentencia
 {
- printf ("Sentencia Multiple\n");                            
+ printf ("Sentencia múltiple. \n");                            
 };
 
-/*sentencia: sentencia_take 
-{
-	printf ("Sentencia TAKE\n");
-};*/
 
 sentencia: seleccion
 {
-	printf ("Sentencia IF\n");
+printf ("Sentencia Condicional: IF. \n");
 };
 
 sentencia: sent_repeat
 {
- printf ("Sentencia REPEAT\n");                            
+ printf ("Sentencia bucle: REPEAT. \n");                            
 };
 
-/* CHECKEAR ESTO */
-/* KSH */
-/*sentencia: sent_repeat_especial
-{
- printf ("Sentencia WHILE ESPECIAL\n");                            
-};*/
 
-sentencia: sent_asignacion //PUNTO_Y_COMA 
+sentencia: sent_asignacion  
 {
- printf ("Sentencia ASIGNACION\n");                            
+ printf ("Sentencia: ASIGNACION. \n");                            
 };
 
-sentencia: sent_write //PUNTO_Y_COMA
+sentencia: sent_write 
 {
- printf ("Sentencia WRITE\n");                            
+ printf ("Sentencia: WRITE. \n");                            
 };
 
-sentencia: sent_read //PUNTO_Y_COMA
+sentencia: sent_read 
 {
- printf ("Sentencia READ\n");                            
+ printf ("Sentencia: READ. \n");                            
 };
+
+
 
 /*Sentencia WRITE*/
 sent_write: PR_WRITE TOKEN_ID
 {
- printf ("WRITE ID\n");
+ printf ("WRITE de un ID. \n");
 }
 
 sent_write: PR_WRITE CONST_STR
 {
- printf ("WRITE STRING\n");
+ printf ("WRITE de un STRING. \n");
 }
 
 /*Sentencia READ*/
 sent_read: PR_READ TOKEN_ID
 {
- printf ("READ ID\n");
+ printf ("READ de un ID. \n");
 }
 
-/*Sentencia IF OK_lea*/
+/*Sentencia IF */
 seleccion: comienzo_if lista_sentencia fin_if
 {
-	printf("IF SIN ELSE\n");
+	printf("IF simple. \n");
 };
 
 seleccion: comienzo_if lista_sentencia comienzo_else lista_sentencia fin_if
 {
-	printf("IF CON ELSE\n");
+	printf("IF con bloque ELSE. \n");
 };
 
-comienzo_if: PR_IF PAR_ABRE condicion PAR_CIERRA PR_THEN
+comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
 {
-	printf("COMIENZO IF\n");
+	printf("COMIENZO del bloque IF. \n");
 };
 
 comienzo_else: PR_ELSE
 {
-	printf("COMIENZO ELSE\n");
+	printf("COMIENZO dele bloque ELSE. \n");
 };
 
 fin_if: PR_ENDIF
 {
-	printf("FINALIZA IF\n");
+	printf("FINALIZA el IF. \n");
 };
 
-/*Sentencia REPEAT cambiar_lea - DONE*/
-/*Sentencia REPEAT arreglado KSH*/
 
-sent_repeat: comienzoWhile lista_sentencia finCondicion finWhile 
+sent_repeat: comienzoRepeat lista_sentencia finRepeat condRepeat
 {
-	printf("Sentencia REPEAT completa\n");
+	printf("Sentencia REPEAT completa. \n");
 };
-comienzoWhile: PR_REPEAT
+comienzoRepeat: PR_REPEAT
 {
-	printf("inicio REPEAT\n");
+	printf("inicio del bucle REPEAT. \n");
 };
-finCondicion: PAR_ABRE condicion PAR_CIERRA 
+condRepeat: PAR_ABRE Condicion PAR_CIERRA 
 {
-	printf("Cond REPEAT\n");
+	printf("Condicion del REPEAT. \n");
 };
-finWhile: PR_UNTIL 
+finRepeat: PR_UNTIL 
 {
-	printf("End repeat\n");
+	printf("Fin del repeat. \n");
 };
 
 /*Condiciones*/
 
-/*Agrupo los dos tipos de condiciones*/
-condicion: condicion_simple
+/*Agrupo los dos tipos de Condiciones*/
+Condicion: Condicion_simple
 {
-	printf("CONDICION SIMPLE\n");
+	printf("Condicion SIMPLE. \n");
 };
 
-condicion: condicion_multiple
+Condicion: Condicion_multiple
 {
-	printf("CONDICION MULTIPLE\n");
+	printf("Condicion MULTIPLE. \n");
 };
 
-condicion_simple: expresion OP_MENOR expresion 	
+Condicion_simple: expresion OP_MENOR expresion 	
 {
- printf ("Condicion Simple Menor\n");
+ printf ("Condicion simple con operador Menor. \n");
 };
 
-condicion_simple: expresion OP_MENOR_IGUAL expresion
+Condicion_simple: expresion OP_MENOR_IGUAL expresion
 {
- printf ("Condicion Simple Menor Igual\n");
+ printf ("Condicion simple con operador Menor e Igual. \n");
 };
 
-condicion_simple: expresion OP_MAYOR expresion
+Condicion_simple: expresion OP_MAYOR expresion
 {
- printf ("Condicion Simple Mayor\n");
+ printf ("Condicion simple con operador Mayor. \n");
 };
  	
-condicion_simple: expresion OP_MAYOR_IGUAL expresion 
+Condicion_simple: expresion OP_MAYOR_IGUAL expresion 
 {
- printf ("Condicion Simple Mayor Igual\n");
+ printf ("Condicion simple con operador Mayor e Igual. \n");
 };
 
-condicion_simple: expresion OP_DISTINTO expresion 
+Condicion_simple: expresion OP_DISTINTO expresion 
 {
- printf ("Condicion Simple Distinto\n");
+ printf ("Condicion simple con operador Distinto. \n");
 };
 
-condicion_simple: expresion OP_IGUAL_IGUAL expresion 
+Condicion_simple: expresion OP_IGUAL_IGUAL expresion 
 {
- printf ("Condicion Simple Igual Igual\n");
+ printf ("Condicion simple  con operador Igual Igual. \n");
 };
 
-condicion_simple: OP_LOG_NOT expresion OP_MENOR expresion 
+Condicion_simple: OP_LOG_NOT expresion OP_MENOR expresion 
 {
- printf ("Condicion Simple Menor Negado\n");
+ printf ("Condicion Simple  con operador Menor Negado. \n");
 };
 
-condicion_simple: OP_LOG_NOT expresion OP_MENOR_IGUAL expresion 
+Condicion_simple: OP_LOG_NOT expresion OP_MENOR_IGUAL expresion 
 {
- printf ("Condicion Simple Menor Igual Negado\n");
+ printf ("Condicion Simple  con operador Menor Igual Negado. \n");
 };
 
-condicion_simple: OP_LOG_NOT expresion OP_MAYOR expresion 
+Condicion_simple: OP_LOG_NOT expresion OP_MAYOR expresion 
 {
- printf ("Condicion Simple Mayor Negado\n");
+ printf ("Condicion Simple  con operador Mayor pero Negado. \n");
 };
 
-condicion_simple: OP_LOG_NOT expresion OP_MAYOR_IGUAL expresion 
+Condicion_simple: OP_LOG_NOT expresion OP_MAYOR_IGUAL expresion 
 {
- printf ("Condicion Simple Mayor Igual Negado\n");
+ printf ("Condicion Simple Mayor Igual pero Negado. \n");
 };
 
-condicion_simple: OP_LOG_NOT expresion OP_DISTINTO expresion 
+Condicion_simple: OP_LOG_NOT expresion OP_DISTINTO expresion 
 {
- printf ("Condicion Simple Distinto Negado\n");
+ printf ("Condicion Simple Distinto pero Negado. \n");
 };
 
-condicion_simple: OP_LOG_NOT expresion OP_IGUAL_IGUAL expresion 
+Condicion_simple: OP_LOG_NOT expresion OP_IGUAL_IGUAL expresion 
 {
- printf ("Condicion Simple Igual Igual Negado\n");
+ printf ("Condicion Simple  con operador Igual Igual pero Negado. \n");
 };
 
-condicion_multiple: condicion_simple OP_LOG_AND condicion_simple
+Condicion_multiple: Condicion_simple OP_LOG_AND Condicion_simple
 {
- printf ("Condicion Multiple AND\n");
+ printf ("Condicion Multiple con operador lógico AND. \n");
 };
 
-condicion_multiple: condicion_simple OP_LOG_OR condicion_simple
+Condicion_multiple: Condicion_simple OP_LOG_OR Condicion_simple
 {
- printf ("Condicion Multiple OR\n");
+ printf ("Condicion Multiple con operador lógico OR. \n");
 };
 
 
@@ -324,154 +311,135 @@ condicion_multiple: condicion_simple OP_LOG_OR condicion_simple
 
 expresion: expresion OP_SUMA termino	
 {
- printf ("Expresion = Expresion + termino\n");       
+ printf ("Expresión como suma de otra expresión y un término. \n");       
 };
 
 expresion: expresion OP_RESTA termino
 {
- printf ("Expresion = Expresion - termino\n");     
+ printf ("Expresión como resta de otra expresión y un término. \n");     
 };
 	
 expresion: termino	
 {
- printf ("Expresion = Termino\n");                        
+ printf ("Expresión como un término. \n");                        
 };
 
 termino: termino OP_MULTIPLICACION factor								
 {
- printf ("Termino = Termino * Factor\n");                    
+ printf ("Término como producto de un término y un factor. \n");                    
 };
 
 termino: termino OP_DIVISION factor	
 {
- printf ("Termino = Termino / Factor\n");   
+ printf ("Término como cociente de un término y un factor. \n");   
 };
 
 termino: factor 
 {
- printf ("Termino = Factor\n");
+ printf ("Termino como un factor. \n");
 };
 
 factor: CONST_INT	
 {
- printf ("Factor = Constante INT\n");                        
+ printf ("Factor es una constante entera. \n");                        
 };
 
 factor: CONST_FLOAT	
 {
- printf ("Factor = Constante REAL\n");                        
+ printf ("Factor es una Constante real. \n");                        
 };
 							
 factor: TOKEN_ID			
 {
- printf ("Factor = ID\n");                        
+ printf ("Factor es un ID. \n");                        
 };
 	
 factor: PAR_ABRE expresion PAR_CIERRA 
 {
- printf ("Factor = ( EXPRESION )\n");
+ printf ("Factor es una  ( EXPRESION ). \n");
+};
+factor: average			
+{
+ printf ("Factor es un resultado de AVERAGE. \n");                        
 };
 
+factor: factorial			
+{
+ printf ("Factor es un resultado de FACTORIAL. \n");                        
+};
+factor: nrocombinatorio
+{
+ printf ("Factor es un resultado de NUMERO COMBINATORIO. \n");                        
+};
 
-/*Asignaciones*/
+/*Asignaciones*/ //Faltan
 
 sent_asignacion: TOKEN_ID OP_ASIGNACION asignado
 {
-printf ("Asignacion Simple\n");
+printf ("Asignacion Simple. \n");
 };
 
 asignado: expresion 
 {
- printf ("Asignacion es una Expresion\n");                        
+ printf ("Asignacion a partir de una expresion. \n");                        
 };
 
 asignado: CONST_STR
 {
- printf ("Asignacion es una Constante String\n");                        
+ printf ("Asignacion a partir de una Constante String. \n");                        
 };
 
-/*"HOLA"++"MUNDO"*/
+/*"pepe1"++"pepe2"*/
 asignado: CONST_STR CONCAT CONST_STR	
 {
- printf ("Asignacion es Constante String CONCAT Constante String\n"); 
+ printf ("Asignacion a partir de una concatenación entre constantes String. \n"); 
 };
 
-/*ID++"HOLA"*/
+/*ID++"pepe2"*/
 asignado: TOKEN_ID CONCAT CONST_STR	
 {
- printf ("Asignacion es ID CONCAT Constante String\n");    
+ printf ("Asignacion a partir de una concatenación entre un ID string y una constante String. \n");    
 };
 
-/*"HOLA"++ID*/
+/*"pepe1"++ID*/
 asignado: CONST_STR CONCAT TOKEN_ID	
 {
- printf ("Asignacion es Constante String CONCAT ID\n");                        
+ printf ("Asignacion a partir de una concatenacion entre una constante String y de un ID string. \n");                        
 };
 
 /*ID++ID*/
 asignado: TOKEN_ID CONCAT TOKEN_ID	
 {
- printf ("Asignacion es ID CONCAT ID\n");         
+ printf ("Asignacion a partir de una concatenacion entre dos ID. \n");         
+};
+
+/*Declaracion Funciónes especiales*/
+
+
+average: PR_AVERAGE PAR_ABRE COR_ABRE lista_expresiones COR_CIERRA PAR_CIERRA
+{
+ printf ("Función AVERAGE. \n");                            
 };
 
 
-/*CHECKEAR ESTO KSH*/
-/*Sentencia WHILE ESPECIAl*/				
-/*sent_repeat_especial: PR_WHILE estructura_in PR_DO lista_sentencia PR_ENDWHILE
+lista_expresiones: expresion |  lista_expresiones COMA expresion
 {
-	printf("Sentencia WHILE ESPECIAL Estructura\n");
-};*/
-
-/*CHECKEAR ESTO KSH*/
-/*
-estructura_in: TOKEN_ID PR_IN COR_ABRE lista_expresiones COR_CIERRA
-{
-	printf ("Estructura IN\n");
-};
-*/
-
-/*CHECKEAR ESTO KSH*/
-/*
-lista_expresiones: expresion | expresion COMA lista_expresiones
-{
-	printf ("Expresiones en WHILE ESPECIAL\n");
-};*/
-
-/*CHECKEAR ESTO KSH*/
-/*Sentencia TAKE*/
-/*
-: PR_TAKE PAR_ABRE definicion_take PAR_CIERRA
-{
-printf ("Sentencia TAKE\n");
+ printf ("Expresión o lista de expresiones. \n");                            
 };
 
 
-definicion_take: OP_SUMA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_SUMA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
+factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
 {
-printf ("Definicion TAKE SUMA\n");
-};
-
-definicion_take: OP_RESTA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_RESTA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
-{
-printf ("Definicion TAKE RESTA\n");
-};
-
-definicion_take: OP_MULTIPLICACION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_MULTIPLICACION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
-{
-printf ("Definicion TAKE MULTIPLICACION\n");
-};
-
-definicion_take: OP_DIVISION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_DIVISION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
-{
-printf ("Definicion TAKE DIVISION\n");
+ printf ("Función FACTORIAL. \n");                            
 };
 
 
-lista_constantes:  CONST_INT | lista_constantes PUNTO_Y_COMA CONST_INT
+
+nrocombinatorio: PR_COMBINATORIO PAR_ABRE expresion COMA expresion PAR_CIERRA
 {
-printf ("Definicion constantes TAKE\n");
+ printf ("Función NÚMERO COMBINATORIO. \n");                            
 };
-*/
+
 %%
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -492,11 +460,11 @@ TS tabla[MAX_TS];
 //Tope Tabla de Simbolos
 int topeTS = 0;
 
-/* FUNCIONES */
+/* FunciónES */
 
 void agregarATS(char *n,char *vs,int t, int l, double v)
 {	int val_func;
-	printf("Verifico si %s existe en la TS y agrego... \n",n);
+	printf("Verifico si %s existe en la TS y agrego... . \n",n);
 	val_func = verificarTS(n);
 	if(val_func==topeTS)
 	{
@@ -509,7 +477,7 @@ void agregarATS(char *n,char *vs,int t, int l, double v)
 	}
 	else
 	{
-		printf("El elemento ya se encuentra en la TS--> Pos: (%d)\n",val_func);
+		printf("El elemento ya se encuentra en la TS--> Pos: (%d). \n",val_func);
 	
 	}
 }
@@ -554,7 +522,7 @@ int main(int argc,char *argv[])
 {
   if ((yyin = fopen(argv[1], "rt")) == NULL)
   {
-	printf("\nNo se puede abrir el archivo: %s\n", argv[1]);
+	printf(". \nNo se puede abrir el archivo: %s. \n", argv[1]);
 	exit(1);
   }
   else
@@ -562,7 +530,7 @@ int main(int argc,char *argv[])
 	//Creación del archivo TS.TXT
 	if((pfTablaSimbolos = fopen("ts.txt","w")) == NULL)
 	{
-		printf("\nError al crear el archivo TS.TXT\n");
+		printf(". \nError al crear el archivo TS.TXT. \n");
 		exit(1);
 	}
 	
@@ -571,21 +539,21 @@ int main(int argc,char *argv[])
   }
   int i;
  //Cargar valores TS en el txt
-  fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última: \n\t _(variable);$(cte float);&(cte int);@(cte string)***\n\n");
+  fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última: . \n\t _(variable);$(cte float);&(cte int);@(cte string)***. \n. \n");
   for(i=0;i<topeTS;i++)
 	{	
-		fprintf(pfTablaSimbolos,"*********************\n");
+		fprintf(pfTablaSimbolos,"*********************. \n");
 		fprintf(pfTablaSimbolos,"%s %d", "Pos:",i);
-		fprintf(pfTablaSimbolos,"\n");
+		fprintf(pfTablaSimbolos,". \n");
 		fprintf(pfTablaSimbolos,"Nombre: ");
 		fprintf(pfTablaSimbolos,tabla[i].nombre);
-		fprintf(pfTablaSimbolos,"\n");
+		fprintf(pfTablaSimbolos,". \n");
 		fprintf(pfTablaSimbolos,"Tipo: ");
 		fprintf(pfTablaSimbolos,"%d",tabla[i].tipo);
-		fprintf(pfTablaSimbolos,"\n");
+		fprintf(pfTablaSimbolos,". \n");
 		fprintf(pfTablaSimbolos,"Longitud: ");
 		fprintf(pfTablaSimbolos,"%d",tabla[i].longitud);
-		fprintf(pfTablaSimbolos,"\n");
+		fprintf(pfTablaSimbolos,". \n");
 		fprintf(pfTablaSimbolos,"Valor: ");
 		if(tabla[i].tipo==CTE_FLT)
 		{
@@ -595,10 +563,10 @@ int main(int argc,char *argv[])
 		{
 			fprintf(pfTablaSimbolos,"%ld",tabla[i].valor);
 		}
-		fprintf(pfTablaSimbolos,"\n");
+		fprintf(pfTablaSimbolos,". \n");
 		fprintf(pfTablaSimbolos,"Valor String: ");
 		fprintf(pfTablaSimbolos,tabla[i].valorString);
-		fprintf(pfTablaSimbolos,"\n");
+		fprintf(pfTablaSimbolos,". \n");
 	
 	}
   fclose(pfTablaSimbolos);
@@ -608,7 +576,7 @@ int main(int argc,char *argv[])
 
 int yyerror(void)
 {
-	printf("Syntax Error\n");
+	printf("Synax Error. \n");
 	system ("Pause");
 	exit (1);
 }

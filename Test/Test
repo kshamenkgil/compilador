@@ -1,0 +1,83 @@
+DECVAR
+	arbol,b,casa,d,e:INT
+	g:FLOAT
+	a_:STRING
+	asdasdasdiego: INT
+	a19:FLOAT
+ENDDEC
+
+BEGIN
+	
+	diego:=3
+	
+	b:=2+6-d*3 - (5/1)
+
+	READ b
+
+	WRITE b
+
+	WRITE "hola"
+
+	r:="hola cadena"
+
+	r:=((4+5)*c)
+
+	casa:=24
+
+	casa:=235.5572345345
+
+	f:=25*c/2+5.4
+
+	mat1:="lenguajes"
+
+	mat2:="compiladores"
+
+	casa:=a++b
+
+	casa:="hola"++"mundo"
+
+	casa:=a++"mundo"
+
+	casa:="hola"++b	
+	
+	i:=0
+
+
+	IF(numero==0 OR numero2<3) THEN
+		casa:=2
+	ELSE
+		casa:=3
+	ENDIF
+
+	IF(NOT avg==11)
+	
+	THEN
+		casa:=2
+	ELSE
+		casa:=3
+	ENDIF
+	
+-/Comentario /- 
+-/Así son los comentarios en el  2 °Cuat de LyC-/Comentario/- /-
+
+	REPEAT
+		WRITE "Repetir 2 veces"
+		i:=i+1
+	UNTIL	
+		(i>2)
+
+	a:= FACTORIAL(3+1-2*1)
+	b:= a - COMBINATORIO(a,666)
+
+
+	IF(a==0 AND AVERAGE([1,2,34,5])<3)
+	
+	THEN
+		casa:=2
+	ELSE
+		casa:=3
+	ENDIF
+
+END
+
+

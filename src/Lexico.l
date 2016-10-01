@@ -17,8 +17,8 @@ DIGITO			[0-9]
 LETRA			[a-zA-Z]
 OTRO			.
 
-C_SIMPLE		"-/"{OTRO}*"/-"
-COMENTARIO		"-/"{OTRO}*{C_SIMPLE}+{OTRO}*"/-"
+COM_SIMPLE		"-/"{OTRO}*"/-"
+COM_ANIDADO		"-/"{OTRO}*{COM_SIMPLE}+{OTRO}*"/-"
 
 CONST_STR 		"\""({LETRA}|{DIGITO}|{OTRO})*"\""
 CONST_FLOAT     {DIGITO}+"."{DIGITO}*|"."{DIGITO}+
@@ -32,8 +32,8 @@ OP_RESTA			["-"]
 OPCONCAT			["++"]
 OP_MAYOR			[">"]
 OP_MENOR			["<"]
-OP_MAYOR_IGUAL		[">="]
-OP_MENOR_IGUAL		["<="]
+OP_MAYOR_IGUAL			[">="]
+OP_MENOR_IGUAL			["<="]
 ASIGNA				[":="]
 IGUAL				["=="]
 DISTINTO			["!="]
@@ -55,14 +55,14 @@ PUT				["WRITE"]
 
 
 %%
-"BEGIN"		{ return PR_BEGIN;}
-"END"		{ return PR_END;}
+"BEGIN"			{ return PR_BEGIN;}
+"END"			{ return PR_END;}
 
-"READ"		{return PR_READ;}
-"WRITE"		{return PR_WRITE;}
+"READ"			{return PR_READ;}
+"WRITE"			{return PR_WRITE;}
 
 "AVERAGE"		{return PR_AVERAGE;}
-"COMBINATORIO"	{return PR_COMBINATORIO;}
+"COMBINATORIO"		{return PR_COMBINATORIO;}
 "FACTORIAL"		{return PR_FACTORIAL;}
 
 
@@ -79,38 +79,38 @@ PUT				["WRITE"]
 "IF"			{ return PR_IF;}
 "THEN"   		{ return PR_THEN;}
 "ELSE"   		{ return PR_ELSE;}
-"ENDIF"	      	{ return PR_ENDIF;}
+"ENDIF"	      		{ return PR_ENDIF;}
 
 "REPEAT"		{ return PR_REPEAT;}
-"UNTIL"	        { return PR_UNTIL;}
+"UNTIL"	        	{ return PR_UNTIL;}
 
 ":="			{ return OP_ASIGNACION;}
-"+"				{ return OP_SUMA;}
-"-"				{ return OP_RESTA;}
-"*"				{ return OP_MULTIPLICACION;}
-"/"				{ return OP_DIVISION;}
+"+"			{ return OP_SUMA;}
+"-"			{ return OP_RESTA;}
+"*"			{ return OP_MULTIPLICACION;}
+"/"			{ return OP_DIVISION;}
 "++"			{ return CONCAT;}
 
-"("				{ return PAR_ABRE;}
-")"				{ return PAR_CIERRA;}
-"["				{ return COR_ABRE;}
-"]"				{ return COR_CIERRA;}
+"("			{ return PAR_ABRE;}
+")"			{ return PAR_CIERRA;}
+"["			{ return COR_ABRE;}
+"]"			{ return COR_CIERRA;}
 
 
-">"             { return OP_MAYOR;}
-">="            { return OP_MAYOR_IGUAL;}
-"<"             { return OP_MENOR;}
-"<="            { return OP_MENOR_IGUAL;}
-"!="            { return OP_DISTINTO;}
-"=="            { return OP_IGUAL_IGUAL;}
+">"             	{ return OP_MAYOR;}
+">="            	{ return OP_MAYOR_IGUAL;}
+"<"             	{ return OP_MENOR;}
+"<="            	{ return OP_MENOR_IGUAL;}
+"!="            	{ return OP_DISTINTO;}
+"=="            	{ return OP_IGUAL_IGUAL;}
 
-"AND"           { return OP_LOG_AND;}
-"OR"            { return OP_LOG_OR;}
-"NOT"           { return OP_LOG_NOT;}
+"AND"           	{ return OP_LOG_AND;}
+"OR"            	{ return OP_LOG_OR;}
+"NOT"           	{ return OP_LOG_NOT;}
 
 
-","				{ return COMA;}
-":"				{ return DOSPUNTOS;}
+","			{ return COMA;}
+":"			{ return DOSPUNTOS;}
 
 {ID}			{
 
@@ -118,16 +118,16 @@ PUT				["WRITE"]
 						yylval.str_val = yytext;
 						if(strlen(yytext)>COTA_ID)
 							{
-								printf("Variable %s supera el maximo de caracteres en linea %d\n");
-								printf("VARIABLE SUPERA MAXIMO CARACTERES\n\t***ERROR - FINALIZANDO LEXICO***\n");
+								printf("¡ERROR con %s! Supera el maximo de caracteres permitidos %d\n",yytext,COTA_ID);
+								printf("---ERROR proporcionado por el Analizador léxico---\n");
 								exit(1);
 							}
 						else	
 							{	strcpy(aux,"_");
 								strcat(aux,yytext);
-								printf( "Ingreso en la Tabla de símbolos: %s\n",aux);
-								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
-								agregarATS(aux,"-",VRBL,0,0);//hay que mandar el id y los datos necesarios para agregar
+								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
+								printf( "identificador encontrado por el analizador lexico: %s (%s)\n", yytext,yylval.str_val);
+								agregarATS(aux,"-",VRBL,0,0);
 								return TOKEN_ID;
 							}
 				}
@@ -135,17 +135,18 @@ PUT				["WRITE"]
 
 {CONST_INT}		{ 		
 						yylval.str_val = yytext;
-						if(atoi(yytext)>COTA_ID)
+						if(atoi(yytext)>COTA_CTE)
 							{
-								printf("CONST ENTERA SUPERA COTA\n\t***ERROR - FINALIZANDO LEXICO***\n");
+								printf("¡ERROR con la constante numérica entera %s! Supera el rango de: %d",yytext,COTA_CTE);
+								printf("\n---ERROR porporcionado por el Analizador léxico---\n");
 								exit(1);
 							}
 						else
 							{
 								strcpy(aux,"&");
 								strcat(aux,yytext);
-								printf( "Genero aux para TS: (%s)\n",aux);
-								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
+								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la ",aux);
+								printf( "constante encontrada por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);
 								agregarATS(aux,"-",CTE_INT,0,atoi(yytext));
 								return CONST_INT;
 							}
@@ -155,7 +156,8 @@ PUT				["WRITE"]
 						strcpy(aux2,yytext);
 						if(strlen(aux2)>COTA_STR)
 							{	
-								printf("STRING SUPERA COTA\n\t***ERROR - FINALIZANDO LEXICO***\n");
+								printf("¡ERROR con %s! Supera el maximo de caracteres permitidos %d\n",yytext,COTA_STR);
+								printf("---ERROR proporcionado por el Analizador léxico---\n");
 								exit(1);
 						
 							}
@@ -164,8 +166,8 @@ PUT				["WRITE"]
 								setearString(aux2,yytext);
 								strcpy(aux,"@");
 								strcat(aux,aux2);
-								printf( "Genero aux para TS: (%s)\n",aux);
-								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
+								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
+				printf( "string encontrado por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);						
 								agregarATS(aux,yytext,CTE_STR,strlen(aux2),0);
 								return CONST_STR;
 							}
@@ -176,22 +178,24 @@ PUT				["WRITE"]
 						f=atof(yytext);
 						if(f>COTA_REAL)
 							{
-								printf("CONST REAL SUPERA COTA\n\t***ERROR - FINALIZANDO LEXICO***\n");
+								printf("¡ERROR con la constante numérica real %s! Supera el rango de: %f",yytext,COTA_REAL);
+								printf("\n---ERROR porporcionado por el Analizador léxico---\n");
 								exit(1);
 							}
 						else
 							{
 								strcpy(aux,"$");
 								strcat(aux,yytext);
-								printf( "Genero aux para TS: (%s)\n",aux);
-								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
+								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la",aux);
+								printf( "constante encontrada por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);
 								agregarATS(aux,"-",CTE_FLT,0,f);
 								return CONST_FLOAT;
 							}
 				}
-				
-{COMENTARIO}	{ printf("COMENTARIO \n");}
 
+{COM_ANIDADO}	{ printf("Comentario anidado encontrado\n");}	
+			
+{COM_SIMPLE}	{ printf("Comentario simple encontrado\n");}
 
 
 
