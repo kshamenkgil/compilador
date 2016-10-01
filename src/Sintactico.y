@@ -77,20 +77,20 @@ char *str_val;
 
 %%
 
-pgm : programa 
+pgm: programa 
 {
- printf("Start\n");
+ printf("Start symbol\n");
  printf("\n");
  printf("COMPILACION EXITOSA\n");
  printf("-------------------\n");
 };
 
-programa : PR_BEGIN lista_sentencia PR_END 
+programa: PR_BEGIN lista_sentencia PR_END 
 {
 	printf("Programa sin variables declaradas\n");
 };
 
-programa : dec_var PR_BEGIN lista_sentencia PR_END 
+programa: dec_var PR_BEGIN lista_sentencia PR_END 
 {
 	printf ("Programa con variables declaradas\n");
 };
@@ -101,132 +101,137 @@ dec_var: PR_VAR lista_dec_var PR_ENDVAR
  printf ("Modulo declaracion de variables\n");
 };
 
-lista_dec_var : linea_dec_var | lista_dec_var linea_dec_var
+lista_dec_var: linea_dec_var | lista_dec_var linea_dec_var
 {
 	printf("Múltiples declaraciones de variables\n");
 }
 
 
-linea_dec_var :  lista_variables DOS_PUNTOS tipo
+linea_dec_var:  lista_variables DOSPUNTOS tipo
 {
  printf ("Declaracion de tipos\n");
 };
 
 
-tipo : PR_INT | PR_FLOAT | PR_STRING
+tipo: PR_INT | PR_FLOAT | PR_STRING
 {
 	printf("Tipo de variable\n");
 }
 
-lista_variables : TOKEN_ID | TOKEN_ID COMA lista_variables
+/* VER SI PARA ESTA ENTREGA VOLAMOS ESTA REGLA */
+/* KSH */
+lista_variables: TOKEN_ID | TOKEN_ID COMA lista_variables
 {
 	printf("Lista de variables\n");
 }
 
 /*Sentencias*/
 
-lista_sentencia : sentencia
+lista_sentencia: sentencia
 {
  printf ("Sentencia Simple\n");                            
 };
 
-lista_sentencia : sentencia lista_sentencia
+lista_sentencia: sentencia lista_sentencia
 {
  printf ("Sentencia Multiple\n");                            
 };
 
-sentencia : sentencia_take 
+sentencia: sentencia_take 
 {
 	printf ("Sentencia TAKE\n");
 };
-sentencia : seleccion
+sentencia: seleccion
 {
 	printf ("Sentencia IF\n");
 };
 
-sentencia : sent_repeat
+sentencia: sent_repeat
 {
  printf ("Sentencia REPEAT\n");                            
 };
 
-sentencia : sent_repeat_especial
+/* CHECKEAR ESTO */
+/* KSH */
+/*sentencia: sent_repeat_especial
 {
  printf ("Sentencia WHILE ESPECIAL\n");                            
-};
+};*/
 
-sentencia : sent_asignacion PUNTO_Y_COMA 
+sentencia: sent_asignacion //PUNTO_Y_COMA 
 {
  printf ("Sentencia ASIGNACION\n");                            
 };
 
-sentencia : sent_put PUNTO_Y_COMA
+sentencia: sent_write //PUNTO_Y_COMA
 {
  printf ("Sentencia WRITE\n");                            
 };
 
-sentencia : sent_get PUNTO_Y_COMA
+sentencia: sent_read //PUNTO_Y_COMA
 {
  printf ("Sentencia READ\n");                            
 };
 
 /*Sentencia WRITE*/
-sent_put : PR_PUT TOKEN_ID
+sent_write: PR_WRITE TOKEN_ID
 {
  printf ("WRITE ID\n");
 }
 
-sent_put : PR_PUT CONST_STR
+sent_write: PR_WRITE CONST_STR
 {
  printf ("WRITE STRING\n");
 }
 
 /*Sentencia READ*/
-sent_get : PR_GET TOKEN_ID
+sent_read: PR_READ TOKEN_ID
 {
  printf ("READ ID\n");
 }
 
 /*Sentencia IF OK_lea*/
-seleccion : comienzo_if lista_sentencia fin_if
+seleccion: comienzo_if lista_sentencia fin_if
 {
 	printf("IF SIN ELSE\n");
 };
 
-seleccion : comienzo_if lista_sentencia comienzo_else lista_sentencia fin_if
+seleccion: comienzo_if lista_sentencia comienzo_else lista_sentencia fin_if
 {
 	printf("IF CON ELSE\n");
 };
 
-comienzo_if : PR_IF PAR_ABRE condicion PAR_CIERRA PR_THEN
+comienzo_if: PR_IF PAR_ABRE condicion PAR_CIERRA PR_THEN
 {
 	printf("COMIENZO IF\n");
 };
 
-comienzo_else : PR_ELSE
+comienzo_else: PR_ELSE
 {
 	printf("COMIENZO ELSE\n");
 };
 
-fin_if : PR_ENDIF
+fin_if: PR_ENDIF
 {
 	printf("FINALIZA IF\n");
 };
 
-/*Sentencia REPEAT cambiar_lea*/
+/*Sentencia REPEAT cambiar_lea - DONE*/
+/*Sentencia REPEAT arreglado KSH*/
 
-sent_repeat: comienzoWhile finCondicion lista_sentencia finWhile 
+sent_repeat: comienzoWhile lista_sentencia finCondicion finWhile 
 {
-	printf("Sentencia While completa\n");
+	printf("Sentencia REPEAT completa\n");
 };
-comienzoWhile: PR_WHILE
+comienzoWhile: PR_REPEAT
 {
-	printf("inicio While\n");
+	printf("inicio REPEAT\n");
 };
 finCondicion: PAR_ABRE condicion PAR_CIERRA 
 {
-	printf("Cond While\n");
+	printf("Cond REPEAT\n");
 };
-finWhile: PR_ENDWHILE 
+finWhile: PR_UNTIL 
 {
 	printf("End repeat\n");
 };
@@ -244,72 +249,72 @@ condicion: condicion_multiple
 	printf("CONDICION MULTIPLE\n");
 };
 
-condicion_simple : expresion OP_MENOR expresion 	
+condicion_simple: expresion OP_MENOR expresion 	
 {
  printf ("Condicion Simple Menor\n");
 };
 
-condicion_simple : expresion OP_MENOR_IGUAL expresion
+condicion_simple: expresion OP_MENOR_IGUAL expresion
 {
  printf ("Condicion Simple Menor Igual\n");
 };
 
-condicion_simple : expresion OP_MAYOR expresion
+condicion_simple: expresion OP_MAYOR expresion
 {
  printf ("Condicion Simple Mayor\n");
 };
  	
-condicion_simple : expresion OP_MAYOR_IGUAL expresion 
+condicion_simple: expresion OP_MAYOR_IGUAL expresion 
 {
  printf ("Condicion Simple Mayor Igual\n");
 };
 
-condicion_simple : expresion OP_DISTINTO expresion 
+condicion_simple: expresion OP_DISTINTO expresion 
 {
  printf ("Condicion Simple Distinto\n");
 };
 
-condicion_simple : expresion OP_IGUAL_IGUAL expresion 
+condicion_simple: expresion OP_IGUAL_IGUAL expresion 
 {
  printf ("Condicion Simple Igual Igual\n");
 };
 
-condicion_simple : OP_LOG_NOT expresion OP_MENOR expresion 
+condicion_simple: OP_LOG_NOT expresion OP_MENOR expresion 
 {
  printf ("Condicion Simple Menor Negado\n");
 };
 
-condicion_simple : OP_LOG_NOT expresion OP_MENOR_IGUAL expresion 
+condicion_simple: OP_LOG_NOT expresion OP_MENOR_IGUAL expresion 
 {
  printf ("Condicion Simple Menor Igual Negado\n");
 };
 
-condicion_simple : OP_LOG_NOT expresion OP_MAYOR expresion 
+condicion_simple: OP_LOG_NOT expresion OP_MAYOR expresion 
 {
  printf ("Condicion Simple Mayor Negado\n");
 };
 
-condicion_simple : OP_LOG_NOT expresion OP_MAYOR_IGUAL expresion 
+condicion_simple: OP_LOG_NOT expresion OP_MAYOR_IGUAL expresion 
 {
  printf ("Condicion Simple Mayor Igual Negado\n");
 };
 
-condicion_simple : OP_LOG_NOT expresion OP_DISTINTO expresion 
+condicion_simple: OP_LOG_NOT expresion OP_DISTINTO expresion 
 {
  printf ("Condicion Simple Distinto Negado\n");
 };
 
-condicion_simple : OP_LOG_NOT expresion OP_IGUAL_IGUAL expresion 
+condicion_simple: OP_LOG_NOT expresion OP_IGUAL_IGUAL expresion 
 {
  printf ("Condicion Simple Igual Igual Negado\n");
 };
 
-condicion_multiple : condicion_simple OP_LOG_AND condicion_simple
+condicion_multiple: condicion_simple OP_LOG_AND condicion_simple
 {
  printf ("Condicion Multiple AND\n");
 };
 
-condicion_multiple : condicion_simple OP_LOG_OR condicion_simple
+condicion_multiple: condicion_simple OP_LOG_OR condicion_simple
 {
  printf ("Condicion Multiple OR\n");
 };
@@ -317,42 +322,42 @@ condicion_multiple : condicion_simple OP_LOG_OR condicion_simple
 
 /*Expresiones Matematicas*/
 
-expresion : expresion OP_SUMA termino	
+expresion: expresion OP_SUMA termino	
 {
  printf ("Expresion = Expresion + termino\n");       
 };
 
-expresion : expresion OP_RESTA termino
+expresion: expresion OP_RESTA termino
 {
  printf ("Expresion = Expresion - termino\n");     
 };
 	
-expresion : termino	
+expresion: termino	
 {
  printf ("Expresion = Termino\n");                        
 };
 
-termino : termino OP_MULTIPLICACION factor								
+termino: termino OP_MULTIPLICACION factor								
 {
  printf ("Termino = Termino * Factor\n");                    
 };
 
-termino : termino OP_DIVISION factor	
+termino: termino OP_DIVISION factor	
 {
  printf ("Termino = Termino / Factor\n");   
 };
 
-termino : factor 
+termino: factor 
 {
  printf ("Termino = Factor\n");
 };
 
-factor : CONST_INT	
+factor: CONST_INT	
 {
  printf ("Factor = Constante INT\n");                        
 };
 
-factor : CONST_FLOAT	
+factor: CONST_FLOAT	
 {
  printf ("Factor = Constante REAL\n");                        
 };
@@ -370,7 +375,7 @@ factor: PAR_ABRE expresion PAR_CIERRA
 
 /*Asignaciones*/
 
-sent_asignacion : TOKEN_ID OP_ASIGNACION asignado
+sent_asignacion: TOKEN_ID OP_ASIGNACION asignado
 {
 printf ("Asignacion Simple\n");
 };
@@ -380,82 +385,93 @@ asignado: expresion
  printf ("Asignacion es una Expresion\n");                        
 };
 
-asignado : CONST_STR
+asignado: CONST_STR
 {
  printf ("Asignacion es una Constante String\n");                        
 };
 
 /*"HOLA"++"MUNDO"*/
-asignado : CONST_STR CONCAT CONST_STR	
+asignado: CONST_STR CONCAT CONST_STR	
 {
  printf ("Asignacion es Constante String CONCAT Constante String\n"); 
 };
 
 /*ID++"HOLA"*/
-asignado : TOKEN_ID CONCAT CONST_STR	
+asignado: TOKEN_ID CONCAT CONST_STR	
 {
  printf ("Asignacion es ID CONCAT Constante String\n");    
 };
 
 /*"HOLA"++ID*/
-asignado : CONST_STR CONCAT TOKEN_ID	
+asignado: CONST_STR CONCAT TOKEN_ID	
 {
  printf ("Asignacion es Constante String CONCAT ID\n");                        
 };
 
 /*ID++ID*/
-asignado : TOKEN_ID CONCAT TOKEN_ID	
+asignado: TOKEN_ID CONCAT TOKEN_ID	
 {
  printf ("Asignacion es ID CONCAT ID\n");         
 };
 
 
+/*CHECKEAR ESTO KSH*/
 /*Sentencia WHILE ESPECIAl*/				
-sent_repeat_especial : PR_WHILE estructura_in PR_DO lista_sentencia PR_ENDWHILE
+/*sent_repeat_especial: PR_WHILE estructura_in PR_DO lista_sentencia PR_ENDWHILE
 {
 	printf("Sentencia WHILE ESPECIAL Estructura\n");
-};
+};*/
 
-estructura_in : TOKEN_ID PR_IN COR_ABRE lista_expresiones COR_CIERRA
+/*CHECKEAR ESTO KSH*/
+/*
+estructura_in: TOKEN_ID PR_IN COR_ABRE lista_expresiones COR_CIERRA
 {
 	printf ("Estructura IN\n");
 };
+*/
 
-lista_expresiones : expresion | expresion COMA lista_expresiones
+/*CHECKEAR ESTO KSH*/
+/*
+lista_expresiones: expresion | expresion COMA lista_expresiones
 {
 	printf ("Expresiones en WHILE ESPECIAL\n");
-};
+};*/
 
+/*CHECKEAR ESTO KSH*/
 /*Sentencia TAKE*/
-sentencia_take : PR_TAKE PAR_ABRE definicion_take PAR_CIERRA
+/*
+sentencia_take: PR_TAKE PAR_ABRE definicion_take PAR_CIERRA
 {
 printf ("Sentencia TAKE\n");
 };
 
-definicion_take : OP_SUMA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_SUMA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
+
+definicion_take: OP_SUMA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_SUMA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
 {
 printf ("Definicion TAKE SUMA\n");
 };
 
-definicion_take : OP_RESTA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_RESTA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
+definicion_take: OP_RESTA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_RESTA PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
 {
 printf ("Definicion TAKE RESTA\n");
 };
 
-definicion_take : OP_MULTIPLICACION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_MULTIPLICACION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
+definicion_take: OP_MULTIPLICACION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_MULTIPLICACION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
 {
 printf ("Definicion TAKE MULTIPLICACION\n");
 };
 
-definicion_take : OP_DIVISION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_DIVISION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
+definicion_take: OP_DIVISION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE lista_constantes COR_CIERRA | OP_DIVISION PUNTO_Y_COMA CONST_INT PUNTO_Y_COMA COR_ABRE COR_CIERRA
 {
 printf ("Definicion TAKE DIVISION\n");
 };
+
 
 lista_constantes:  CONST_INT | lista_constantes PUNTO_Y_COMA CONST_INT
 {
 printf ("Definicion constantes TAKE\n");
 };
+*/
 %%
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
