@@ -4,7 +4,7 @@
 #include <conio.h>
 #include <string.h>
 #include "y.tab.h"
-#include "Defines.h"
+#include "constantes.h"
 
 FILE  *yyin;
 char aux[COTA_STR],aux2[COTA_STR];
@@ -33,8 +33,8 @@ OP_RESTA			["-"]
 OPCONCAT			["++"]
 OP_MAYOR			[">"]
 OP_MENOR			["<"]
-OP_MAYOR_IGUAL			[">="]
-OP_MENOR_IGUAL			["<="]
+OP_MAYOR_IGUAL		[">="]
+OP_MENOR_IGUAL		["<="]
 ASIGNA				[":="]
 IGUAL				["=="]
 DISTINTO			["!="]
@@ -48,71 +48,85 @@ P_CIERRA			[")"]
 COR_ABRE			["["]
 COR_CIERRA			["]"]
 COMA				[","]
+DOSPUNTOS			[":"]
 
 GET				["READ"]
 PUT				["WRITE"]
 
 
+
 %%
-"BEGINPROG"		{ return PR_BEGINPROG;}
-"ENDPROG"		{ return PR_ENDPROG;}
+"BEGIN"		{ return PR_BEGIN;}
+"END"		{ return PR_END;}
+
+"READ"		{return PR_READ;}
+"WRITE"		{return PR_WRITE;}
 
 "AVERAGE"		{return PR_AVERAGE;}
-"COMBINATORIA"		{return PR_COMBINATORIO;}
+"COMBINATORIO"	{return PR_COMBINATORIO;}
 "FACTORIAL"		{return PR_FACTORIAL;}
+
 
 
 "DECVAR"		{ return PR_VAR;}
 "ENDDEC"		{ return PR_ENDVAR;}
 
+
 "FLOAT"			{ return PR_FLOAT;}
 "INT"			{ return PR_INT;}
 "STRING"		{ return PR_STRING;}
+
 
 "IF"			{ return PR_IF;}
 "THEN"   		{ return PR_THEN;}
 "ELSE"   		{ return PR_ELSE;}
 "ENDIF"	      	{ return PR_ENDIF;}
 
-"REPEAT"	{ return PR_REPEAT;}
+"REPEAT"		{ return PR_REPEAT;}
 "UNTIL"	        { return PR_UNTIL;}
 
-
+":="			{ return OP_ASIGNACION;}
 "+"				{ return OP_SUMA;}
 "-"				{ return OP_RESTA;}
 "*"				{ return OP_MULTIPLICACION;}
 "/"				{ return OP_DIVISION;}
+"++"			{ return CONCAT;}
+
+"("				{ return PAR_ABRE;}
+")"				{ return PAR_CIERRA;}
+"["				{ return COR_ABRE;}
+"]"				{ return COR_CIERRA;}
+
+
 ">"             { return OP_MAYOR;}
 ">="            { return OP_MAYOR_IGUAL;}
 "<"             { return OP_MENOR;}
 "<="            { return OP_MENOR_IGUAL;}
 "!="            { return OP_DISTINTO;}
 "=="            { return OP_IGUAL_IGUAL;}
+
 "AND"           { return OP_LOG_AND;}
 "OR"            { return OP_LOG_OR;}
 "NOT"           { return OP_LOG_NOT;}
-":="				{ return OP_ASIGNACION;}
-"("				{ return PAR_ABRE;}
-")"				{ return PAR_CIERRA;}
-"["				{ return COR_ABRE;}
-"]"				{ return COR_CIERRA;}
-"READ"			{ return PR_GET;}
-"WRITE"			{ return PR_PUT;}
+
+
 ","				{ return COMA;}
-"++"			{ return CONCAT;}
+":"				{ return DOSPUNTOS;}
 
 {ID}			{
+
 
 						yylval.str_val = yytext;
 						if(strlen(yytext)>COTA_ID)
 							{
+								printf("Variable %s supera el maximo de caracteres en linea %d\n")
 								printf("VARIABLE SUPERA MAXIMO CARACTERES\n\t***ERROR - FINALIZANDO LEXICO***\n");
 								exit(1);
 							}
 						else	
 							{	strcpy(aux,"_");
 								strcat(aux,yytext);
-								printf( "Genero aux para TS: (%s)\n",aux);
+								printf( "Ingreso en la Tabla de símbolos: %s\n",aux);
 								printf( "Identificador en lexico: %s (%s)\n", yytext,yylval.str_val);
 								agregarATS(aux,"-",VRBL,0,0);//hay que mandar el id y los datos necesarios para agregar
 								return TOKEN_ID;
@@ -178,6 +192,8 @@ PUT				["WRITE"]
 				}
 				
 {COMENTARIO}	{ printf("COMENTARIO \n");}
+
+
 
 
 
