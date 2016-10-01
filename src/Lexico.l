@@ -1,7 +1,6 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include <string.h>
 #include "y.tab.h"
 #include "constantes.h"
@@ -119,7 +118,7 @@ PUT				["WRITE"]
 						yylval.str_val = yytext;
 						if(strlen(yytext)>COTA_ID)
 							{
-								printf("Variable %s supera el maximo de caracteres en linea %d\n")
+								printf("Variable %s supera el maximo de caracteres en linea %d\n");
 								printf("VARIABLE SUPERA MAXIMO CARACTERES\n\t***ERROR - FINALIZANDO LEXICO***\n");
 								exit(1);
 							}

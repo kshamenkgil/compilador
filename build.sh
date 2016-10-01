@@ -1,17 +1,25 @@
 #!/bin/bash
 so="$(uname -o)"
-echo $so
 if [ "$so" == "GNU/Linux" ]; then
+	cd src
 	flex Lexico.l
 	bison -dyv Sintactico.y
-	gcc lex.yy.c y.tab.c -o TPEntregable
+	cd ..
+	mkdir -p bin
+	gcc src/lex.yy.c src/y.tab.c -o bin/TPEntregable
+	rm src/lex.yy.c
+	rm src/y.tab.c
+	rm src/y.output
+	rm src/y.tab.h
 else
-	c:\GnuWin32\bin\flex Lexico.l
-	c:\GnuWin32\bin\bison -dyv Sintactico.y
-	c:\MinGW\bin\gcc.exe lex.yy.c y.tab.c -o TPEntregable.exe
+	cd src
+	c:\GnuWin32\bin\flex src\Lexico.l
+	c:\GnuWin32\bin\bison -dyv src\Sintactico.y
+	cd ..
+	mkdir -p bin
+	c:\MinGW\bin\gcc.exe src\lex.yy.c src\y.tab.c -o bin\TPEntregable.exe
+	rm src\lex.yy.c
+	rm src\y.tab.c
+	rm src\y.output
+	rm src\y.tab.h	
 fi
-
-rm lex.yy.c
-rm y.tab.c
-rm y.output
-rm y.tab.h

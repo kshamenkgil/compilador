@@ -1,7 +1,6 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include <conio.h>
 #include "y.tab.h"
 #include "constantes.h"
 
@@ -53,7 +52,7 @@ char *str_val;
 %token OP_RESTA
 %token OP_MULTIPLICACION
 %token OP_DIVISION
-%token OP_CONCAT
+%token CONCAT
 
 %token PAR_ABRE
 %token PAR_CIERRA
@@ -137,10 +136,11 @@ lista_sentencia: sentencia lista_sentencia
  printf ("Sentencia Multiple\n");                            
 };
 
-sentencia: sentencia_take 
+/*sentencia: sentencia_take 
 {
 	printf ("Sentencia TAKE\n");
-};
+};*/
+
 sentencia: seleccion
 {
 	printf ("Sentencia IF\n");
@@ -440,7 +440,7 @@ lista_expresiones: expresion | expresion COMA lista_expresiones
 /*CHECKEAR ESTO KSH*/
 /*Sentencia TAKE*/
 /*
-sentencia_take: PR_TAKE PAR_ABRE definicion_take PAR_CIERRA
+: PR_TAKE PAR_ABRE definicion_take PAR_CIERRA
 {
 printf ("Sentencia TAKE\n");
 };
