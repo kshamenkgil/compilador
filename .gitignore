@@ -1,2 +1,4 @@
 bin/TPEntregable
 bin/TPEntregable.exe
+lex.yy.c
+y.output

@@ -451,7 +451,7 @@ typedef struct tablaS {
        int tipo; // 0 es palabra reservada, 1 es variable, 2 constante
        double valor;
        int longitud;
-       char valorString [COTA_STR]; /*Guarda valor de las variables tipo string*/
+       char valorString [COTA_STR]; /*Guarda valor de las variables tipo string. De no ser un string guarda un "-"*/
 }TS;
 
 //Instancia de Tabla de Símbolos
@@ -462,60 +462,69 @@ int topeTS = 0;
 
 /* FunciónES */
 
-void agregarATS(char *n,char *vs,int t, int l, double v)
-{	int val_func;
-	printf("Verifico si %s existe en la TS y agrego... . \n",n);
-	val_func = verificarTS(n);
-	if(val_func==topeTS)
+/* De no existir el Token en la tabla de simbolos lo agrega */
+
+void agregarTokenTS(char *name,char *valueString,int type, int long, double value)
+{	int pos_token_ts;
+	printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);
+	pos_token_ts = existeTokenEnTS(name);
+	if(pos_token_ts==topeTS)
 	{
-			strcpy(tabla[topeTS].nombre,n);
-			strcpy(tabla[topeTS].valorString,vs);
-			tabla[topeTS].tipo=t;
-			tabla[topeTS].longitud=l;
-			tabla[topeTS].valor=v;
+			printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);
+
+			strcpy(tabla[topeTS].nombre,name);
+			strcpy(tabla[topeTS].valorString,valueString);
+			tabla[topeTS].tipo=type;
+			tabla[topeTS].longitud=long;
+			tabla[topeTS].valor=value;
 			topeTS++;
 	}
 	else
 	{
-		printf("El elemento ya se encuentra en la TS--> Pos: (%d). \n",val_func);
+		printf("El token ya se encuentra en la Tabla de Simbolos. Posicion: (%d). \n",pos_token_ts);
 	
 	}
 }
 
-int verificarTS(char *n)
+
+/*Verifica la existencia de un token en la TS. Compara por nombre y de encontrarlo devuelve la pos */
+
+int existeTokenEnTS(char *name)
 {
-	int i;
-	for(i=0;i<topeTS;i++)
-		if(strcmp(n, tabla[i].nombre)==0)
-			break;
-	return i;
+	int pos;
+	for(pos=0;pos<topeTS;pos++)
+		if(strcmp(name, tabla[pos].nombre)==0)
+			return pos;
+	return pos;
 }
 
-void setearString(char *a, char *yt)
+/* Esta funcion arma el nombre del token y el valor del string. Para el nombre del token reemplaza los ' ' por '_'. */
+/* Para el nombre del token y el valor del string saltea los '"'. */
+
+void armarValorYNombreToken(char *a, char *yt)
 {
-	char t[COTA_STR],y[COTA_STR];
+	char nombre_token[COTA_STR],valor_token[COTA_STR];
 	int i,j=0,z=0;
-	for(i=0;i<strlen(a);i++)
-		{
+	for(i=0;i<strlen(a);i++){
 			if(a[i]!='"'&&a[i]!=' ')
 				{
-					t[j]=a[i];
-					y[z]=a[i];
+					nombre_token[j]=a[i];
+					valor_token[z]=a[i];
 					j++;
 					z++;
 				}
 			if(a[i]==' ')
 				{
-					t[j]='_';
-					y[z]=a[i];
+					nombre_token[j]='_';
+					valor_token[z]=a[i];
 					j++;
 					z++;
 				}	
 		}
-	t[j]='\0';
-	y[z]='\0';
-	strcpy(a,t);
-	strcpy(yt,y);
+	nombre_token[j]='\0';
+	valor_token[z]='\0';
+	strcpy(a,nombre_token);
+	strcpy(yt,valor_token);
 
 }
 int main(int argc,char *argv[])
@@ -527,10 +536,10 @@ int main(int argc,char *argv[])
   }
   else
   {
-	//Creación del archivo TS.TXT
-	if((pfTablaSimbolos = fopen("ts.txt","w")) == NULL)
+	//Creación del archivo tablaSimbolos.txt
+	if((pfTablaSimbolos = fopen("tablaSimbolos.txt","w")) == NULL)
 	{
-		printf(". \nError al crear el archivo TS.TXT. \n");
+		printf(". \nError al crear el archivo tablaSimbolos.txt. \n");
 		exit(1);
 	}
 	
@@ -538,35 +547,32 @@ int main(int argc,char *argv[])
 
   }
   int i;
- //Cargar valores TS en el txt
-  fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última: . \n\t _(variable);$(cte float);&(cte int);@(cte string)***. \n. \n");
+//Imprimir TS en el txt
+ fprintf(pfTablaSimbolos,"\t\t ******Tabla de Simbolos******. \n. \n");
+ fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última: . \n\t _(variable);$(cte float);&(cte int);@(cte string)***. \n. \n");
+ fprintf(pfTablaSimbolos,"*********************. \n\n");
+ fprintf(pfTablaSimbolos,"Posicion ");
+ fprintf(pfTablaSimbolos,"\t\t Nombre ");
+ fprintf(pfTablaSimbolos,"\t\t Tipo");
+ fprintf(pfTablaSimbolos,"\t\t Longitud");
+ fprintf(pfTablaSimbolos,"\t\t Valor");
+ fprintf(pfTablaSimbolos,"\t\t Valor String");
+
   for(i=0;i<topeTS;i++)
-	{	
-		fprintf(pfTablaSimbolos,"*********************. \n");
-		fprintf(pfTablaSimbolos,"%s %d", "Pos:",i);
-		fprintf(pfTablaSimbolos,". \n");
-		fprintf(pfTablaSimbolos,"Nombre: ");
-		fprintf(pfTablaSimbolos,tabla[i].nombre);
-		fprintf(pfTablaSimbolos,". \n");
-		fprintf(pfTablaSimbolos,"Tipo: ");
-		fprintf(pfTablaSimbolos,"%d",tabla[i].tipo);
-		fprintf(pfTablaSimbolos,". \n");
-		fprintf(pfTablaSimbolos,"Longitud: ");
-		fprintf(pfTablaSimbolos,"%d",tabla[i].longitud);
-		fprintf(pfTablaSimbolos,". \n");
-		fprintf(pfTablaSimbolos,"Valor: ");
+	{	fprintf(pfTablaSimbolos,"%d", "Pos:",i);
+		fprintf(pfTablaSimbolos,"\t\t "tabla[i].nombre);
+		fprintf(pfTablaSimbolos,"\t\t %d",tabla[i].tipo);
+		fprintf(pfTablaSimbolos,"\t\t %d",tabla[i].longitud);
 		if(tabla[i].tipo==CTE_FLT)
 		{
-			fprintf(pfTablaSimbolos,"%7.10lf",tabla[i].valor);
+			fprintf(pfTablaSimbolos,"\t\t %7.10lf",tabla[i].valor);
 		}
 		else
 		{
-			fprintf(pfTablaSimbolos,"%ld",tabla[i].valor);
+			fprintf(pfTablaSimbolos,"\t\t %ld",tabla[i].valor);
 		}
-		fprintf(pfTablaSimbolos,". \n");
-		fprintf(pfTablaSimbolos,"Valor String: ");
-		fprintf(pfTablaSimbolos,tabla[i].valorString);
-		fprintf(pfTablaSimbolos,". \n");
+		fprintf(pfTablaSimbolos,"\t\t "tabla[i].valorString);
+		fprintf(pfTablaSimbolos,"\n\n");
 	
 	}
   fclose(pfTablaSimbolos);

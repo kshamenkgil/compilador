@@ -127,7 +127,7 @@ PUT				["WRITE"]
 								strcat(aux,yytext);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
 								printf( "identificador encontrado por el analizador lexico: %s (%s)\n", yytext,yylval.str_val);
-								agregarATS(aux,"-",VRBL,0,0);
+								agregarTokenTS(aux,"-",VRBL,0,0);
 								return TOKEN_ID;
 							}
 				}
@@ -147,7 +147,7 @@ PUT				["WRITE"]
 								strcat(aux,yytext);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la ",aux);
 								printf( "constante encontrada por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);
-								agregarATS(aux,"-",CTE_INT,0,atoi(yytext));
+								agregarTokenTS(aux,"-",CTE_INT,0,atoi(yytext));
 								return CONST_INT;
 							}
 				}
@@ -163,12 +163,12 @@ PUT				["WRITE"]
 							}
 						else
 							{
-								setearString(aux2,yytext);
+								armarValorYNombreToken(aux2,yytext);
 								strcpy(aux,"@");
 								strcat(aux,aux2);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
 				printf( "string encontrado por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);						
-								agregarATS(aux,yytext,CTE_STR,strlen(aux2),0);
+								agregarTokenTS(aux,yytext,CTE_STR,strlen(aux2),0);
 								return CONST_STR;
 							}
 				}
@@ -188,7 +188,7 @@ PUT				["WRITE"]
 								strcat(aux,yytext);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la",aux);
 								printf( "constante encontrada por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);
-								agregarATS(aux,"-",CTE_FLT,0,f);
+								agregarTokenTS(aux,"-",CTE_FLT,0,f);
 								return CONST_FLOAT;
 							}
 				}
