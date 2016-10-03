@@ -8,6 +8,7 @@
 int yystopparser=0;
 FILE  *yyin; //Archivo de Entrada
 FILE * pfTablaSimbolos; //Tabla de Simbolos
+FILE * pfTablaSimbolos2; //Tabla de Simbolos
 
 %}
 
@@ -542,28 +543,36 @@ int main(int argc,char *argv[])
 		printf(". \nError al crear el archivo tablaSimbolos.txt. \n");
 		exit(1);
 	}
+	//Creación del archivo tablaSimbolos2.txt
+	if((pfTablaSimbolos2 = fopen("tablaSimbolos2.txt","w")) == NULL)
+	{
+		printf(". \nError al crear el archivo tablaSimbolos2.txt. \n");
+		exit(1);
+	}
 	
 	yyparse();
 
   }
   int i;
+  //Genero la primer tabla de simbolos
 //Imprimir TS en el txt
- fprintf(pfTablaSimbolos,"\t\t ******Tabla de Simbolos******. \n. \n");
- fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última: . \n\t _(variable);$(cte float);&(cte int);@(cte string)***. \n. \n");
- fprintf(pfTablaSimbolos,"*********************. \n\n");
- fprintf(pfTablaSimbolos,"Posicion ");
+ fprintf(pfTablaSimbolos,"\t\t\t ******Tabla de Simbolos******\n\n");
+ fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);@(cte string)***\n");
+ fprintf(pfTablaSimbolos,"****************************************************************************\n\n");
+ fprintf(pfTablaSimbolos,"Posicion");
  fprintf(pfTablaSimbolos,"\t\t Nombre ");
  fprintf(pfTablaSimbolos,"\t\t Tipo");
  fprintf(pfTablaSimbolos,"\t\t Longitud");
  fprintf(pfTablaSimbolos,"\t\t Valor");
  fprintf(pfTablaSimbolos,"\t\t Valor String");
+ fprintf(pfTablaSimbolos,"\n\n");
 
   for(i=0;i<topeTS;i++)
 	{	fprintf(pfTablaSimbolos,"%d", "Pos:",i);
-		fprintf(pfTablaSimbolos,"\t\t ");
+		fprintf(pfTablaSimbolos,"\t\t\t ");
 		fprintf(pfTablaSimbolos,tabla[i].nombre);
-		fprintf(pfTablaSimbolos,"\t\t %d",tabla[i].tipo);
-		fprintf(pfTablaSimbolos,"\t\t %d",tabla[i].longitud);
+		fprintf(pfTablaSimbolos,"\t\t\t %d",tabla[i].tipo);
+		fprintf(pfTablaSimbolos,"\t\t\t %d",tabla[i].longitud);
 		if(tabla[i].tipo==CTE_FLT)
 		{
 			fprintf(pfTablaSimbolos,"\t\t %7.10lf",tabla[i].valor);
@@ -577,6 +586,42 @@ int main(int argc,char *argv[])
 		fprintf(pfTablaSimbolos,"\n\n");
 	
 	}
+
+	//Genero la 2da tabla de simbolos
+	//Genero la primer tabla de simbolos
+//Imprimir TS en el txt
+ fprintf(pfTablaSimbolos2,"\t\t\t ******Tabla de Simbolos******\n\n");
+ fprintf(pfTablaSimbolos2,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);@(cte string)***\n");
+ fprintf(pfTablaSimbolos2,"****************************************************************************");
+ 
+
+  for(i=0;i<topeTS;i++)
+	{	
+		fprintf(pfTablaSimbolos2,"\n\n");
+		fprintf(pfTablaSimbolos2,"Posicion: ");
+		fprintf(pfTablaSimbolos2,"%d",i);
+ 		fprintf(pfTablaSimbolos2,"\nNombre: ");
+		 fprintf(pfTablaSimbolos2,tabla[i].nombre);
+ 		fprintf(pfTablaSimbolos2,"\nTipo: ");
+		 fprintf(pfTablaSimbolos2,"%d",tabla[i].tipo);
+ 		fprintf(pfTablaSimbolos2,"\nLongitud: ");
+		 fprintf(pfTablaSimbolos2,"%d",tabla[i].longitud);
+ 		fprintf(pfTablaSimbolos2,"\nValor: ");
+ 		if(tabla[i].tipo==CTE_FLT)
+		{
+			fprintf(pfTablaSimbolos2,"%7.10lf",tabla[i].valor);
+		}
+		else
+		{
+			fprintf(pfTablaSimbolos2,"%ld",tabla[i].valor);
+		}
+		 fprintf(pfTablaSimbolos2,"\nValor String: ");
+		fprintf(pfTablaSimbolos2,tabla[i].valorString);
+		fprintf(pfTablaSimbolos2,"\n\n");
+		fprintf(pfTablaSimbolos2,"****************************************************************************");
+	
+	}
+  fclose(pfTablaSimbolos2);
   fclose(pfTablaSimbolos);
   fclose(yyin);
   return 0;
