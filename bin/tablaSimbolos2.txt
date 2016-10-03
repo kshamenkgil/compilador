@@ -1,0 +1,374 @@
+			 ******Tabla de Simbolos******
+
+***El tipo de variable lo determina el caracter que precede a esta última:
+	 _(variable);$(cte float);&(cte int);@(cte string)***
+****************************************************************************
+
+Posicion: 0
+Nombre: _arbol
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 1
+Nombre: _b
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 2
+Nombre: _casa
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 3
+Nombre: _d
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 4
+Nombre: _e
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 5
+Nombre: _g
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 6
+Nombre: _a_
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 7
+Nombre: _v4r14bl3
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 8
+Nombre: _a19
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 9
+Nombre: &3
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 10
+Nombre: &2
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 11
+Nombre: &6
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 12
+Nombre: &5
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 13
+Nombre: &1
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 14
+Nombre: @hola
+Tipo: 4
+Longitud: 4
+Valor: 0
+Valor String: hola
+
+****************************************************************************
+
+Posicion: 15
+Nombre: _r
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 16
+Nombre: @hola_cadena
+Tipo: 4
+Longitud: 11
+Valor: 0
+Valor String: hola cadena
+
+****************************************************************************
+
+Posicion: 17
+Nombre: &4
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 18
+Nombre: _c
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 19
+Nombre: &24
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 20
+Nombre: $235.5572345345
+Tipo: 3
+Longitud: 0
+Valor: 235.5572345345
+Valor String: -
+
+****************************************************************************
+
+Posicion: 21
+Nombre: _f
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 22
+Nombre: &25
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 23
+Nombre: $5.4
+Tipo: 3
+Longitud: 0
+Valor: 5.4000000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 24
+Nombre: _mat1
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 25
+Nombre: @lenguajes
+Tipo: 4
+Longitud: 9
+Valor: 0
+Valor String: lenguajes
+
+****************************************************************************
+
+Posicion: 26
+Nombre: _mat2
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 27
+Nombre: @compiladores
+Tipo: 4
+Longitud: 12
+Valor: 0
+Valor String: compiladores
+
+****************************************************************************
+
+Posicion: 28
+Nombre: _a
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 29
+Nombre: @aca
+Tipo: 4
+Longitud: 3
+Valor: 0
+Valor String: aca
+
+****************************************************************************
+
+Posicion: 30
+Nombre: @ahi
+Tipo: 4
+Longitud: 3
+Valor: 0
+Valor String: ahi
+
+****************************************************************************
+
+Posicion: 31
+Nombre: @mundo
+Tipo: 4
+Longitud: 5
+Valor: 0
+Valor String: mundo
+
+****************************************************************************
+
+Posicion: 32
+Nombre: _i
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 33
+Nombre: &0
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 34
+Nombre: _numero
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 35
+Nombre: _numero2
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 36
+Nombre: _avg
+Tipo: 1
+Longitud: 0
+Valor: 72057589759672320
+Valor String: -
+
+****************************************************************************
+
+Posicion: 37
+Nombre: &11
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 38
+Nombre: @Repetir_3_veces
+Tipo: 4
+Longitud: 15
+Valor: 0
+Valor String: Repetir 3 veces
+
+****************************************************************************
+
+Posicion: 39
+Nombre: &666
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************
+
+Posicion: 40
+Nombre: &34
+Tipo: 2
+Longitud: 0
+Valor: -65536
+Valor String: -
+
+****************************************************************************

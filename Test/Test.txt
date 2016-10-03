@@ -2,13 +2,13 @@ DECVAR
 	arbol,b,casa,d,e:INT
 	g:FLOAT
 	a_:STRING
-	asdasdasdiego: INT
+	v4r14bl3: INT
 	a19:FLOAT
 ENDDEC
 
 BEGIN
 	
-	diego:=3
+	casa:=3
 	
 	b:=2+6-d*3 - (5/1)
 
@@ -34,7 +34,7 @@ BEGIN
 
 	casa:=a++b
 
-	casa:="hola"++"mundo"
+	casa:="aca"++"ahi"
 
 	casa:=a++"mundo"
 
@@ -42,7 +42,7 @@ BEGIN
 	
 	i:=0
 
-
+	-/ Aclaración del IF/-
 	IF(numero==0 OR numero2<3) THEN
 		casa:=2
 	ELSE
@@ -61,23 +61,22 @@ BEGIN
 -/Así son los comentarios en el  2 °Cuat de LyC-/Comentario/- /-
 
 	REPEAT
-		WRITE "Repetir 2 veces"
+		WRITE "Repetir 3 veces"
 		i:=i+1
 	UNTIL	
 		(i>2)
 
+-/FNs especiales como factores/-
 	a:= FACTORIAL(3+1-2*1)
 	b:= a - COMBINATORIO(a,666)
-
-
-	IF(a==0 AND AVERAGE([1,2,34,5])<3)
 	
+	IF(a==0 AND AVERAGE([1,2,34,5])<3)
 	THEN
 		casa:=2
 	ELSE
 		casa:=3
 	ENDIF
+	
 
 END
-
 

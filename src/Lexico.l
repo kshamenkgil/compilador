@@ -20,16 +20,20 @@ OTRO			.
 COM_SIMPLE		"-/"{OTRO}*"/-"
 COM_ANIDADO		"-/"{OTRO}*{COM_SIMPLE}+{OTRO}*"/-"
 
-CONST_STR 		"\""({LETRA}|{DIGITO}|{OTRO})*"\""
+CONST_STR 		"\""({ESPACIO}|{LETRA}|{DIGITO})*"\""
+
 CONST_FLOAT     {DIGITO}+"."{DIGITO}*|"."{DIGITO}+
 CONST_INT       {DIGITO}+
 ID				{LETRA}({LETRA}|{DIGITO}|_)*
 
+
+ESPACIO				[" "]
+PUNTOYCOMA			[";"]
 OP_MUL				["*"]
 OP_DIV				["/"]
 OP_SUMA				["+"]
 OP_RESTA			["-"]
-OPCONCAT			["++"]
+OP_CONCAT			["++"]
 OP_MAYOR			[">"]
 OP_MENOR			["<"]
 OP_MAYOR_IGUAL			[">="]
@@ -167,7 +171,7 @@ PUT				["WRITE"]
 								strcpy(aux,"@");
 								strcat(aux,aux2);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
-				printf( "string encontrado por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);						
+								printf( "string encontrado por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);						
 								agregarTokenTS(aux,yytext,CTE_STR,strlen(aux2),0);
 								return CONST_STR;
 							}
