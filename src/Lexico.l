@@ -157,8 +157,9 @@ PUT				["WRITE"]
 				}
 				
 {CONST_STR}		{ 		yylval.str_val = yytext;
-						strcpy(aux2,yytext);
-						if(strlen(aux2)>COTA_STR)
+						//strcpy(aux2,yytext);
+						//if(strlen(aux2)>COTA_STR)
+						if(strlen(yytext)>COTA_STR)
 							{	
 								printf("¡ERROR con %s! Supera el maximo de caracteres permitidos %d\n",yytext,COTA_STR);
 								printf("---ERROR proporcionado por el Analizador léxico---\n");
@@ -167,6 +168,7 @@ PUT				["WRITE"]
 							}
 						else
 							{
+								strcpy(aux2,yytext); //ksh
 								armarValorYNombreToken(aux2,yytext);
 								strcpy(aux,"@");
 								strcat(aux,aux2);
