@@ -16,3 +16,13 @@
 
 //Cantidad Total de Palabras Reservadas
 #define TOTAL_PR 18
+
+//Define de PR 
+
+#define EMPIEZA_IF      500
+#define TERMINA_IF      501
+#define COND2           502
+#define EMPIEZA_REPEAT  503
+#define WHILE_VERDAD    504
+#define TERMINA_REPEAT  505
+#define ELSE            506

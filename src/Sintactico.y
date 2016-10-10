@@ -4,11 +4,72 @@
 #include <string.h>
 #include "y.tab.h"
 #include "constantes.h"
+#include "lista_dinamica.c"
+#include "pilaDinamica.c"
+#include "tipos.h"
 
+int debug=1;
 int yystopparser=0;
 FILE  *yyin; //Archivo de Entrada
 FILE * pfTablaSimbolos; //Tabla de Simbolos
 FILE * pfTablaSimbolos2; //Tabla de Simbolos
+
+************************** Estructura de Tercetos en tipos.h *****************************
+
+int cant_tercetos = 0;
+Lista <estructura_tercetos> lista_tercetos;
+Lista <estructura_tercetos> lista_tercetos_aux;
+
+************************* Estructura de ID ********************************************
+
+int cant_id = 0;
+int cant_var = 1;
+Lista <estructura_id> lista_id, lista_var;
+
+
+************************* Estructura de Tipo de dato ********************************************
+
+int cant_tipo = 0;
+estructura_tipo estruc_tipo;
+Lista <estructura_tipo> lista_tipo;
+
+************************* Pila de Tercetos ********************************************
+
+int cantidad_pila = 0;
+estructura_pila pila;
+Pila <estructura_pila> pila_tercetos;
+
+********************************************
+
+//Contadores de Etiquetas
+int cant_etiq_if = 0;
+int cant_etiq_while = 0;
+int cant_etiq_repeat = 0;
+int cant_etiq_filter = 0;
+
+Pila <pila_cont_etiquetas> pila_etiquetas;
+int cont_expresion = 0;
+
+
+************************************* Tabla de Simbolos *********************************************
+
+//Estructuras de analizador lexico
+typedef struct tablaS {
+       char nombre [100]; //si el nombre le precede un "_" entonces es una variable, si tiene $ entonces es real y si tiene & es int,    
+                          //si tiene un @ es una cte string.
+       int tipo; // 0 es palabra reservada, 1 es variable, 2 constante
+       double valor;
+       int longitud;
+       char valorString [COTA_STR]; /*Guarda valor de las variables tipo string. De no ser un string guarda un "-"*/
+}TS;
+
+//Instancia de Tabla de Símbolos
+TS tabla[MAX_TS];
+
+//Tope Tabla de Simbolos
+int topeTS = 0;
+
+******************************************
 
 %}
 
@@ -81,29 +142,45 @@ char *str_val;
 /*OK!*/
 pgm: programa 
 {
- printf("Start symbol - ¡Compilación exitosa!. \n");
- printf("-------------------. \n");
+	if(debug){
+ 			printf("Start symbol - ¡Compilación exitosa!. \n");
+ 			printf("-------------------. \n");
+	}
+
+	 strcpy(tercetos.parametro_1, "END" );
+     strcpy(tercetos.parametro_2, "-" );
+     strcpy(tercetos.parametro_3, "-" );
+     lista_tercetos.Insertar_al_final(tercetos);
+     cantidad_tercetos++;
 };
 
 programa: PR_BEGIN lista_sentencia PR_END 
 {
-	printf("Programa donde no hubo declaración de variables. \n");
+	if(debug){
+		printf("Programa donde no hubo declaración de variables. \n");
+	}
 };
 
 programa: dec_var PR_BEGIN lista_sentencia PR_END 
 {
-	printf ("Programa con variables declaradas previamente. \n");
+	if(debug){
+		printf ("Programa con variables declaradas previamente. \n");
+	}
 };
 
 /*Declaración de Variables*/
 dec_var: PR_VAR lista_dec_var PR_ENDVAR
 {
- printf ("Bloque con declaracion de las variables. \n");
+	if(debug){
+	 printf ("Bloque con declaracion de las variables. \n");
+	}
 };
 
 lista_dec_var: linea_dec_var | lista_dec_var linea_dec_var
 {
-	printf("Múltiples líneas con declaraciones de las variables. \n");
+	if(debug){
+		printf("Múltiples líneas con declaraciones de las variables. \n");
+	}
 }
 
 linea_dec_var:  lista_variables DOSPUNTOS tipo
@@ -166,7 +243,20 @@ sentencia: sent_read
 /*Sentencia WRITE*/
 sent_write: PR_WRITE TOKEN_ID
 {
- printf ("WRITE de un ID. \n");
+	if(debug){
+ 		printf ("WRITE de un ID. \n");
+	}
+
+	 strcpy(tercetos.parametro_1, "WRITE");
+ 	 pila = pila_tercetos.Sacar();
+     cantidad_pila--;
+                  
+    strcpy(tercetos.parametro_2, "-");
+    strcpy(tercetos.parametro_3, pila.parametro);
+    lista_tercetos.Insertar_al_final(tercetos);
+    cantidad_tercetos++; 
+
+
 }
 
 sent_write: PR_WRITE CONST_STR
@@ -183,12 +273,38 @@ sent_read: PR_READ TOKEN_ID
 /*Sentencia IF */
 seleccion: comienzo_if lista_sentencia fin_if
 {
-	printf("IF simple. \n");
+	if(debug){
+		printf("IF simple. \n");
+	}
+
+	if(strcmp (pila.parametro, "DOBLE_CONDICION") == 0){
+		corregir_salto_doble_if(cantidad_tercetos+1);
+	}    
+	else // es condición simple
+		corregir_salto_if(cantidad_tercetos+1, "BF");
+
+	generar_terceto_etiqueta(TERMINA_IF);
+
+
+
+
 };
 
 seleccion: comienzo_if lista_sentencia comienzo_else lista_sentencia fin_if
 {
-	printf("IF con bloque ELSE. \n");
+	if(debug){
+		printf("IF con bloque ELSE. \n");
+	}
+	
+	pila = pila_tercetos.Sacar();
+	cantidad_pila--;
+	
+	if(strcmp (pila.parametro, "COND_DOBLE") == 0){
+		corregir_salto_doble_if(cantidad_tercetos+2);
+	}
+	else{ // es condición simple
+		corregir_salto_if(cantidad_tercetos+2, "BF");
+	}                  
 };
 
 comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
@@ -445,21 +561,7 @@ nrocombinatorio: PR_COMBINATORIO PAR_ABRE expresion COMA expresion PAR_CIERRA
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Estructuras de analizador lexico
-typedef struct tablaS {
-       char nombre [100]; //si el nombre le precede un "_" entonces es una variable, si tiene $ entonces es real y si tiene & es int,    
-                          //si tiene un @ es una cte string.
-       int tipo; // 0 es palabra reservada, 1 es variable, 2 constante
-       double valor;
-       int longitud;
-       char valorString [COTA_STR]; /*Guarda valor de las variables tipo string. De no ser un string guarda un "-"*/
-}TS;
 
-//Instancia de Tabla de Símbolos
-TS tabla[MAX_TS];
-
-//Tope Tabla de Simbolos
-int topeTS = 0;
 
 /* FunciónES */
 
@@ -632,4 +734,196 @@ int yyerror(void)
 	printf("Synax Error. \n");
 	system ("Pause");
 	exit (1);
+}
+
+
+*************************************************** FUNCIONES ESPECIALES DE TERCETOS ***************************************************************
+
+void generar_terceto_etiqueta(int etiqueta)
+{
+    char aux[4];
+	// Se encuentra en tipos.h
+    estructura_pila pila_aux;
+    switch (etiqueta)
+       {
+        case EMPIEZA_IF:
+                           cant_etiq_if++;
+                           struc_etiq.contador = cant_etiq_if;
+                           strcpy(struc_etiq.sentencia, "COMIENZO_IF_");
+                           pila_etiquetas.Poner (struc_etiq);
+			   sprintf(aux,"%u",cant_etiq_if);
+                           strcpy(tercetos.parametro_3, "");
+                           strcat(tercetos.parametro_3, "COMIENZO_IF_");
+                           strcat(tercetos.parametro_3, aux);
+                           strcpy(tercetos.parametro_2, "-");
+                           strcpy(tercetos.parametro_1, "ETIQ");
+                           break;
+
+        case ELSE:
+                      struc_etiq = pila_etiquetas.Sacar ();
+		      sprintf(aux,"%u",struc_etiq.contador);
+                      strcpy(tercetos.parametro_3, "");
+                      strcat(tercetos.parametro_3, "ELSE_IF_");
+                      strcat(tercetos.parametro_3, aux);
+                      strcpy(tercetos.parametro_2, "-");
+                      strcpy(tercetos.parametro_1, "ETIQ");
+                      pila_etiquetas.Poner (struc_etiq);
+                      break;
+
+        case TERMINA_IF:
+                      struc_etiq = pila_etiquetas.Sacar();
+		      sprintf(aux,"%u",struc_etiq.contador);
+                      strcpy(tercetos.parametro_3, "");
+                      strcat(tercetos.parametro_3, "FIN_IF_");
+                      strcat(tercetos.parametro_3, aux);
+                      strcpy(tercetos.parametro_2, "-");
+                      strcpy(tercetos.parametro_1, "ETIQ");
+                      break;
+        case COND2:
+                   //Guardo numero de terceto de segunda condicion
+                    pila_aux = pila_tercetos.Sacar();
+                   //Nexo logico (AND u OR)  
+                   pila = pila_tercetos.Sacar();
+                   
+                   //Si es OR debo generar terceto de etiqueta
+                   if (strcmp(pila.parametro,"OR") == 0)
+                      {
+                      struc_etiq = pila_etiquetas.Sacar ();
+                      strcpy(tercetos.parametro_3, "");
+                      strcat(tercetos.parametro_3, struc_etiq.sentencia);
+                      strcat(tercetos.parametro_3, "_COND2");
+                      strcpy(tercetos.parametro_2, "-");
+                      strcpy(tercetos.parametro_1, "ETIQ");
+                      
+                      pila_etiquetas.Poner (struc_etiq);
+                      pila_tercetos.Poner(pila);  
+                      pila_tercetos.Poner(pila_aux);
+                      }
+                   else
+                      {
+                       pila_tercetos.Poner(pila);  
+                       pila_tercetos.Poner(pila_aux);
+                       return;
+                      }
+                    break;
+
+        case COMIENZO_WHILE:
+                       cant_etiq_while++;
+                       struc_etiq.contador = cant_etiq_while;
+                       strcpy(struc_etiq.sentencia, "COMIENZO_WHILE_");
+                       pila_etiquetas.Poner (struc_etiq);
+		       sprintf(aux,"%u",cant_etiq_while);
+                       strcpy(tercetos.parametro_3, "");
+                       strcat(tercetos.parametro_3, "COMIENZO_WHILE_");
+                       strcat(tercetos.parametro_3, aux);
+                       strcpy(tercetos.parametro_2, "-");
+                       strcpy(tercetos.parametro_1, "ETIQ");
+                       break;
+
+        case WHILE_VERDAD:
+                      struc_etiq = pila_etiquetas.Sacar ();
+		      sprintf(aux,"%u",struc_etiq.contador);
+                      strcpy(tercetos.parametro_3, "");
+                      strcat(tercetos.parametro_3, "WHILE_VERDAD_");
+                      strcat(tercetos.parametro_3, aux);
+                      strcpy(tercetos.parametro_2, "-");
+                      strcpy(tercetos.parametro_1, "ETIQ");
+                      pila_etiquetas.Poner (struc_etiq);
+                      break;
+
+        case FIN_WHILE:
+                      struc_etiq = pila_etiquetas.Sacar ();
+		      sprintf(aux,"%u",struc_etiq.contador);
+                      strcpy(tercetos.parametro_3, "");
+                      strcat(tercetos.parametro_3, "FIN_WHILE_");
+                      strcat(tercetos.parametro_3, aux);
+                      strcpy(tercetos.parametro_2, "-");
+                      strcpy(tercetos.parametro_1, "ETIQ");
+                      break;     
+        }     
+        lista_tercetos.Insertar_al_final(tercetos);
+        cantidad_tercetos++;
+}
+
+
+/******************************************************************************/
+void corregir_salto_doble_if (int p_salto)
+{
+    char aux[MAX];
+    int aux2;
+    char cond2[MAX];
+    
+    pila = pila_tercetos.Sacar();
+    cantidad_pila--;
+    strcpy(cond2, pila.parametro);
+    pila = pila_tercetos.Sacar();
+    cantidad_pila--;
+    if (strcmp (pila.parametro, "AND") == 0)
+    {
+        pila = pila_tercetos.Sacar();
+        cantidad_pila--;
+        /* Corregir salto para condicion 1 */
+  	sprintf(aux,"%lu", p_salto);
+    	strcpy(tercetos.parametro_3,"");
+        strcat(tercetos.parametro_3,"[");
+    	strcat(tercetos.parametro_3,aux);
+    	strcat(tercetos.parametro_3,"]");
+    	strcpy(tercetos.parametro_1, "BF" );
+        strcpy(tercetos.parametro_2, "-" );
+        aux2 = atoi(pila.parametro);
+        lista_tercetos.Modificar(tercetos, aux2);
+        
+        /* Corregir salto para condicion 2 */
+        aux2 = atoi(cond2);
+        lista_tercetos.Modificar(tercetos, aux2);         	                
+    }
+    else /* es OR*/
+    {
+         pila = pila_tercetos.Sacar();
+        cantidad_pila--;
+        /* Corregir salto para condicion 1 */
+        aux2 = atoi(cond2);
+        aux2++;
+  	sprintf(aux,"%lu", aux2);
+    	strcpy(tercetos.parametro_3,"");
+        strcat(tercetos.parametro_3,"[");
+    	strcat(tercetos.parametro_3,aux);
+    	strcat(tercetos.parametro_3,"]");
+    	strcpy(tercetos.parametro_1, "BV" );
+        strcpy(tercetos.parametro_2, "-" );
+        aux2 = atoi(pila.parametro);
+        lista_tercetos.Modificar(tercetos, aux2);
+        
+        /* Corregir salto para condicion 2 */
+  	sprintf(aux,"%lu", p_salto);
+    	strcpy(tercetos.parametro_3,"");
+        strcat(tercetos.parametro_3,"[");
+    	strcat(tercetos.parametro_3,aux);
+    	strcat(tercetos.parametro_3,"]");
+    	strcpy(tercetos.parametro_1, "BF" );
+        strcpy(tercetos.parametro_2, "-" );
+        aux2 = atoi(cond2);
+        lista_tercetos.Modificar(tercetos, aux2); 
+    }
+}
+;
+/****************************************************************************** /
+//Corrige salto para el número de terceto desapilado antes de llamada la función
+void corregir_salto_if (int p_salto, char bifurcacion[MAX])
+{
+    char aux[MAX];
+    int aux2;
+    
+    sprintf(aux,"%u", p_salto);
+    
+    strcpy(tercetos.parametro_3,"");
+    strcat(tercetos.parametro_3,"[");
+    strcat(tercetos.parametro_3,aux);
+    strcat(tercetos.parametro_3,"]");
+    
+    strcpy(tercetos.parametro_1, bifurcacion );
+    strcpy(tercetos.parametro_2, "-" );
+    aux2 = atoi(pila.parametro);
+    printf("par: %d",aux2);
+    lista_tercetos.Modificar(tercetos, aux2);
 }
