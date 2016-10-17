@@ -11,22 +11,13 @@ BEGIN
 	THEN 
 		WRITE a
 	ENDIF
+	
 	IF (a == 0) 
 	THEN 
 		READ e
 	ENDIF
-	IF (a == 0 AND b<0) 
-	THEN 
-		READ e
-	ENDIF
-	IF (NOT a) 
-	THEN 
-		WRITE "PERRO"
-	ENDIF
-	IF (a) 
-	THEN 
-		WRITE a19
-	ENDIF
+	
+	
 	IF(b != a19)
 	THEN
 		WRITE v4r14bl3	

@@ -183,7 +183,7 @@ lista_sentencia: sentencia
 lista_sentencia: sentencia lista_sentencia
 {
 
-	lista_sentencia_ind=CrearTerceto(lista_sentencia_ind,sentencia_ind,NULL,&lista_terceto);
+	//lista_sentencia_ind=CrearTerceto(lista_sentencia_ind,sentencia_ind,NULL,&lista_terceto);
   if(DEBUG)  {printf("Sentencia múltiple. \n");       }                     
 };
 
@@ -246,23 +246,39 @@ sent_read: PR_READ TOKEN_ID
 seleccion: comienzo_if lista_sentencia PR_ENDIF
 {	
 
-		//seleccion_ind=CrearTerceto(comienzo_if_ind,lista_sentencia_ind,TERC_NULL,&lista_terceto);
-		//printf("[%d] (%d,[%d],[%d])\n",seleccion_ind, comienzo_if_ind, lista_sentencia_ind,TERC_NULL);
 		int toModificar = 0;
 		sacar_de_pila(&pila,&toModificar,10);
 		int aDonde =  NumeroUltimoTerceto();
 
 
 		ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+1, &lista_terceto, toModificar);
-		//printf("[%d] (%d,[%d],[%d])\n",seleccion_ind, comienzo_if_ind, lista_sentencia_ind,TERC_NULL);
+		
 		 if(DEBUG)  {printf("IF simple. \n");}
 };
 
-seleccion: comienzo_if lista_sentencia PR_ELSE lista_sentencia PR_ENDIF
+seleccion: comienzo_if lista_sentencia {
+
+		//Salto a else
+		int toModificar = 0;
+		sacar_de_pila(&pila,&toModificar,10);
+		int aDonde =  NumeroUltimoTerceto();
+
+		ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+2, &lista_terceto, toModificar);
+
+		//Branch al find
+		int ind_bra = CrearTerceto(TERC_BRA,TERC_NULL,TERC_NULL,&lista_terceto);
+		//ind_bra += 1;
+		poner_en_pila(&pila,&ind_bra,10);
+}
+PR_ELSE lista_sentencia PR_ENDIF
 {		
-			
-		seleccion_ind=CrearTerceto(comienzo_if_ind,lista_sentencia_ind,lista_sentencia_ind,&lista_terceto);
-		
+		//salto BRA
+		int toModificar = 0;
+		sacar_de_pila(&pila,&toModificar,10);
+		int aDonde =  NumeroUltimoTerceto();
+
+		ModificarTerceto(NO_MODIF, aDonde+1, NO_MODIF, &lista_terceto, toModificar);
+							
 	 	if(DEBUG)  {printf("IF con bloque ELSE. \n");}
 };
 
