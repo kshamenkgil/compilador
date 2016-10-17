@@ -7,16 +7,11 @@ DECVAR
 ENDDEC
 
 BEGIN
-	IF (a < 0) 
+	IF (a < 0 OR b==0) 
 	THEN 
+		
 		WRITE a
 	ENDIF
-	
-	IF (a == 0) 
-	THEN 
-		READ e
-	ENDIF
-	
 	
 	IF(b != a19)
 	THEN
@@ -24,4 +19,18 @@ BEGIN
 	ELSE
 		READ v4r14bl3
 	ENDIF
+
+	IF(b != a19 OR a==0)
+	THEN
+		WRITE v4r14bl3
+		WRITE v4r14bl3
+		WRITE v4r14bl3
+		WRITE v4r14bl3	
+	ELSE
+		READ v4r14bl3
+		READ v4r14bl3
+		READ v4r14bl3
+		READ v4r14bl3
+	ENDIF
+
 END

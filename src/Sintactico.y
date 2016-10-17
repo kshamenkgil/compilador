@@ -14,6 +14,10 @@ int sentencia_ind, sent_asignacion_ind, sent_read_ind, sent_repeat_ind, sent_wri
 	
 int ultimo=0;
 
+//para condiciones multiples
+int condicionesMultiples=0;
+int isAnd=0;
+
 //se termino la declaracion de variables?
 int finDecVar = 0;
 
@@ -245,14 +249,27 @@ sent_read: PR_READ TOKEN_ID
 /*Sentencia IF */
 seleccion: comienzo_if lista_sentencia PR_ENDIF
 {	
-
 		int toModificar = 0;
 		sacar_de_pila(&pila,&toModificar,10);
 		int aDonde =  NumeroUltimoTerceto();
 
-
-		ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+1, &lista_terceto, toModificar);
+		ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+1, &lista_terceto, toModificar);		
 		
+		if(condicionesMultiples){
+			int toModificar2 = 0;
+			sacar_de_pila(&pila,&toModificar2,10);
+//		int aDonde2 =  NumeroUltimoTerceto();
+
+			if(isAnd){				
+				ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+1, &lista_terceto, toModificar2);				
+			}else{
+				ModificarTerceto(NO_MODIF, NO_MODIF, toModificar2+1, &lista_terceto, toModificar2);				
+				ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+1, &lista_terceto, toModificar);
+
+			}
+			isAnd = 0;
+			condicionesMultiples = 0;
+		}
 		 if(DEBUG)  {printf("IF simple. \n");}
 };
 
@@ -262,18 +279,34 @@ seleccion: comienzo_if lista_sentencia {
 		int toModificar = 0;
 		sacar_de_pila(&pila,&toModificar,10);
 		int aDonde =  NumeroUltimoTerceto();
+		ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+2, &lista_terceto, toModificar);		
+		
+		if(condicionesMultiples){
+			int toModificar2 = 0;
+			sacar_de_pila(&pila,&toModificar2,10);
+//		int aDonde2 =  NumeroUltimoTerceto();
 
-		ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+2, &lista_terceto, toModificar);
+			if(isAnd){				
+				ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+2, &lista_terceto, toModificar2);				
+			}else{
+				ModificarTerceto(NO_MODIF, NO_MODIF, toModificar2+1, &lista_terceto, toModificar2);				
+				ModificarTerceto(NO_MODIF, NO_MODIF, aDonde+2, &lista_terceto, toModificar);
+			}
+			isAnd = 0;
+			condicionesMultiples = 0;
 
+		}
+		
 		//Branch al find
 		int ind_bra = CrearTerceto(TERC_BRA,TERC_NULL,TERC_NULL,&lista_terceto);
-		//ind_bra += 1;
+		
 		poner_en_pila(&pila,&ind_bra,10);
 }
 PR_ELSE lista_sentencia PR_ENDIF
 {		
 		//salto BRA
 		int toModificar = 0;
+		
 		sacar_de_pila(&pila,&toModificar,10);
 		int aDonde =  NumeroUltimoTerceto();
 
@@ -282,7 +315,7 @@ PR_ELSE lista_sentencia PR_ENDIF
 	 	if(DEBUG)  {printf("IF con bloque ELSE. \n");}
 };
 
-comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA{int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);} PR_THEN
+comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
 {
 	comienzo_if_ind=condicion_ind;
 	 if(DEBUG)  {printf("COMIENZO del bloque IF. \n");}
@@ -290,7 +323,7 @@ comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA{int numero = NumeroUltimoTercet
 
 sent_repeat: PR_REPEAT lista_sentencia PR_UNTIL condRepeat
 {
-	sent_repeat_ind=CrearTerceto(lista_sentencia_ind,condrepeat_ind,NULL,&lista_terceto);
+	//sent_repeat_ind=CrearTerceto(lista_sentencia_ind,condrepeat_ind,NULL,&lista_terceto);
 	 if(DEBUG)  {printf("Sentencia REPEAT completa. \n");}
 };
 
@@ -306,12 +339,14 @@ condRepeat: PAR_ABRE Condicion PAR_CIERRA
 /*Agrupo los dos tipos de Condiciones*/
 Condicion: Condicion_simple
 {
+	  int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);
     condicion_ind = condsimple_ind;
 	 if(DEBUG)  {printf("Condicion SIMPLE. \n");}
 };
 
 Condicion: Condicion_multiple
-{
+{	
+		condicionesMultiples=1;
     condicion_ind = condmult_ind;
 	 if(DEBUG)  {printf("Condicion MULTIPLE. \n");}
 };
@@ -419,15 +454,17 @@ Condicion_simple: OP_LOG_NOT expresion{expresion1_ind=expresion_ind;} OP_IGUAL_I
   	if(DEBUG)  {printf("Condicion Simple  con operador Igual Igual pero Negado. \n");}
 };
 
-Condicion_multiple: Condicion_simple {condsimple1_ind=condsimple_ind;} OP_LOG_AND Condicion_simple {condsimple2_ind=condsimple_ind;}
-{
-    condmult_ind = CrearTerceto(TERC_AND,condsimple1_ind,condsimple2_ind, &lista_terceto);
+Condicion_multiple: Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple1_ind=condsimple_ind;} OP_LOG_AND Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple2_ind=condsimple_ind;}
+{	
+		isAnd = 1;
+    //condmult_ind = CrearTerceto(TERC_AND,condsimple1_ind,condsimple2_ind, &lista_terceto);
   	if(DEBUG)  {printf("Condicion Multiple con operador lógico AND. \n");}
 };
 
-Condicion_multiple: Condicion_simple {condsimple1_ind=condsimple_ind;} OP_LOG_OR Condicion_simple {condsimple2_ind=condsimple_ind;}
+Condicion_multiple: Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple1_ind=condsimple_ind;} OP_LOG_OR Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple2_ind=condsimple_ind;}
 {
-    condmult_ind = CrearTerceto(TERC_OR,condsimple1_ind,condsimple2_ind, &lista_terceto);
+		isAnd = 0;
+    //condmult_ind = CrearTerceto(TERC_OR,condsimple1_ind,condsimple2_ind, &lista_terceto);
   	if(DEBUG)  {printf("Condicion Multiple con operador lógico OR. \n");}
 };
 
@@ -577,7 +614,7 @@ average: PR_AVERAGE {longitud_cont=0;} PAR_ABRE COR_ABRE lista_expresiones COR_C
 
 lista_expresiones: expresion {
 		    longitud_cont++;
-         listaexpr_ind = CrearTerceto(expresion_ind, TERC_NULL, TERC_NULL, &lista_terceto);
+         //listaexpr_ind = CrearTerceto(expresion_ind, TERC_NULL, TERC_NULL, &lista_terceto);
 	    }
         |  lista_expresiones COMA expresion
         {

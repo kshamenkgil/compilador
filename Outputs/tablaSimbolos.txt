@@ -54,3 +54,5 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 
 23			 &cte3			 2			 0		 0.000000		 -
 
+24			 &cte4			 2			 0		 0.000000		 -
+
