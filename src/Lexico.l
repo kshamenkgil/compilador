@@ -9,9 +9,11 @@ FILE  *yyin;
 char aux[COTA_STR],aux2[COTA_STR];
 double f;
 
+char bufferItoa[STR_VALUE];
+
 %}
 
-%option noyywrap  
+%option noyywrap 
 %option yylineno 
 
 DIGITO			[0-9]
@@ -120,7 +122,7 @@ PUT				["WRITE"]
 {ID}			{
 
 
-						yylval.str_val = yytext;
+						yylval.str_val = strdup(yytext);
 						if(strlen(yytext)>COTA_ID)
 							{
 								printf("¡ERROR con %s! Supera el maximo de caracteres permitidos %d\n",yytext,COTA_ID);
@@ -130,8 +132,10 @@ PUT				["WRITE"]
 						else	
 							{	strcpy(aux,"_");
 								strcat(aux,yytext);
-								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
-								printf( "identificador %s (%s)\n", yytext,yylval.str_val);
+								if(DEBUG) {
+									printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
+									printf( "identificador %s (%s)\n", yytext,yylval.str_val);
+								}
 								agregarTokenTS(aux,"-",VRBL,0,0);
 								return TOKEN_ID;
 							}
@@ -139,7 +143,7 @@ PUT				["WRITE"]
 				
 
 {CONST_INT}		{ 		
-						yylval.str_val = yytext;
+						yylval.str_val = strdup(yytext);
 						if(atoi(yytext)>COTA_CTE)
 							{
 								printf("¡ERROR con la constante numérica entera %s! Supera el rango de: %d",yytext,COTA_CTE);
@@ -148,16 +152,22 @@ PUT				["WRITE"]
 							}
 						else
 							{
-								strcpy(aux,"&");
-								strcat(aux,yytext);
-								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la ",aux);
-								printf( "constante %s (%s)\n", yytext,yylval.str_val);
-								agregarTokenTS(aux,"-",CTE_INT,0,atoi(yytext));
+								strcpy(aux,"&cte");
+								//strcat(aux,yytext);
+								sprintf(bufferItoa,"%d",getiConstantes());
+								strcat(aux,bufferItoa);
+								if(DEBUG){ 
+									printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la ",aux);
+									printf( "constante %s (%s)\n", yytext,yylval.str_val);
+								}
+								float valor = atof(yytext);								
+								agregarTokenTS(aux,"-",CTE_INT,0,valor);
+								incrementarIConstantes();
 								return CONST_INT;
 							}
 				}
 				
-{CONST_STR}		{ 		yylval.str_val = yytext;
+{CONST_STR}		{ 		yylval.str_val = strdup(yytext);
 						//strcpy(aux2,yytext);
 						//if(strlen(aux2)>COTA_STR)
 						if(strlen(yytext)>COTA_STR)
@@ -171,18 +181,24 @@ PUT				["WRITE"]
 							{
 								strcpy(aux2,yytext); //ksh
 								armarValorYNombreToken(aux2,yytext);
-								strcpy(aux,"@");
-								strcat(aux,aux2);
-								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
-								printf( "string  %s (%s)\n", yytext,yylval.str_val);						
+								strcpy(aux,"@cte");
+								sprintf(bufferItoa,"%d",getiConstantes());
+								strcat(aux,bufferItoa);
+								//strcat(aux,aux2);
+								if(DEBUG) {
+									printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
+									printf( "string  %s (%s)\n", yytext,yylval.str_val);
+								}						
 								agregarTokenTS(aux,yytext,CTE_STR,strlen(aux2),0);
+								incrementarIConstantes();
 								return CONST_STR;
 							}
 				}
 				
 {CONST_FLOAT}	{ 		
-						yylval.str_val = yytext;
+						yylval.str_val = strdup(yytext);
 						f=atof(yytext);
+						
 						if(f>COTA_REAL)
 							{
 								printf("¡ERROR con la constante numérica real %s! Supera el rango de: %f",yytext,COTA_REAL);
@@ -191,18 +207,23 @@ PUT				["WRITE"]
 							}
 						else
 							{
-								strcpy(aux,"$");
-								strcat(aux,yytext);
-								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la",aux);
-								printf( "constante %s (%s)\n", yytext,yylval.str_val);
+								strcpy(aux,"$cte");
+								sprintf(bufferItoa,"%d",getiConstantes());
+								strcat(aux,bufferItoa);
+								//strcat(aux,yytext);
+								if(DEBUG) {
+									printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la",aux);
+									printf( "constante %s (%s)\n", yytext,yylval.str_val);
+								}
 								agregarTokenTS(aux,"-",CTE_FLT,0,f);
-								return CONST_FLOAT;
+								incrementarIConstantes();
+								return CONST_FLOAT;																
 							}
 				}
 
-{COM_ANIDADO}	{ printf("Comentario anidado encontrado\n");}	
+{COM_ANIDADO}	{ if(DEBUG) {printf("Comentario anidado encontrado\n");} }	
 			
-{COM_SIMPLE}	{ printf("Comentario simple encontrado\n");}
+{COM_SIMPLE}	{ if(DEBUG) {printf("Comentario simple encontrado\n");} }
 
 
 

@@ -1,5 +1,5 @@
 DECVAR
-	arbol,b,casa,d,e:INT
+	b,arbol,casa,d,e,a:INT	
 	g:FLOAT
 	a_:STRING
 	v4r14bl3: INT
@@ -7,76 +7,30 @@ DECVAR
 ENDDEC
 
 BEGIN
-	
-	casa:=3
-	
-	b:=2+6-d*3 - (5/1)
-
-	READ b
-
-	WRITE b
-
-	WRITE "hola"
-
-	r:="hola cadena"
-
-	r:=((4+5)*c)
-
-	casa:=24
-
-	casa:=235.5572345345
-
-	f:=25*c/2+5.4
-
-	mat1:="lenguajes"
-
-	mat2:="compiladores"
-
-	casa:=a++b
-
-	casa:="aca"++"ahi"
-
-	casa:=a++"mundo"
-
-	casa:="hola"++b	
-	
-	i:=0
-
-	-/ Aclaración del IF/-
-	IF(numero==0 OR numero2<3) THEN
-		casa:=2
-	ELSE
-		casa:=3
+	IF (a < 0) 
+	THEN 
+		WRITE a
 	ENDIF
-
-	IF(NOT avg==11)
-	
+	IF (a == 0) 
+	THEN 
+		READ e
+	ENDIF
+	IF (a == 0 AND b<0) 
+	THEN 
+		READ e
+	ENDIF
+	IF (NOT a) 
+	THEN 
+		WRITE "PERRO"
+	ENDIF
+	IF (a) 
+	THEN 
+		WRITE a19
+	ENDIF
+	IF(b != a19)
 	THEN
-		casa:=2
+		WRITE v4r14bl3	
 	ELSE
-		casa:=3
+		READ v4r14bl3
 	ENDIF
-	
--/Comentario /- 
--/Así son los comentarios en el  2 °Cuat de LyC-/Comentario/- /-
-
-	REPEAT
-		WRITE "Repetir 3 veces"
-		i:=i+1
-	UNTIL	
-		(i>2)
-
--/FNs especiales como factores/-
-	a:= FACTORIAL(3+1-2*1)
-	b:= a - COMBINATORIO(a,666)
-	
-	IF(a==0 AND AVERAGE([1,2,34,5])<3)
-	THEN
-		casa:=2
-	ELSE
-		casa:=3
-	ENDIF
-	
-
 END
-

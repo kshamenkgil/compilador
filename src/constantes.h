@@ -1,4 +1,5 @@
 //Cotas de Datos
+#define STR_VALUE 255
 #define COTA_STR 30
 #define COTA_CTE 65535
 #define COTA_REAL 9999999.9999999999
@@ -10,6 +11,9 @@
 #define CTE_INT 2
 #define CTE_FLT 3
 #define CTE_STR 4
+
+//Variable para debug
+#define DEBUG 0
 
 /*Tamaño de la tabla de simbolos*/
 #define MAX_TS 1000
@@ -25,3 +29,4 @@ typedef struct tablaS {
        int longitud;
        char valorString [COTA_STR]; /*Guarda valor de las variables tipo string. De no ser un string guarda un "-"*/
 }TS;
+

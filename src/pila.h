@@ -1,31 +1,22 @@
-#ifndef PILA_H
-#define PILA_H
-
-#include <stdio.h>
-
-#include <iostream>
-#include <iomanip>
 #include <stdlib.h>
+#define PILA_LLENA -1
+#define PILA_VACIA 0
+#define TODO_OK 1
 
-template <class R> class NodoPila
-{ 	public:
-   R Contenido;
-   NodoPila<R> *Siguiente;
-};
-
-template <class T> class Pila
+typedef struct s_nodo
 {
-		NodoPila<T> *Tope;
-		bool error_de_memoria;
-	public:
-   	Pila();
-      ~Pila();
-      bool ErrorDeMemoria();
-		bool Poner(T);
-      T Sacar();
-      bool PilaVacia();
-      bool Vaciar_pila();
+    void *dato;
+    struct s_nodo *psig;
+}t_nodo;
 
-};
+typedef t_nodo *t_pila;
 
-#endif
+
+//Pila
+int poner_en_pila(t_pila *,const void * ,int);
+int sacar_de_pila(t_pila *,void * ,int);
+int tope_pila(const t_pila *,void * ,int);
+void vaciar_pila(t_pila *);
+int pila_llena(const t_pila *);
+int pila_vacia(const t_pila *);
+void crear_pila(t_pila *);
