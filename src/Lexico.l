@@ -8,6 +8,7 @@
 FILE  *yyin;
 char aux[COTA_STR],aux2[COTA_STR];
 double f;
+
 %}
 
 %option noyywrap  
@@ -130,7 +131,7 @@ PUT				["WRITE"]
 							{	strcpy(aux,"_");
 								strcat(aux,yytext);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
-								printf( "identificador encontrado por el analizador lexico: %s (%s)\n", yytext,yylval.str_val);
+								printf( "identificador %s (%s)\n", yytext,yylval.str_val);
 								agregarTokenTS(aux,"-",VRBL,0,0);
 								return TOKEN_ID;
 							}
@@ -150,7 +151,7 @@ PUT				["WRITE"]
 								strcpy(aux,"&");
 								strcat(aux,yytext);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la ",aux);
-								printf( "constante encontrada por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);
+								printf( "constante %s (%s)\n", yytext,yylval.str_val);
 								agregarTokenTS(aux,"-",CTE_INT,0,atoi(yytext));
 								return CONST_INT;
 							}
@@ -173,7 +174,7 @@ PUT				["WRITE"]
 								strcpy(aux,"@");
 								strcat(aux,aux2);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
-								printf( "string encontrado por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);						
+								printf( "string  %s (%s)\n", yytext,yylval.str_val);						
 								agregarTokenTS(aux,yytext,CTE_STR,strlen(aux2),0);
 								return CONST_STR;
 							}
@@ -193,7 +194,7 @@ PUT				["WRITE"]
 								strcpy(aux,"$");
 								strcat(aux,yytext);
 								printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la",aux);
-								printf( "constante encontrada por el analizador léxico: %s (%s)\n", yytext,yylval.str_val);
+								printf( "constante %s (%s)\n", yytext,yylval.str_val);
 								agregarTokenTS(aux,"-",CTE_FLT,0,f);
 								return CONST_FLOAT;
 							}

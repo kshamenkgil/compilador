@@ -4,73 +4,19 @@
 #include <string.h>
 #include "y.tab.h"
 #include "constantes.h"
-#include "lista_dinamica.c"
-#include "pilaDinamica.c"
-#include "tipos.h"
+#include "Terceto.h"
 
-int debug=1;
+int pgm_ind, programa_ind, DEBUG,tipo_var,condrepeat_ind, condicion_ind, condsimple_ind, condmult_ind;
+int termino_ind, factor_ind, expresion_ind,avg_ind,factorial_ind, nrocomb_ind,asignacion_ind,tokenid_ind,asignado_ind,longitud_cont;
+int listaexpr_ind,lista_sentencia_ind,dec_var_ind,dec_var_ind,lista_dec_var_ind,linea_dec_var_ind;
+int sentencia_ind, sent_asignacion_ind, sent_read_ind, sent_repeat_ind, sent_write_ind, lista_sentencia_ind,comienzo_if_ind,seleccion_ind,lista_variables_ind;
+	
+int ultimo=0;
+lista_tercetos_t * lista_terceto;
 int yystopparser=0;
 FILE  *yyin; //Archivo de Entrada
 FILE * pfTablaSimbolos; //Tabla de Simbolos
 FILE * pfTablaSimbolos2; //Tabla de Simbolos
-
-************************** Estructura de Tercetos en tipos.h *****************************
-
-int cant_tercetos = 0;
-Lista <estructura_tercetos> lista_tercetos;
-Lista <estructura_tercetos> lista_tercetos_aux;
-
-************************* Estructura de ID ********************************************
-
-int cant_id = 0;
-int cant_var = 1;
-Lista <estructura_id> lista_id, lista_var;
-
-
-************************* Estructura de Tipo de dato ********************************************
-
-int cant_tipo = 0;
-estructura_tipo estruc_tipo;
-Lista <estructura_tipo> lista_tipo;
-
-************************* Pila de Tercetos ********************************************
-
-int cantidad_pila = 0;
-estructura_pila pila;
-Pila <estructura_pila> pila_tercetos;
-
-********************************************
-
-//Contadores de Etiquetas
-int cant_etiq_if = 0;
-int cant_etiq_while = 0;
-int cant_etiq_repeat = 0;
-int cant_etiq_filter = 0;
-
-Pila <pila_cont_etiquetas> pila_etiquetas;
-int cont_expresion = 0;
-
-
-************************************* Tabla de Simbolos *********************************************
-
-//Estructuras de analizador lexico
-typedef struct tablaS {
-       char nombre [100]; //si el nombre le precede un "_" entonces es una variable, si tiene $ entonces es real y si tiene & es int,    
-                          //si tiene un @ es una cte string.
-       int tipo; // 0 es palabra reservada, 1 es variable, 2 constante
-       double valor;
-       int longitud;
-       char valorString [COTA_STR]; /*Guarda valor de las variables tipo string. De no ser un string guarda un "-"*/
-}TS;
-
-//Instancia de Tabla de Símbolos
-TS tabla[MAX_TS];
-
-//Tope Tabla de Simbolos
-int topeTS = 0;
-
-******************************************
-
 %}
 
 /* PARA OBTENER LOS VALORES Y PASAR A TS*/
@@ -79,6 +25,7 @@ int intval;
 double val;
 char *str_val;
 }
+
 
 %token <str_val>TOKEN_ID
 %token <int>CONST_INT
@@ -142,100 +89,118 @@ char *str_val;
 /*OK!*/
 pgm: programa 
 {
-	if(debug){
- 			printf("Start symbol - ¡Compilación exitosa!. \n");
- 			printf("-------------------. \n");
-	}
-
-	 strcpy(tercetos.parametro_1, "END" );
-     strcpy(tercetos.parametro_2, "-" );
-     strcpy(tercetos.parametro_3, "-" );
-     lista_tercetos.Insertar_al_final(tercetos);
-     cantidad_tercetos++;
+ pgm_ind = programa_ind;
+ printf("Start symbol - ¡Compilación exitosa!. \n");
+ printf("-------------------. \n");
+	DumpLista(&lista_terceto);
 };
 
 programa: PR_BEGIN lista_sentencia PR_END 
 {
-	if(debug){
-		printf("Programa donde no hubo declaración de variables. \n");
-	}
+			programa_ind= lista_sentencia_ind;
+      printf("Programa donde no hubo declaración de variables. \n");
 };
 
 programa: dec_var PR_BEGIN lista_sentencia PR_END 
 {
-	if(debug){
-		printf ("Programa con variables declaradas previamente. \n");
-	}
+	//programa_ind=CrearTerceto(dec_var_ind,lista_sentencia_ind,NULL, &lista_terceto);
+		  printf("Programa con variables declaradas previamente. \n");
 };
 
 /*Declaración de Variables*/
 dec_var: PR_VAR lista_dec_var PR_ENDVAR
 {
-	if(debug){
-	 printf ("Bloque con declaracion de las variables. \n");
-	}
+	//dec_var_ind= lista_dec_var_ind;
+  printf("Bloque con declaracion de las variables. \n");
 };
 
-lista_dec_var: linea_dec_var | lista_dec_var linea_dec_var
-{
-	if(debug){
-		printf("Múltiples líneas con declaraciones de las variables. \n");
+lista_dec_var: linea_dec_var {
+	
+	//lista_dec_var_ind=CrearTerceto(linea_dec_var_ind,NULL,NULL, &lista_terceto);
 	}
+
+
+| lista_dec_var linea_dec_var {
+	
+	//lista_dec_var_ind=CrearTerceto(lista_dec_var_ind,linea_dec_var_ind,NULL, &lista_terceto);
+	
+	}
+{
+	 printf("Múltiples líneas con declaraciones de las variables. \n");
 }
 
 linea_dec_var:  lista_variables DOSPUNTOS tipo
 {
- printf ("Declaracion de variables de cierto tipo. \n");
+	linea_dec_var_ind = lista_variables_ind;
+  printf("Declaracion de variables de cierto tipo. \n");
 };
 
 
-tipo: PR_INT | PR_FLOAT | PR_STRING
+tipo: PR_INT {tipo_var=CTE_INT;} | PR_FLOAT {tipo_var=CTE_FLT;}| PR_STRING{tipo_var=CTE_STR;}
 {
-	printf("Tipo de variable. \n");
-}
+	 printf("Tipo de variable. \n");
+}																								//Ver aca
 
-lista_variables: TOKEN_ID |   lista_variables COMA TOKEN_ID
-{
-	printf("Variable o lista de variables. \n");
-}
+lista_variables: TOKEN_ID {
+//	lista_variables_ind= CrearTerceto($1,NULL,NULL,&lista_terceto);
+	 agregarTipoIDaTS($1,tipo_var);
+		 printf("Variable. \n");
+
+	}	
+	|  lista_variables COMA TOKEN_ID {
+
+//	lista_variables_ind= CrearTerceto(lista_variables_ind,$3,NULL,&lista_terceto);
+	agregarTipoIDaTS($3,tipo_var);
+		 printf("lista de variables. \n");
+
+	}
 
 /*Sentencias*/
 
 lista_sentencia: sentencia
 {
- printf ("Sentencia única. \n");                            
+	lista_sentencia_ind=sentencia_ind;
+  printf("Sentencia única. \n");                            
 };
 
 lista_sentencia: sentencia lista_sentencia
 {
- printf ("Sentencia múltiple. \n");                            
+
+	lista_sentencia_ind=CrearTerceto(lista_sentencia_ind,sentencia_ind,NULL,&lista_terceto);
+  printf("Sentencia múltiple. \n");                            
 };
 
 
 sentencia: seleccion
 {
-printf ("Sentencia Condicional: IF. \n");
+	sentencia_ind=seleccion_ind;
+ printf("Sentencia Condicional: IF. \n");
 };
 
 sentencia: sent_repeat
 {
- printf ("Sentencia bucle: REPEAT. \n");                            
+	sentencia_ind=sent_repeat_ind;
+  printf("Sentencia bucle: REPEAT. \n");                            
 };
 
 
 sentencia: sent_asignacion  
 {
- printf ("Sentencia: ASIGNACION. \n");                            
+
+	sentencia_ind=sent_asignacion_ind;
+  printf("Sentencia: ASIGNACION. \n");                            
 };
 
 sentencia: sent_write 
 {
- printf ("Sentencia: WRITE. \n");                            
+	sentencia_ind=sent_write_ind;
+  printf("Sentencia: WRITE. \n");                            
 };
 
 sentencia: sent_read 
 {
- printf ("Sentencia: READ. \n");                            
+	sentencia_ind=sent_read_ind;
+  printf("Sentencia: READ. \n");                            
 };
 
 
@@ -243,184 +208,164 @@ sentencia: sent_read
 /*Sentencia WRITE*/
 sent_write: PR_WRITE TOKEN_ID
 {
-	if(debug){
- 		printf ("WRITE de un ID. \n");
-	}
-
-	 strcpy(tercetos.parametro_1, "WRITE");
- 	 pila = pila_tercetos.Sacar();
-     cantidad_pila--;
-                  
-    strcpy(tercetos.parametro_2, "-");
-    strcpy(tercetos.parametro_3, pila.parametro);
-    lista_tercetos.Insertar_al_final(tercetos);
-    cantidad_tercetos++; 
-
-
+	sent_write_ind=CrearTerceto(TERC_WRITE,$2,NULL,&lista_terceto);
+  printf("WRITE de un ID. \n");
 }
-
+																	//Ver como diferenciar ID y CONS a la hora de imprimir 
 sent_write: PR_WRITE CONST_STR
 {
- printf ("WRITE de un STRING. \n");
+	sent_write_ind=CrearTerceto(TERC_WRITE,$2,NULL,&lista_terceto);
+  printf("WRITE de un STRING. \n");
 }
 
 /*Sentencia READ*/
 sent_read: PR_READ TOKEN_ID
 {
- printf ("READ de un ID. \n");
+	sent_read_ind=CrearTerceto(TERC_READ,$2,NULL,&lista_terceto);
+  printf("READ de un ID. \n");
 }
 
 /*Sentencia IF */
-seleccion: comienzo_if lista_sentencia fin_if
-{
-	if(debug){
-		printf("IF simple. \n");
-	}
-
-	if(strcmp (pila.parametro, "DOBLE_CONDICION") == 0){
-		corregir_salto_doble_if(cantidad_tercetos+1);
-	}    
-	else // es condición simple
-		corregir_salto_if(cantidad_tercetos+1, "BF");
-
-	generar_terceto_etiqueta(TERMINA_IF);
-
-
-
-
+seleccion: comienzo_if lista_sentencia PR_ENDIF
+{	
+	seleccion_ind=CrearTerceto(comienzo_if_ind,lista_sentencia_ind,NULL,&lista_terceto);
+	 printf("IF simple. \n");
 };
 
-seleccion: comienzo_if lista_sentencia comienzo_else lista_sentencia fin_if
-{
-	if(debug){
-		printf("IF con bloque ELSE. \n");
-	}
-	
-	pila = pila_tercetos.Sacar();
-	cantidad_pila--;
-	
-	if(strcmp (pila.parametro, "COND_DOBLE") == 0){
-		corregir_salto_doble_if(cantidad_tercetos+2);
-	}
-	else{ // es condición simple
-		corregir_salto_if(cantidad_tercetos+2, "BF");
-	}                  
+seleccion: comienzo_if lista_sentencia PR_ELSE lista_sentencia PR_ENDIF
+{																	//Ver aca	
+		seleccion_ind=CrearTerceto(comienzo_if_ind,lista_sentencia_ind,lista_sentencia_ind,&lista_terceto);
+	 printf("IF con bloque ELSE. \n");
 };
 
 comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
 {
-	printf("COMIENZO del bloque IF. \n");
+	comienzo_if_ind=condicion_ind;
+	 printf("COMIENZO del bloque IF. \n");
 };
 
-comienzo_else: PR_ELSE
+sent_repeat: PR_REPEAT lista_sentencia PR_UNTIL condRepeat
 {
-	printf("COMIENZO dele bloque ELSE. \n");
+	sent_repeat_ind=CrearTerceto(lista_sentencia_ind,condrepeat_ind,NULL,&lista_terceto);
+	 printf("Sentencia REPEAT completa. \n");
 };
 
-fin_if: PR_ENDIF
-{
-	printf("FINALIZA el IF. \n");
-};
-
-
-sent_repeat: comienzoRepeat lista_sentencia finRepeat condRepeat
-{
-	printf("Sentencia REPEAT completa. \n");
-};
-comienzoRepeat: PR_REPEAT
-{
-	printf("inicio del bucle REPEAT. \n");
-};
 condRepeat: PAR_ABRE Condicion PAR_CIERRA 
 {
-	printf("Condicion del REPEAT. \n");
+    condrepeat_ind = condicion_ind;
+	 printf("Condicion del REPEAT. \n");
 };
-finRepeat: PR_UNTIL 
-{
-	printf("Fin del repeat. \n");
-};
+
 
 /*Condiciones*/
 
 /*Agrupo los dos tipos de Condiciones*/
 Condicion: Condicion_simple
 {
-	printf("Condicion SIMPLE. \n");
+    condicion_ind = condsimple_ind;
+	 printf("Condicion SIMPLE. \n");
 };
 
 Condicion: Condicion_multiple
 {
-	printf("Condicion MULTIPLE. \n");
+    condicion_ind = condmult_ind;
+	 printf("Condicion MULTIPLE. \n");
 };
 
 Condicion_simple: expresion OP_MENOR expresion 	
 {
- printf ("Condicion simple con operador Menor. \n");
+    condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MENOR, condsimple_ind, NULL, &lista_terceto);
+    
+  printf("Condicion simple con operador Menor. \n");
 };
 
 Condicion_simple: expresion OP_MENOR_IGUAL expresion
 {
- printf ("Condicion simple con operador Menor e Igual. \n");
+    condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MENOR_IGUAL,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion simple con operador Menor e Igual. \n");
 };
 
 Condicion_simple: expresion OP_MAYOR expresion
 {
- printf ("Condicion simple con operador Mayor. \n");
+    condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MAYOR,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion simple con operador Mayor. \n");
 };
  	
 Condicion_simple: expresion OP_MAYOR_IGUAL expresion 
 {
- printf ("Condicion simple con operador Mayor e Igual. \n");
+        condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MAYOR_IGUAL,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion simple con operador Mayor e Igual. \n");
 };
 
 Condicion_simple: expresion OP_DISTINTO expresion 
-{
- printf ("Condicion simple con operador Distinto. \n");
+{        condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_DISTINTO,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion simple con operador Distinto. \n");
 };
 
 Condicion_simple: expresion OP_IGUAL_IGUAL expresion 
 {
- printf ("Condicion simple  con operador Igual Igual. \n");
+        condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_IGUAL,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion simple  con operador Igual Igual. \n");
 };
 
 Condicion_simple: OP_LOG_NOT expresion OP_MENOR expresion 
 {
- printf ("Condicion Simple  con operador Menor Negado. \n");
+            condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MAYOR_IGUAL,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion Simple  con operador Menor Negado. \n");
 };
 
 Condicion_simple: OP_LOG_NOT expresion OP_MENOR_IGUAL expresion 
 {
- printf ("Condicion Simple  con operador Menor Igual Negado. \n");
+        condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MAYOR,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion Simple  con operador Menor Igual Negado. \n");
 };
 
 Condicion_simple: OP_LOG_NOT expresion OP_MAYOR expresion 
 {
- printf ("Condicion Simple  con operador Mayor pero Negado. \n");
+        condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MENOR_IGUAL,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion Simple  con operador Mayor pero Negado. \n");
 };
 
 Condicion_simple: OP_LOG_NOT expresion OP_MAYOR_IGUAL expresion 
 {
- printf ("Condicion Simple Mayor Igual pero Negado. \n");
+            condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_MENOR,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion Simple Mayor Igual pero Negado. \n");
 };
 
 Condicion_simple: OP_LOG_NOT expresion OP_DISTINTO expresion 
 {
- printf ("Condicion Simple Distinto pero Negado. \n");
+    condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_IGUAL,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion Simple Distinto pero Negado. \n");
 };
 
 Condicion_simple: OP_LOG_NOT expresion OP_IGUAL_IGUAL expresion 
 {
- printf ("Condicion Simple  con operador Igual Igual pero Negado. \n");
+            condsimple_ind = CrearTerceto(TERC_CMP, expresion_ind,expresion_ind, &lista_terceto);
+    condsimple_ind = CrearTerceto(TERC_DISTINTO,  condsimple_ind, NULL, &lista_terceto);
+  printf("Condicion Simple  con operador Igual Igual pero Negado. \n");
 };
 
 Condicion_multiple: Condicion_simple OP_LOG_AND Condicion_simple
 {
- printf ("Condicion Multiple con operador lógico AND. \n");
+    condmult_ind = CrearTerceto(TERC_AND,condsimple_ind,condsimple_ind, &lista_terceto);
+  printf("Condicion Multiple con operador lógico AND. \n");
 };
 
 Condicion_multiple: Condicion_simple OP_LOG_OR Condicion_simple
 {
- printf ("Condicion Multiple con operador lógico OR. \n");
+    condmult_ind = CrearTerceto(TERC_OR,condsimple_ind,condsimple_ind, &lista_terceto);
+  printf("Condicion Multiple con operador lógico OR. \n");
 };
 
 
@@ -428,153 +373,193 @@ Condicion_multiple: Condicion_simple OP_LOG_OR Condicion_simple
 
 expresion: expresion OP_SUMA termino	
 {
- printf ("Expresión como suma de otra expresión y un término. \n");       
+            expresion_ind= CrearTerceto(TERC_SUMA, expresion_ind, termino_ind, &lista_terceto);
+  printf("Expresión como suma de otra expresión y un término. \n");       
 };
 
 expresion: expresion OP_RESTA termino
 {
- printf ("Expresión como resta de otra expresión y un término. \n");     
+        expresion_ind= CrearTerceto(TERC_RESTA, expresion_ind, termino_ind, &lista_terceto);
+  printf("Expresión como resta de otra expresión y un término. \n");     
 };
 	
 expresion: termino	
 {
- printf ("Expresión como un término. \n");                        
+    expresion_ind=termino_ind;
+  printf("Expresión como un término. \n");                        
 };
 
 termino: termino OP_MULTIPLICACION factor								
 {
- printf ("Término como producto de un término y un factor. \n");                    
+        termino_ind= CrearTerceto(TERC_MULT, termino_ind, factor_ind, &lista_terceto);
+  printf("Término como producto de un término y un factor. \n");                    
 };
 
 termino: termino OP_DIVISION factor	
 {
- printf ("Término como cociente de un término y un factor. \n");   
+    termino_ind= CrearTerceto(TERC_DIV, termino_ind, factor_ind, &lista_terceto);
+  printf("Término como cociente de un término y un factor. \n");   
 };
 
 termino: factor 
 {
- printf ("Termino como un factor. \n");
+    termino_ind = factor_ind;
+ printf("Termino como un factor. \n");
 };
 
 factor: CONST_INT	
 {
- printf ("Factor es una constante entera. \n");                        
+
+    factor_ind = CrearTerceto($<intval>1, TERC_NULL, TERC_NULL, &lista_terceto);
+		//printf("\n %d y",$<intval>1);
+  printf("Factor es una constante entera. \n");                        
 };
 
 factor: CONST_FLOAT	
 {
- printf ("Factor es una Constante real. \n");                        
+
+    factor_ind = CrearTerceto($<val>1, TERC_NULL, TERC_NULL, &lista_terceto);
+  printf("Factor es una Constante real. \n");                        
 };
 							
 factor: TOKEN_ID			
 {
- printf ("Factor es un ID. \n");                        
+    factor_ind = CrearTerceto($1, TERC_NULL, TERC_NULL, &lista_terceto);
+  printf("Factor es un ID. \n");                        
 };
 	
 factor: PAR_ABRE expresion PAR_CIERRA 
 {
- printf ("Factor es una  ( EXPRESION ). \n");
+    factor_ind = expresion_ind;
+  printf("Factor es una  ( EXPRESION ). \n");
 };
 factor: average			
 {
- printf ("Factor es un resultado de AVERAGE. \n");                        
+    factor_ind = avg_ind;
+  printf("Factor es un resultado de AVERAGE. \n");                        
 };
 
 factor: factorial			
 {
- printf ("Factor es un resultado de FACTORIAL. \n");                        
+
+    factor_ind = factorial_ind;
+  printf("Factor es un resultado de FACTORIAL. \n");                        
 };
 factor: nrocombinatorio
 {
- printf ("Factor es un resultado de NUMERO COMBINATORIO. \n");                        
+
+    factor_ind = nrocomb_ind;
+  printf("Factor es un resultado de NUMERO COMBINATORIO. \n");                        
 };
 
 /*Asignaciones*/ //Faltan
 
 sent_asignacion: TOKEN_ID OP_ASIGNACION asignado
 {
-printf ("Asignacion Simple. \n");
+     asignacion_ind = CrearTerceto(TERC_ASIG, tokenid_ind, asignado_ind, &lista_terceto);
+			 
+ printf("Asignacion Simple. \n");
 };
 
 asignado: expresion 
 {
- printf ("Asignacion a partir de una expresion. \n");                        
+     asignado_ind = expresion_ind;
+  printf("Asignacion a partir de una expresion. \n");                        
 };
 
 asignado: CONST_STR
 {
- printf ("Asignacion a partir de una Constante String. \n");                        
+     asignado_ind = CrearTerceto($1, NULL, NULL, &lista_terceto);
+  printf("Asignacion a partir de una Constante String. \n");                        
 };
 
 /*"pepe1"++"pepe2"*/
 asignado: CONST_STR CONCAT CONST_STR	
 {
- printf ("Asignacion a partir de una concatenación entre constantes String. \n"); 
+        asignado_ind = CrearTerceto(TERC_CONCAT, $1, $3, &lista_terceto);
+  printf("Asignacion a partir de una concatenación entre constantes String. \n"); 
 };
 
 /*ID++"pepe2"*/
 asignado: TOKEN_ID CONCAT CONST_STR	
 {
- printf ("Asignacion a partir de una concatenación entre un ID string y una constante String. \n");    
+
+        asignado_ind = CrearTerceto(TERC_CONCAT, $1, $3, &lista_terceto);
+  printf("Asignacion a partir de una concatenación entre un ID string y una constante String. \n");    
 };
 
 /*"pepe1"++ID*/
 asignado: CONST_STR CONCAT TOKEN_ID	
 {
- printf ("Asignacion a partir de una concatenacion entre una constante String y de un ID string. \n");                        
+        asignado_ind = CrearTerceto(TERC_CONCAT, $1, tokenid_ind, &lista_terceto);
+  printf("Asignacion a partir de una concatenacion entre una constante String y de un ID string. \n");                        
 };
 
 /*ID++ID*/
 asignado: TOKEN_ID CONCAT TOKEN_ID	
-{
- printf ("Asignacion a partir de una concatenacion entre dos ID. \n");         
+{                                              
+        asignado_ind = CrearTerceto(TERC_CONCAT, $<intval>1, $<intval>3, &lista_terceto);
+  printf("Asignacion a partir de una concatenacion entre dos ID. \n");         
 };
 
 /*Declaracion Funciónes especiales*/
 
 
-average: PR_AVERAGE PAR_ABRE COR_ABRE lista_expresiones COR_CIERRA PAR_CIERRA
+average: PR_AVERAGE {longitud_cont=0;} PAR_ABRE COR_ABRE lista_expresiones COR_CIERRA PAR_CIERRA
 {
- printf ("Función AVERAGE. \n");                            
+    avg_ind = CrearTerceto(TERC_AVG, listaexpr_ind, longitud_cont, &lista_terceto);
+  printf("Función AVERAGE. \n");                            
 };
 
 
-lista_expresiones: expresion |  lista_expresiones COMA expresion
+lista_expresiones: expresion {
+		    longitud_cont++;
+         listaexpr_ind = CrearTerceto(expresion_ind, TERC_NULL, TERC_NULL, &lista_terceto);
+	    }
+        |  lista_expresiones COMA expresion
+        {
+        
+         listaexpr_ind = CrearTerceto(TERC_SUMA,listaexpr_ind ,expresion_ind, &lista_terceto);    
+		longitud_cont++;
+	}
 {
- printf ("Expresión o lista de expresiones. \n");                            
+  printf("Expresión o lista de expresiones. \n");                            
 };
 
 
 factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
 {
- printf ("Función FACTORIAL. \n");                            
+    factorial_ind = CrearTerceto(TERC_FACT, expresion_ind, TERC_NULL, &lista_terceto);
+    
+  printf("Función FACTORIAL. \n");                            
 };
 
 
 
 nrocombinatorio: PR_COMBINATORIO PAR_ABRE expresion COMA expresion PAR_CIERRA
 {
- printf ("Función NÚMERO COMBINATORIO. \n");                            
+    //VER
+    nrocomb_ind = CrearTerceto(TERC_NROCOMB, expresion_ind, expresion_ind, &lista_terceto);
+  printf("Función NÚMERO COMBINATORIO. \n");                            
 };
 
 %%
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Estructuras de analizador lexico
 
-
-
+//Instancia de Tabla de Símbolos
+TS tabla[MAX_TS];
+//Tope Tabla de Simbolos
+int topeTS = 0;
 /* FunciónES */
-
 /* De no existir el Token en la tabla de simbolos lo agrega */
-
 void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 {	int pos_token_ts;
-	printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);
+	 printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);
 	pos_token_ts = existeTokenEnTS(n);
 	if(pos_token_ts==topeTS)
 	{
-			printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);
-
+			 printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);
 			strcpy(tabla[topeTS].nombre,n);
 			strcpy(tabla[topeTS].valorString,valueString);
 			tabla[topeTS].tipo=type;
@@ -584,14 +569,29 @@ void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 	}
 	else
 	{
-		printf("El token ya se encuentra en la Tabla de Simbolos. Posicion: (%d). \n",pos_token_ts);
+		 printf("El token ya se encuentra en la Tabla de Simbolos. Posicion: (%d). \n",pos_token_ts);
+	
+	}
+}
+void agregarTipoIDaTS(char *n,int type)
+{	int pos_token_ts;
+	 printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);
+	pos_token_ts = existeTokenEnTS(n);
+	if(pos_token_ts==topeTS)
+	{
+			 printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);
+			tabla[topeTS].tipo=type;
+			topeTS++;
+	}
+	else
+	{
+		printf("El id ya estaba declarado. ERROR");
+        //exit(1);
 	
 	}
 }
 
-
 /*Verifica la existencia de un token en la TS. Compara por nombre y de encontrarlo devuelve la pos */
-
 int existeTokenEnTS(char *name)
 {
 	int pos;
@@ -600,10 +600,8 @@ int existeTokenEnTS(char *name)
 			return pos;
 	return pos;
 }
-
 /* Esta funcion arma el nombre del token y el valor del string. Para el nombre del token reemplaza los ' ' por '_'. */
 /* Para el nombre del token y el valor del string saltea los '"'. */
-
 void armarValorYNombreToken(char *a, char *yt)
 {
 	char nombre_token[COTA_STR],valor_token[COTA_STR];
@@ -628,32 +626,31 @@ void armarValorYNombreToken(char *a, char *yt)
 	valor_token[z]='\0';
 	strcpy(a,nombre_token);
 	strcpy(yt,valor_token);
-
 }
 int main(int argc,char *argv[])
 {
+	system("echo hola");
   if ((yyin = fopen(argv[1], "rt")) == NULL)
   {
-	printf(". \nNo se puede abrir el archivo: %s. \n", argv[1]);
+	 printf(". \nNo se puede abrir el archivo: %s. \n", argv[1]);
 	exit(1);
   }
   else
   {
 	//Creación del archivo tablaSimbolos.txt
-	if((pfTablaSimbolos = fopen("tablaSimbolos.txt","w")) == NULL)
+	if((pfTablaSimbolos = fopen("Outputs/tablaSimbolos.txt","w")) == NULL)
 	{
-		printf(". \nError al crear el archivo tablaSimbolos.txt. \n");
+		 printf(". \nError al crear el archivo tablaSimbolos.txt. \n");
 		exit(1);
 	}
 	//Creación del archivo tablaSimbolos2.txt
-	if((pfTablaSimbolos2 = fopen("tablaSimbolos2.txt","w")) == NULL)
+	if((pfTablaSimbolos2 = fopen("Outputs/tablaSimbolos2.txt","w")) == NULL)
 	{
-		printf(". \nError al crear el archivo tablaSimbolos2.txt. \n");
+		 printf(". \nError al crear el archivo tablaSimbolos2.txt. \n");
 		exit(1);
 	}
 	
 	yyparse();
-
   }
   int i;
   //Genero la primer tabla de simbolos
@@ -668,7 +665,6 @@ int main(int argc,char *argv[])
  fprintf(pfTablaSimbolos,"\t\t Valor");
  fprintf(pfTablaSimbolos,"\t\t Valor String");
  fprintf(pfTablaSimbolos,"\n\n");
-
   for(i=0;i<topeTS;i++)
 	{	fprintf(pfTablaSimbolos,"%d", "Pos:",i);
 		fprintf(pfTablaSimbolos,"\t\t\t ");
@@ -688,7 +684,6 @@ int main(int argc,char *argv[])
 		fprintf(pfTablaSimbolos,"\n\n");
 	
 	}
-
 	//Genero la 2da tabla de simbolos
 	//Genero la primer tabla de simbolos
 //Imprimir TS en el txt
@@ -696,7 +691,6 @@ int main(int argc,char *argv[])
  fprintf(pfTablaSimbolos2,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);@(cte string)***\n");
  fprintf(pfTablaSimbolos2,"****************************************************************************");
  
-
   for(i=0;i<topeTS;i++)
 	{	
 		fprintf(pfTablaSimbolos2,"\n\n");
@@ -729,201 +723,20 @@ int main(int argc,char *argv[])
   return 0;
 }
 
+void ObtenerItemTS(int ind, TS *reg){
+	int pos=0;
+	while(pos <= ultimo){
+		if(pos == ind){
+			*reg = tabla[ind];
+			break;
+		}	
+		pos++;
+	}	
+}
 int yyerror(void)
 {
+
 	printf("Synax Error. \n");
-	system ("Pause");
-	exit (1);
-}
-
-
-*************************************************** FUNCIONES ESPECIALES DE TERCETOS ***************************************************************
-
-void generar_terceto_etiqueta(int etiqueta)
-{
-    char aux[4];
-	// Se encuentra en tipos.h
-    estructura_pila pila_aux;
-    switch (etiqueta)
-       {
-        case EMPIEZA_IF:
-                           cant_etiq_if++;
-                           struc_etiq.contador = cant_etiq_if;
-                           strcpy(struc_etiq.sentencia, "COMIENZO_IF_");
-                           pila_etiquetas.Poner (struc_etiq);
-			   sprintf(aux,"%u",cant_etiq_if);
-                           strcpy(tercetos.parametro_3, "");
-                           strcat(tercetos.parametro_3, "COMIENZO_IF_");
-                           strcat(tercetos.parametro_3, aux);
-                           strcpy(tercetos.parametro_2, "-");
-                           strcpy(tercetos.parametro_1, "ETIQ");
-                           break;
-
-        case ELSE:
-                      struc_etiq = pila_etiquetas.Sacar ();
-		      sprintf(aux,"%u",struc_etiq.contador);
-                      strcpy(tercetos.parametro_3, "");
-                      strcat(tercetos.parametro_3, "ELSE_IF_");
-                      strcat(tercetos.parametro_3, aux);
-                      strcpy(tercetos.parametro_2, "-");
-                      strcpy(tercetos.parametro_1, "ETIQ");
-                      pila_etiquetas.Poner (struc_etiq);
-                      break;
-
-        case TERMINA_IF:
-                      struc_etiq = pila_etiquetas.Sacar();
-		      sprintf(aux,"%u",struc_etiq.contador);
-                      strcpy(tercetos.parametro_3, "");
-                      strcat(tercetos.parametro_3, "FIN_IF_");
-                      strcat(tercetos.parametro_3, aux);
-                      strcpy(tercetos.parametro_2, "-");
-                      strcpy(tercetos.parametro_1, "ETIQ");
-                      break;
-        case COND2:
-                   //Guardo numero de terceto de segunda condicion
-                    pila_aux = pila_tercetos.Sacar();
-                   //Nexo logico (AND u OR)  
-                   pila = pila_tercetos.Sacar();
-                   
-                   //Si es OR debo generar terceto de etiqueta
-                   if (strcmp(pila.parametro,"OR") == 0)
-                      {
-                      struc_etiq = pila_etiquetas.Sacar ();
-                      strcpy(tercetos.parametro_3, "");
-                      strcat(tercetos.parametro_3, struc_etiq.sentencia);
-                      strcat(tercetos.parametro_3, "_COND2");
-                      strcpy(tercetos.parametro_2, "-");
-                      strcpy(tercetos.parametro_1, "ETIQ");
-                      
-                      pila_etiquetas.Poner (struc_etiq);
-                      pila_tercetos.Poner(pila);  
-                      pila_tercetos.Poner(pila_aux);
-                      }
-                   else
-                      {
-                       pila_tercetos.Poner(pila);  
-                       pila_tercetos.Poner(pila_aux);
-                       return;
-                      }
-                    break;
-
-        case COMIENZO_WHILE:
-                       cant_etiq_while++;
-                       struc_etiq.contador = cant_etiq_while;
-                       strcpy(struc_etiq.sentencia, "COMIENZO_WHILE_");
-                       pila_etiquetas.Poner (struc_etiq);
-		       sprintf(aux,"%u",cant_etiq_while);
-                       strcpy(tercetos.parametro_3, "");
-                       strcat(tercetos.parametro_3, "COMIENZO_WHILE_");
-                       strcat(tercetos.parametro_3, aux);
-                       strcpy(tercetos.parametro_2, "-");
-                       strcpy(tercetos.parametro_1, "ETIQ");
-                       break;
-
-        case WHILE_VERDAD:
-                      struc_etiq = pila_etiquetas.Sacar ();
-		      sprintf(aux,"%u",struc_etiq.contador);
-                      strcpy(tercetos.parametro_3, "");
-                      strcat(tercetos.parametro_3, "WHILE_VERDAD_");
-                      strcat(tercetos.parametro_3, aux);
-                      strcpy(tercetos.parametro_2, "-");
-                      strcpy(tercetos.parametro_1, "ETIQ");
-                      pila_etiquetas.Poner (struc_etiq);
-                      break;
-
-        case FIN_WHILE:
-                      struc_etiq = pila_etiquetas.Sacar ();
-		      sprintf(aux,"%u",struc_etiq.contador);
-                      strcpy(tercetos.parametro_3, "");
-                      strcat(tercetos.parametro_3, "FIN_WHILE_");
-                      strcat(tercetos.parametro_3, aux);
-                      strcpy(tercetos.parametro_2, "-");
-                      strcpy(tercetos.parametro_1, "ETIQ");
-                      break;     
-        }     
-        lista_tercetos.Insertar_al_final(tercetos);
-        cantidad_tercetos++;
-}
-
-
-/******************************************************************************/
-void corregir_salto_doble_if (int p_salto)
-{
-    char aux[MAX];
-    int aux2;
-    char cond2[MAX];
-    
-    pila = pila_tercetos.Sacar();
-    cantidad_pila--;
-    strcpy(cond2, pila.parametro);
-    pila = pila_tercetos.Sacar();
-    cantidad_pila--;
-    if (strcmp (pila.parametro, "AND") == 0)
-    {
-        pila = pila_tercetos.Sacar();
-        cantidad_pila--;
-        /* Corregir salto para condicion 1 */
-  	sprintf(aux,"%lu", p_salto);
-    	strcpy(tercetos.parametro_3,"");
-        strcat(tercetos.parametro_3,"[");
-    	strcat(tercetos.parametro_3,aux);
-    	strcat(tercetos.parametro_3,"]");
-    	strcpy(tercetos.parametro_1, "BF" );
-        strcpy(tercetos.parametro_2, "-" );
-        aux2 = atoi(pila.parametro);
-        lista_tercetos.Modificar(tercetos, aux2);
-        
-        /* Corregir salto para condicion 2 */
-        aux2 = atoi(cond2);
-        lista_tercetos.Modificar(tercetos, aux2);         	                
-    }
-    else /* es OR*/
-    {
-         pila = pila_tercetos.Sacar();
-        cantidad_pila--;
-        /* Corregir salto para condicion 1 */
-        aux2 = atoi(cond2);
-        aux2++;
-  	sprintf(aux,"%lu", aux2);
-    	strcpy(tercetos.parametro_3,"");
-        strcat(tercetos.parametro_3,"[");
-    	strcat(tercetos.parametro_3,aux);
-    	strcat(tercetos.parametro_3,"]");
-    	strcpy(tercetos.parametro_1, "BV" );
-        strcpy(tercetos.parametro_2, "-" );
-        aux2 = atoi(pila.parametro);
-        lista_tercetos.Modificar(tercetos, aux2);
-        
-        /* Corregir salto para condicion 2 */
-  	sprintf(aux,"%lu", p_salto);
-    	strcpy(tercetos.parametro_3,"");
-        strcat(tercetos.parametro_3,"[");
-    	strcat(tercetos.parametro_3,aux);
-    	strcat(tercetos.parametro_3,"]");
-    	strcpy(tercetos.parametro_1, "BF" );
-        strcpy(tercetos.parametro_2, "-" );
-        aux2 = atoi(cond2);
-        lista_tercetos.Modificar(tercetos, aux2); 
-    }
-}
-;
-/****************************************************************************** /
-//Corrige salto para el número de terceto desapilado antes de llamada la función
-void corregir_salto_if (int p_salto, char bifurcacion[MAX])
-{
-    char aux[MAX];
-    int aux2;
-    
-    sprintf(aux,"%u", p_salto);
-    
-    strcpy(tercetos.parametro_3,"");
-    strcat(tercetos.parametro_3,"[");
-    strcat(tercetos.parametro_3,aux);
-    strcat(tercetos.parametro_3,"]");
-    
-    strcpy(tercetos.parametro_1, bifurcacion );
-    strcpy(tercetos.parametro_2, "-" );
-    aux2 = atoi(pila.parametro);
-    printf("par: %d",aux2);
-    lista_tercetos.Modificar(tercetos, aux2);
+	//system ("Pause");
+	//exit (1);
 }

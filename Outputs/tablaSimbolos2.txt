@@ -1,0 +1,194 @@
+			 ******Tabla de Simbolos******
+
+***El tipo de variable lo determina el caracter que precede a esta última:
+	 _(variable);$(cte float);&(cte int);@(cte string)***
+****************************************************************************
+
+Posicion: 0
+Nombre: _arbol
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 1
+Nombre: 
+Tipo: 0
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 2
+Nombre: _b
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 3
+Nombre: 
+Tipo: 0
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 4
+Nombre: _casa
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 5
+Nombre: 
+Tipo: 0
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 6
+Nombre: _d
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 7
+Nombre: 
+Tipo: 0
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 8
+Nombre: _e
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 9
+Nombre: 
+Tipo: 0
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 10
+Nombre: _g
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 11
+Nombre: 
+Tipo: 2
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 12
+Nombre: _a_
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 13
+Nombre: 
+Tipo: 3
+Longitud: 0
+Valor: 0.0000000000
+Valor String: 
+
+****************************************************************************
+
+Posicion: 14
+Nombre: _cotamax_
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 15
+Nombre: 
+Tipo: 3
+Longitud: 0
+Valor: 0.0000000000
+Valor String: 
+
+****************************************************************************
+
+Posicion: 16
+Nombre: _v4r14bl3
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 17
+Nombre: 
+Tipo: 4
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 18
+Nombre: _a19
+Tipo: 1
+Longitud: 0
+Valor: 0
+Valor String: -
+
+****************************************************************************
+
+Posicion: 19
+Nombre: 
+Tipo: 2
+Longitud: 0
+Valor: 0
+Valor String: 
+
+****************************************************************************
+
+Posicion: 20
+Nombre: &3
+Tipo: 2
+Longitud: 0
+Valor: 3
+Valor String: -
+
+****************************************************************************

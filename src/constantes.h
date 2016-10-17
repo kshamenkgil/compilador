@@ -17,12 +17,11 @@
 //Cantidad Total de Palabras Reservadas
 #define TOTAL_PR 18
 
-//Define de PR 
-
-#define EMPIEZA_IF      500
-#define TERMINA_IF      501
-#define COND2           502
-#define EMPIEZA_REPEAT  503
-#define WHILE_VERDAD    504
-#define TERMINA_REPEAT  505
-#define ELSE            506
+typedef struct tablaS {
+       char nombre [100]; //si el nombre le precede un "_" entonces es una variable, si tiene $ entonces es real y si tiene & es int,    
+                          //si tiene un @ es una cte string.
+       int tipo; // 0 es palabra reservada, 1 es variable, 2 constante
+       double valor;
+       int longitud;
+       char valorString [COTA_STR]; /*Guarda valor de las variables tipo string. De no ser un string guarda un "-"*/
+}TS;

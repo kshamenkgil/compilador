@@ -1,6 +1,6 @@
 cd src
-flex Lexico.l
-bison -dyv Sintactico.y
+C:\GnuWin32\bin\flex Lexico.l
+C:\GnuWin32\bin\bison -dyv Sintactico.y
 cd ..
 gcc.exe src/lex.yy.c src/y.tab.c -o bin/Primera.exe
 
