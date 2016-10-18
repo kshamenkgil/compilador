@@ -44,7 +44,7 @@
 
 #define TERC_NULL -1
 #define NO_MODIF -1
-#define NEGAR 200
+#define NEGAR -99
 
 
 typedef struct

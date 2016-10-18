@@ -60,7 +60,7 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 
 26			 &cte17			 2			 0		 4.000000		 -
 
-27			 @cte18			 4			 3		 0.000000		 OSO
+27			 @cte18			 4			 3		 4.000000		 OSO
 
-28			 @cte19			 4			 9		 0.000000		 VIGILANTE
+28			 @cte19			 4			 9		 4.000000		 VIGILANTE
 

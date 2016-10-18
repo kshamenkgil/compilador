@@ -251,7 +251,7 @@ Posicion: 27
 Nombre: @cte18
 Tipo: 4
 Longitud: 3
-Valor: 0.000000
+Valor: 4.000000
 Valor String: OSO
 
 ****************************************************************************
@@ -260,7 +260,7 @@ Posicion: 28
 Nombre: @cte19
 Tipo: 4
 Longitud: 9
-Valor: 0.000000
+Valor: 4.000000
 Valor String: VIGILANTE
 
 ****************************************************************************

@@ -314,7 +314,6 @@ comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
 
 sent_repeat: PR_REPEAT{
 	int ultimo = NumeroUltimoTerceto()+1;
-	 printf("pongo en pila : %d",ultimo);
 	poner_en_pila(&pila,&ultimo,10);
 
 
@@ -334,11 +333,11 @@ sent_repeat: PR_REPEAT{
 		toModificar = 0;
 		sacar_de_pila(&pila,&toModificar,10);
 		if(isAnd){				
-				ModificarTerceto(NEGAR, NO_MODIF, enPila+1, &lista_terceto, enPila);
-				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila2);	
+				ModificarTerceto(NEGAR, NO_MODIF, enPila2+1, &lista_terceto, enPila2);
+				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);	
 			}else{
-				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);				
-				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila2);
+				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila2);				
+				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);
 
 		}
 	}else{
@@ -346,8 +345,6 @@ sent_repeat: PR_REPEAT{
 		sacar_de_pila(&pila,&enPila,10);
 		toModificar = 0;
 		sacar_de_pila(&pila,&toModificar,10);
-		printf("to modif: %d", toModificar);
-		printf("en pila: %d", enPila);
 		ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);
 	}
 
@@ -369,7 +366,7 @@ condRepeat: PAR_ABRE Condicion PAR_CIERRA
 Condicion: Condicion_simple
 {
 	  int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);
-	  printf("pongo en pila : %d",numero);
+	  //printf("pongo en pila : %d",numero);
     condicion_ind = condsimple_ind;
 	 if(DEBUG)  {printf("Condicion SIMPLE. \n");}
 };
@@ -909,23 +906,7 @@ int existeCteFloat(double valor){
 
 //para constantes float
 int findFloatTS(int pos){
-	printf("pos: %d",pos);
 	return tabla[pos].nombre;
-	/*int i=0;
-	char * ret;
-	while(i < topeTS){
-		if(tabla[i].tipo == CTE_INT || tabla[i].tipo == CTE_FLT){
-			if(fabs(tabla[i].valor - valor) < 0.0000000001){			
-				ret = tabla[i].nombre;
-				return ret;
-			}
-		}
-		i++;
-
-	}
-
-	informeError("No existe constante en TS");*/
-
 }
 
 //para ver si existe la constante string

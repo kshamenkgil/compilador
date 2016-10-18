@@ -7,7 +7,7 @@ DECVAR
 ENDDEC
 
 BEGIN
-	IF (!arbol) THEN
+	IF (NOT arbol) THEN
 		a:=x
 		x:=25.45
 		a := 3
@@ -21,6 +21,6 @@ BEGIN
 	ENDIF
 	REPEAT
 		READ b
-	UNTIL(a<3 AND b!=3)
+	UNTIL(a > 3)
 
 END
