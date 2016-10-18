@@ -221,7 +221,7 @@ Valor String:
 ****************************************************************************
 
 Posicion: 24
-Nombre: $cte2
+Nombre: $cte15
 Tipo: 3
 Longitud: 0
 Valor: 25.4500000000
@@ -230,7 +230,7 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 25
-Nombre: &cte3
+Nombre: &cte16
 Tipo: 2
 Longitud: 0
 Valor: 3.000000
@@ -239,7 +239,7 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 26
-Nombre: &cte4
+Nombre: &cte17
 Tipo: 2
 Longitud: 0
 Valor: 4.000000
@@ -248,7 +248,7 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 27
-Nombre: @cte5
+Nombre: @cte18
 Tipo: 4
 Longitud: 3
 Valor: 0.000000
@@ -257,7 +257,7 @@ Valor String: OSO
 ****************************************************************************
 
 Posicion: 28
-Nombre: @cte7
+Nombre: @cte19
 Tipo: 4
 Longitud: 9
 Valor: 0.000000

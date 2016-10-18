@@ -54,13 +54,13 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 
 23			 			 2			 0		 0.000000		 
 
-24			 $cte2			 3			 0		 25.4500000000		 -
+24			 $cte15			 3			 0		 25.4500000000		 -
 
-25			 &cte3			 2			 0		 3.000000		 -
+25			 &cte16			 2			 0		 3.000000		 -
 
-26			 &cte4			 2			 0		 4.000000		 -
+26			 &cte17			 2			 0		 4.000000		 -
 
-27			 @cte5			 4			 3		 0.000000		 OSO
+27			 @cte18			 4			 3		 0.000000		 OSO
 
-28			 @cte7			 4			 9		 0.000000		 VIGILANTE
+28			 @cte19			 4			 9		 0.000000		 VIGILANTE
 

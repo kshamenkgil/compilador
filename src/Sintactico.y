@@ -691,7 +691,7 @@ TS tabla[MAX_TS];
 int topeTS = 0;
 /* FunciónES */
 /* De no existir el Token en la tabla de simbolos lo agrega */
-void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
+int agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 {	int pos_token_ts;
 	
 	if(DEBUG)  { printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
@@ -720,11 +720,13 @@ void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 			tabla[topeTS].longitud=l;
 			tabla[topeTS].valor=value;
 			topeTS++;
+			incrementarIConstantes();
+			return topeTS-1;
 	}
 	else
 	{
 		if(DEBUG)  { printf("El token ya se encuentra en la Tabla de Simbolos. Posicion: (%d). \n",pos_token_ts);}
-	
+		return pos_token_ts;
 	}
 }
 
@@ -891,6 +893,7 @@ int existeCteFloat(double valor){
 	int i=0;
 	int ret;
 	while(i < topeTS){
+		
 		if(fabs(tabla[i].valor - valor) < 0.0000000001){
 		//if(tabla[i].valor==valor){
 			ret = i;
@@ -905,20 +908,23 @@ int existeCteFloat(double valor){
 }
 
 //para constantes float
-int findFloatTS(double valor){
-	
-	int i=0;
+int findFloatTS(int pos){
+	printf("pos: %d",pos);
+	return tabla[pos].nombre;
+	/*int i=0;
 	char * ret;
 	while(i < topeTS){
-		if(fabs(tabla[i].valor - valor) < 0.0000000001){
-			ret = tabla[i].nombre;
-			return ret;
+		if(tabla[i].tipo == CTE_INT || tabla[i].tipo == CTE_FLT){
+			if(fabs(tabla[i].valor - valor) < 0.0000000001){			
+				ret = tabla[i].nombre;
+				return ret;
+			}
 		}
 		i++;
 
 	}
 
-	informeError("No existe constante en TS");
+	informeError("No existe constante en TS");*/
 
 }
 

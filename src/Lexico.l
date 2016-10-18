@@ -161,12 +161,13 @@ PUT				["WRITE"]
 									printf( "constante %s (%s)\n", yytext,yylval.str_val);
 								}
 								float valor = atof(yytext);								
-								agregarTokenTS(aux,"-",CTE_INT,0,valor);
-
+								
 								//Comentar esta linea si se quieren ver directamente los numeros
 								//junto con la de factor -> CONST_INT del sintáctico. 
-								yylval.intval=getiConstantes();
-								incrementarIConstantes();
+								//yylval.intval=getiConstantes();
+								yylval.intval =agregarTokenTS(aux,"-",CTE_INT,0,valor);
+
+								//incrementarIConstantes();
 								return CONST_INT;
 							}
 				}
@@ -194,7 +195,7 @@ PUT				["WRITE"]
 									printf( "string  %s (%s)\n", yytext,yylval.str_val);
 								}						
 								agregarTokenTS(aux,yytext,CTE_STR,strlen(aux2),0);
-								incrementarIConstantes();
+								//incrementarIConstantes();
 								return CONST_STR;
 							}
 				}
@@ -219,9 +220,11 @@ PUT				["WRITE"]
 									printf( "Nuevo elemento en la Tabla de símbolos: %s a partir de la",aux);
 									printf( "constante %s (%s)\n", yytext,yylval.str_val);
 								}
-								agregarTokenTS(aux,"-",CTE_FLT,0,f);
-								yylval.intval = getiConstantes();
-								incrementarIConstantes();
+
+								yylval.intval = agregarTokenTS(aux,"-",CTE_FLT,0,f);
+								
+								//yylval.intval = getiConstantes();
+								
 								return CONST_FLOAT;																
 							}
 				}
