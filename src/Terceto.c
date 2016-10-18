@@ -132,9 +132,14 @@ void ModificarTerceto(int op, int li, int ld, lista_tercetos_t *p, int pos)
 		{
 			if(cont == pos)
 			{
-			    if(op != NO_MODIF)
+			    if(op != NO_MODIF){
                     act->info.operacion = op;
-			    if(li != NO_MODIF)
+				}
+				if(op != NEGAR){
+					int ope = act->info.operacion;
+					act->info.operacion = NegarOperador(ope);
+				}
+				if(li != NO_MODIF)
                     act->info.opIzq = li;
                 if(ld != NO_MODIF)
                     act->info.opDer = ld;

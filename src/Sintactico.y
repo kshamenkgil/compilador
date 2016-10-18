@@ -133,20 +133,10 @@ dec_var: PR_VAR {agregarCtesGenerales();} lista_dec_var PR_ENDVAR
 	 if(DEBUG) {printf("Bloque con declaracion de las variables. \n");}
 };
 
-lista_dec_var: linea_dec_var {
-	
-	//lista_dec_var_ind=CrearTerceto(linea_dec_var_ind,NULL,NULL, &lista_terceto);
-	}
-
-
-| lista_dec_var linea_dec_var {
-	
-	//lista_dec_var_ind=CrearTerceto(lista_dec_var_ind,linea_dec_var_ind,NULL, &lista_terceto);
-	
-	}
+lista_dec_var: linea_dec_var | lista_dec_var linea_dec_var
 {
 	 if(DEBUG)  {printf("Múltiples líneas con declaraciones de las variables. \n");}
-}
+};
 
 linea_dec_var:  lista_variables DOSPUNTOS tipo
 {
@@ -155,10 +145,10 @@ linea_dec_var:  lista_variables DOSPUNTOS tipo
 };
 
 
-tipo: PR_INT {tipo_var=CTE_INT;} | PR_FLOAT {tipo_var=CTE_FLT;}| PR_STRING{tipo_var=CTE_STR;}
+tipo: PR_INT {tipo_var=CTE_INT;}| PR_FLOAT {tipo_var=CTE_FLT;}| PR_STRING{tipo_var=CTE_STR;}
 {
 	 if(DEBUG)  {printf("Tipo de variable. \n");}
-}																								//Ver aca
+};																								//Ver aca
 
 lista_variables: TOKEN_ID {
 //	lista_variables_ind= CrearTerceto($1,NULL,NULL,&lista_terceto);	
@@ -321,9 +311,47 @@ comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
 	 if(DEBUG)  {printf("COMIENZO del bloque IF. \n");}
 };
 
-sent_repeat: PR_REPEAT lista_sentencia PR_UNTIL condRepeat
+sent_repeat: PR_REPEAT{
+	int ultimo = NumeroUltimoTerceto()+1;
+	 printf("pongo en pila : %d",ultimo);
+	poner_en_pila(&pila,&ultimo,10);
+
+
+} lista_sentencia PR_UNTIL condRepeat
 {
-	//sent_repeat_ind=CrearTerceto(lista_sentencia_ind,condrepeat_ind,NULL,&lista_terceto);
+
+	int enPila = 0;
+	int enPila2 = 0;
+	int toModificar = 0;
+
+
+	if(condicionesMultiples==1){
+		enPila = 0;
+		sacar_de_pila(&pila,&enPila,10);
+		enPila2  = 0;
+		sacar_de_pila(&pila,&enPila2,10);
+		toModificar = 0;
+		sacar_de_pila(&pila,&toModificar,10);
+		if(isAnd){				
+				ModificarTerceto(NEGAR, NO_MODIF, enPila+1, &lista_terceto, enPila);
+				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila2);	
+			}else{
+				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);				
+				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila2);
+
+		}
+	}else{
+		enPila  = 0;
+		sacar_de_pila(&pila,&enPila,10);
+		toModificar = 0;
+		sacar_de_pila(&pila,&toModificar,10);
+		printf("to modif: %d", toModificar);
+		printf("en pila: %d", enPila);
+		ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);
+	}
+
+	condicionesMultiples = 0;
+	isAnd = 0;
 	 if(DEBUG)  {printf("Sentencia REPEAT completa. \n");}
 };
 
@@ -340,6 +368,7 @@ condRepeat: PAR_ABRE Condicion PAR_CIERRA
 Condicion: Condicion_simple
 {
 	  int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);
+	  printf("pongo en pila : %d",numero);
     condicion_ind = condsimple_ind;
 	 if(DEBUG)  {printf("Condicion SIMPLE. \n");}
 };

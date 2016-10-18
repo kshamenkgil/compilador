@@ -1,0 +1,21 @@
+
+c:\Users\Facundo\Desktop\Compiladores\compilador>cd src 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador\src>C:\GnuWin32\bin\flex Lexico.l 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador\src>C:\GnuWin32\bin\bison -dyv Sintactico.y 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador\src>cd .. 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador>gcc.exe src/lex.yy.c src/y.tab.c -o bin/Primera.exe 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador>del src\lex.yy.c 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador>del src\y.tab.c 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador>del src\y.output 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador>del src\y.tab.h 
+
+c:\Users\Facundo\Desktop\Compiladores\compilador>pause
+Presione una tecla para continuar . . . 
