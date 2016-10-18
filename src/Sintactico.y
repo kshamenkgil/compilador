@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "y.tab.h"
 #include "constantes.h"
 #include "Terceto.c"
@@ -890,12 +891,13 @@ int existeCteFloat(double valor){
 	int i=0;
 	int ret;
 	while(i < topeTS){
-		if(tabla[i].valor==valor){
+		if(fabs(tabla[i].valor - valor) < 0.0000000001){
+		//if(tabla[i].valor==valor){
 			ret = i;
 			return ret;
 		}
-		i++;
 
+		i++;
 	}
 
 	return i;
