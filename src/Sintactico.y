@@ -910,7 +910,7 @@ int findFloatTS(double valor){
 	int i=0;
 	char * ret;
 	while(i < topeTS){
-		if(tabla[i].valor==valor){
+		if(fabs(tabla[i].valor - valor) < 0.0000000001){
 			ret = tabla[i].nombre;
 			return ret;
 		}
