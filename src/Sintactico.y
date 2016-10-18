@@ -11,7 +11,7 @@ int pgm_ind, programa_ind,tipo_var,condrepeat_ind, condicion_ind, condsimple_ind
 int termino_ind, factor_ind, expresion_ind,expresion1_ind,expresion2_ind,avg_ind,factorial_ind, nrocomb_ind,asignacion_ind,tokenid_ind,asignado_ind,longitud_cont;
 int listaexpr_ind,lista_sentencia_ind,dec_var_ind,dec_var_ind,lista_dec_var_ind,linea_dec_var_ind;
 int sentencia_ind, sent_asignacion_ind, sent_read_ind, sent_repeat_ind, sent_write_ind, lista_sentencia_ind,comienzo_if_ind,seleccion_ind,lista_variables_ind;
-	
+int concatTokenInd,concatTokenInd2,concatConstInd,concatConstInd2;	
 int ultimo=0;
 
 //para condiciones multiples
@@ -485,14 +485,14 @@ Condicion_simple: OP_LOG_NOT expresion{expresion1_ind=expresion_ind;} OP_IGUAL_I
 
 Condicion_multiple: Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple1_ind=condsimple_ind;} OP_LOG_AND Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple2_ind=condsimple_ind;}
 {	
-		isAnd = 1;
+	isAnd = 1;
     //condmult_ind = CrearTerceto(TERC_AND,condsimple1_ind,condsimple2_ind, &lista_terceto);
   	if(DEBUG)  {printf("Condicion Multiple con operador lógico AND. \n");}
 };
 
 Condicion_multiple: Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple1_ind=condsimple_ind;} OP_LOG_OR Condicion_simple {int numero = NumeroUltimoTerceto(); poner_en_pila(&pila,&numero,10);condsimple2_ind=condsimple_ind;}
 {
-		isAnd = 0;
+	isAnd = 0;
     //condmult_ind = CrearTerceto(TERC_OR,condsimple1_ind,condsimple2_ind, &lista_terceto);
   	if(DEBUG)  {printf("Condicion Multiple con operador lógico OR. \n");}
 };
@@ -502,142 +502,150 @@ Condicion_multiple: Condicion_simple {int numero = NumeroUltimoTerceto(); poner_
 
 expresion: expresion OP_SUMA termino	
 {
-            expresion_ind= CrearTerceto(TERC_SUMA, expresion_ind, termino_ind, &lista_terceto);
-  if(DEBUG)  {printf("Expresión como suma de otra expresión y un término. \n");  }     
+    expresion_ind= CrearTerceto(TERC_SUMA, expresion_ind, termino_ind, &lista_terceto);
+  	if(DEBUG)  {printf("Expresión como suma de otra expresión y un término. \n");  }     
 };
 
 expresion: expresion OP_RESTA termino
 {
-        expresion_ind= CrearTerceto(TERC_RESTA, expresion_ind, termino_ind, &lista_terceto);
-  if(DEBUG)  {printf("Expresión como resta de otra expresión y un término. \n");  }   
+    expresion_ind= CrearTerceto(TERC_RESTA, expresion_ind, termino_ind, &lista_terceto);
+  	if(DEBUG)  {printf("Expresión como resta de otra expresión y un término. \n");  }   
 };
 	
 expresion: termino	
 {
     expresion_ind=termino_ind;
-  if(DEBUG)  {printf("Expresión como un término. \n");   }                     
+  	if(DEBUG)  {printf("Expresión como un término. \n");   }                     
 };
 
 termino: termino OP_MULTIPLICACION factor								
 {
-        termino_ind= CrearTerceto(TERC_MULT, termino_ind, factor_ind, &lista_terceto);
-  if(DEBUG)  {printf("Término como producto de un término y un factor. \n");         }           
+    termino_ind= CrearTerceto(TERC_MULT, termino_ind, factor_ind, &lista_terceto);
+  	if(DEBUG)  {printf("Término como producto de un término y un factor. \n");         }           
 };
 
 termino: termino OP_DIVISION factor	
 {
     termino_ind= CrearTerceto(TERC_DIV, termino_ind, factor_ind, &lista_terceto);
-  if(DEBUG)  {printf("Término como cociente de un término y un factor. \n");   }
+  	if(DEBUG)  {printf("Término como cociente de un término y un factor. \n");   }
 };
 
 termino: factor 
 {
     termino_ind = factor_ind;
- if(DEBUG)  {printf("Termino como un factor. \n");}
+ 	if(DEBUG)  {printf("Termino como un factor. \n");}
 };
 
 factor: CONST_INT	
-{
-	
-    factor_ind = CrearTerceto($<intval>1, TERC_NULL, TERC_NULL, &lista_terceto);
-		//printf("\n %d y",$<intval>1);
-  if(DEBUG)  {printf("Factor es una constante entera. \n");   }                     
+{	
+	//Descomentar esta linea junto con la del léxico si se quieren ver directamente los numeros.
+    //factor_ind = CrearTerceto($<intval>1, TERC_NULL, TERC_NULL, &lista_terceto);	
+	factor_ind = CrearTerceto(findFloatTS($<intval>1), TERC_NULL, TERC_NULL, &lista_terceto);
+  	if(DEBUG)  {printf("Factor es una constante entera. \n");   }                     
 };
 
 factor: CONST_FLOAT	
 {
-	
-    factor_ind = CrearTerceto($<val>1, TERC_NULL, TERC_NULL, &lista_terceto);
-  if(DEBUG)  {printf("Factor es una Constante real. \n");            }            
+    factor_ind = CrearTerceto(findFloatTS($<intval>1), TERC_NULL, TERC_NULL, &lista_terceto);
+  	if(DEBUG)  {printf("Factor es una Constante real. \n");            }            
 };
 							
 factor: TOKEN_ID			
 {
-    factor_ind = CrearTerceto($1, TERC_NULL, TERC_NULL, &lista_terceto);
-  if(DEBUG)  {printf("Factor es un ID. \n");                     }   
+	factor_ind = CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);  
+	if(DEBUG)  {printf("Factor es un ID. \n");}   
 };
 	
 factor: PAR_ABRE expresion PAR_CIERRA 
 {
     factor_ind = expresion_ind;
-  if(DEBUG)  {printf("Factor es una  ( EXPRESION ). \n");}
+  	if(DEBUG)  {printf("Factor es una  ( EXPRESION ). \n");}
 };
+
 factor: average			
 {
     factor_ind = avg_ind;
-  if(DEBUG)  {printf("Factor es un resultado de AVERAGE. \n"); }                       
+	if(DEBUG)  {printf("Factor es un resultado de AVERAGE. \n"); }                       
 };
 
 factor: factorial			
 {
-
     factor_ind = factorial_ind;
-  if(DEBUG)  {printf("Factor es un resultado de FACTORIAL. \n"); }                       
+  	if(DEBUG)  {printf("Factor es un resultado de FACTORIAL. \n"); }                       
 };
+
 factor: nrocombinatorio
 {
-
     factor_ind = nrocomb_ind;
-  if(DEBUG)  {printf("Factor es un resultado de NUMERO COMBINATORIO. \n");  }                      
+  	if(DEBUG)  {printf("Factor es un resultado de NUMERO COMBINATORIO. \n");  }                      
 };
 
 /*Asignaciones*/ //Faltan
 
 sent_asignacion: TOKEN_ID OP_ASIGNACION asignado
 {
+	 tokenid_ind = CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
      asignacion_ind = CrearTerceto(TERC_ASIG, tokenid_ind, asignado_ind, &lista_terceto);
 			 
- if(DEBUG)  {printf("Asignacion Simple. \n");}
+ 	 if(DEBUG)  {printf("Asignacion Simple. \n");}
 };
 
 asignado: expresion 
 {
      asignado_ind = expresion_ind;
-  if(DEBUG)  {printf("Asignacion a partir de una expresion. \n");  }                      
+ 	 if(DEBUG)  {printf("Asignacion a partir de una expresion. \n");  }                      
 };
 
 asignado: CONST_STR
-{
-     asignado_ind = CrearTerceto($1, NULL, NULL, &lista_terceto);
-  if(DEBUG)  {printf("Asignacion a partir de una Constante String. \n");  }                      
+{	
+     asignado_ind = CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
+     if(DEBUG)  {printf("Asignacion a partir de una Constante String. \n");  }                      
 };
 
 /*"pepe1"++"pepe2"*/
 asignado: CONST_STR CONCAT CONST_STR	
 {
-        asignado_ind = CrearTerceto(TERC_CONCAT, $1, $3, &lista_terceto);
-  if(DEBUG)  {printf("Asignacion a partir de una concatenación entre constantes String. \n"); }
+	//int concatTokenInd,concatTokenInd2,concatConstInd,concatConstInd2;
+	concatConstInd=CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
+	concatConstInd2=CrearTerceto(findNombreTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
+	asignado_ind = CrearTerceto(TERC_CONCAT, concatConstInd, concatConstInd2, &lista_terceto);
+	if(DEBUG)  {printf("Asignacion a partir de una concatenación entre constantes String. \n"); }
 };
 
 /*ID++"pepe2"*/
 asignado: TOKEN_ID CONCAT CONST_STR	
 {
-
-        asignado_ind = CrearTerceto(TERC_CONCAT, $1, $3, &lista_terceto);
-  if(DEBUG)  {printf("Asignacion a partir de una concatenación entre un ID string y una constante String. \n");    }
+	concatTokenInd=CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
+	concatConstInd=CrearTerceto(findNombreTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
+	asignado_ind = CrearTerceto(TERC_CONCAT, concatTokenInd, concatConstInd, &lista_terceto);
+	if(DEBUG)  {printf("Asignacion a partir de una concatenación entre un ID string y una constante String. \n");    }
 };
 
 /*"pepe1"++ID*/
 asignado: CONST_STR CONCAT TOKEN_ID	
-{
-        asignado_ind = CrearTerceto(TERC_CONCAT, $1, tokenid_ind, &lista_terceto);
-  if(DEBUG)  {printf("Asignacion a partir de una concatenacion entre una constante String y de un ID string. \n");   }                     
+{	
+	concatConstInd=CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
+	concatTokenInd=CrearTerceto(findIdTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
+	asignado_ind = CrearTerceto(TERC_CONCAT,concatConstInd ,concatTokenInd , &lista_terceto);	
+	if(DEBUG)  {printf("Asignacion a partir de una concatenacion entre una constante String y de un ID string. \n");   }                     
 };
 
 /*ID++ID*/
 asignado: TOKEN_ID CONCAT TOKEN_ID	
-{                                              
-        asignado_ind = CrearTerceto(TERC_CONCAT, $<intval>1, $<intval>3, &lista_terceto);
-  if(DEBUG)  {printf("Asignacion a partir de una concatenacion entre dos ID. \n");  }       
+{                             
+	  concatTokenInd=CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);  
+	  concatTokenInd2=CrearTerceto(findIdTS($3), TERC_NULL, TERC_NULL, &lista_terceto);            
+      asignado_ind = CrearTerceto(TERC_CONCAT, concatTokenInd, concatTokenInd2, &lista_terceto);
+	  if(DEBUG)  {printf("Asignacion a partir de una concatenacion entre dos ID. \n");  }       
 };
 
-/*Declaracion Funciónes especiales*/
 
+/***Declaracion Funciónes especiales***/
 
 average: PR_AVERAGE {longitud_cont=0;} PAR_ABRE COR_ABRE lista_expresiones COR_CIERRA PAR_CIERRA
 {
-    avg_ind = CrearTerceto(TERC_AVG, listaexpr_ind, longitud_cont, &lista_terceto);
-  if(DEBUG)  {printf("Función AVERAGE. \n");                            }
+	avg_ind = CrearTerceto(TERC_AVG, listaexpr_ind, longitud_cont, &lista_terceto);
+	if(DEBUG)  {printf("Función AVERAGE. \n");                            }
 };
 
 
@@ -686,7 +694,14 @@ void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 {	int pos_token_ts;
 	
 	if(DEBUG)  { printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
-	pos_token_ts = existeTokenEnTS(n);
+
+	if(type == VRBL)
+		pos_token_ts = existeTokenEnTS(n);
+	else if(type == CTE_STR)
+		pos_token_ts = existeCteString(valueString);
+	else
+		pos_token_ts = existeCteFloat(value);
+
 	if(pos_token_ts==topeTS)
 	{
 
@@ -695,7 +710,7 @@ void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 			strcat(msg,n);
 			strcat(msg," no declarada previamente");		 
 			informeError(msg);
-		}
+		}		
 
 		if(DEBUG)  {	 printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);}
 			strcpy(tabla[topeTS].nombre,n);
@@ -714,8 +729,8 @@ void agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 
 void agregarTipoIDaTS(char *n,int type)
 {	int pos_token_ts;
-if(DEBUG)  {	 printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
-	pos_token_ts = existeTokenEnTS(n);
+	if(DEBUG)  {	 printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
+	pos_token_ts = existeTokenEnTS(n, type);
 	if(pos_token_ts==topeTS)
 	{
 		if(DEBUG)  {	 printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);}
@@ -728,8 +743,9 @@ if(DEBUG)  {	 printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
 	}
 }
 
+
 /*Verifica la existencia de un token en la TS. Compara por nombre y de encontrarlo devuelve la pos */
-int existeTokenEnTS(char *name)
+int existeTokenEnTS(char *name, int type)
 {
 	int pos;
 	for(pos=0;pos<topeTS;pos++)
@@ -868,6 +884,64 @@ int main(int argc,char *argv[])
   return 0;
 }
 
+//para ver si existe la constante float
+int existeCteFloat(double valor){
+	
+	int i=0;
+	int ret;
+	while(i < topeTS){
+		if(tabla[i].valor==valor){
+			ret = i;
+			return ret;
+		}
+		i++;
+
+	}
+
+	return i;
+
+}
+
+//para constantes float
+int findFloatTS(double valor){
+	
+	int i=0;
+	char * ret;
+	while(i < topeTS){
+		if(tabla[i].valor==valor){
+			ret = tabla[i].nombre;
+			return ret;
+		}
+		i++;
+
+	}
+
+	informeError("No existe constante en TS");
+
+}
+
+//para ver si existe la constante string
+int existeCteString(int valorString){
+	char t_aux[STR_VALUE], sinComillas[STR_VALUE];
+	int ret;
+
+	strcpy(t_aux, valorString);
+	armarValorYNombreToken(t_aux,sinComillas);
+	
+	int i=0;
+	while(i < topeTS){
+		if(strcmp(tabla[i].valorString,t_aux)==0 ){
+			ret = i;
+			return ret;
+		}
+		i++;
+
+	}
+	
+	return i;
+
+}
+
 //para constantes string
 int findNombreTS(int valorString){
 	char t_aux[STR_VALUE], sinComillas[STR_VALUE];
@@ -885,7 +959,7 @@ int findNombreTS(int valorString){
 		i++;
 
 	}
-
+	
 	informeError("No existe constante en TS");
 
 }

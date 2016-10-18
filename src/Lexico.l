@@ -162,6 +162,10 @@ PUT				["WRITE"]
 								}
 								float valor = atof(yytext);								
 								agregarTokenTS(aux,"-",CTE_INT,0,valor);
+
+								//Comentar esta linea si se quieren ver directamente los numeros
+								//junto con la de factor -> CONST_INT del sintáctico. 
+								yylval.intval=getiConstantes();
 								incrementarIConstantes();
 								return CONST_INT;
 							}
@@ -196,7 +200,7 @@ PUT				["WRITE"]
 				}
 				
 {CONST_FLOAT}	{ 		
-						yylval.str_val = strdup(yytext);
+						yylval.str_val = strdup(yytext);						
 						f=atof(yytext);
 						
 						if(f>COTA_REAL)
@@ -216,6 +220,7 @@ PUT				["WRITE"]
 									printf( "constante %s (%s)\n", yytext,yylval.str_val);
 								}
 								agregarTokenTS(aux,"-",CTE_FLT,0,f);
+								yylval.intval = getiConstantes();
 								incrementarIConstantes();
 								return CONST_FLOAT;																
 							}

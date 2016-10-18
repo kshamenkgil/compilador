@@ -18,6 +18,9 @@ TODOs:
 * Funciones especiales.
 * Agregar NOT expresion. DONE
 * Agregar constante 0 y 1 al prinicipio del programa. DONE
+* Fix generar tercetos asignaciones. DONE
+* Fix no agregar mil veces las constantes a la TS. DONE
+* Fix en CONST_INT y CONST_FLOAT devuelvo posicion de la constante en la TS. DONE
 
 Generar compilador:
 ----------------------
