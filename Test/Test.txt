@@ -7,20 +7,7 @@ DECVAR
 ENDDEC
 
 BEGIN
-	IF (NOT arbol) THEN
-		a:=x
-		x:=25.45
-		a := 3
-		b := 4
-		WRITE b
-		a:=a++b
-		a:="OSO"
-		v4r14bl3:="OSO"++"VIGILANTE"
-		a:=v4r14bl3++"VIGILANTE"
-		a_:=v4r14bl3++v4r14bl3
-	ENDIF
-	REPEAT
-		READ b
-	UNTIL(a > 3)
+	b:="QUE ONDA"
+	a:=FACTORIAL(5+8*2)
 
 END

@@ -11,6 +11,7 @@
 #define CTE_INT 2
 #define CTE_FLT 3
 #define CTE_STR 4
+#define VRBL_AUX 5
 
 //Variable para debug
 #define DEBUG 0
@@ -23,7 +24,7 @@
 
 typedef struct tablaS {
        char nombre [100]; //si el nombre le precede un "_" entonces es una variable, si tiene $ entonces es real y si tiene & es int,    
-                          //si tiene un @ es una cte string.
+                          //si tiene un # es una cte string.
        int tipo; // 0 es palabra reservada, 1 es variable, 2 constante
        double valor;
        int longitud;

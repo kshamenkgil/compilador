@@ -644,7 +644,7 @@ average: PR_AVERAGE {longitud_cont=0;} PAR_ABRE COR_ABRE lista_expresiones COR_C
 {
 
 	agregarTokenTS("&cte_1"	,"-",CTE_INT,0,longitud_cont); //Ver aca
-		incrementarIConstantes();							//Ver aca
+		//incrementarIConstantes();							//Ver aca
 
 	int aux  = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
 	int dividir=CrearTerceto(findFloatTS(existeCteFloat( longitud_cont)),TERC_NULL,TERC_NULL,&lista_terceto);	
@@ -673,38 +673,91 @@ lista_expresiones: expresion {
 
 
 factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
-{	int n = 1;
-	agregarTokenTS("&cte_2"	,"-",CTE_INT,0,n);
-	incrementarIConstantes();
+{	
+	/*****
+	Ejemplo en C:
 
-	int resultado_ind;
-	int cant = $<intval>3;
-//	printf("%d",cant);
+	int valor = 5;
+	int total;
 
-	if(cant==0 || cant==1) 
-		{
-		int aux = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
-		int uno = CrearTerceto("uno",TERC_NULL,TERC_NULL,&lista_terceto);
- 		aux =  CrearTerceto(TERC_ASIG,aux,uno,&lista_terceto);
-		resultado_ind = aux; 
-		} 
-	while(cant>2){
-		printf("Entro");
-  int aux = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
-  int fact =  CrearTerceto(TERC_ASIG,aux,expresion_ind,&lista_terceto);
-  int uno = CrearTerceto("uno",TERC_NULL,TERC_NULL,&lista_terceto);
-  
-  int resta = CrearTerceto(TERC_RESTA,aux,uno,&lista_terceto);
-  int aux2 = CrearTerceto("_aux2",TERC_NULL,TERC_NULL,&lista_terceto);
-  int otro =CrearTerceto(TERC_ASIG,aux2,resta,&lista_terceto);
-  int aux3 = CrearTerceto("_aux3",TERC_NULL,TERC_NULL,&lista_terceto);
-  int mult = CrearTerceto(TERC_MULT,aux2,aux,&lista_terceto);
-resultado_ind=CrearTerceto(TERC_ASIG,aux3,mult,&lista_terceto);
-expresion_ind = aux2;
-	cant--;
+	total = valor;
+	while(valor>0){
+		valor = (valor-1);
+		total = total * valor; 
 	}
-	factorial_ind = resultado_ind;
-    //factorial_ind = CrearTerceto(TERC_FACT, expresion_ind, TERC_NULL, &lista_terceto);
+
+	En ASM sería (pseudocodigo):
+
+	FACTORIAL:
+	mov r1, expresion	
+	mov @auxValor,r1
+	mov r1,@auxValor
+	mov @auxTotal,r1
+	mov @auxTotal,r1
+	mov @auxValor,r1
+	sub r1,1
+	mov @auxValor,r1
+	mul @auxTotal, @auxValor //supongo que guarda en r1
+	mov @auxTotal,r1
+	cmp @auxValor,0
+	jne FACTORIAL
+	mov _variable, @auxTotal
+
+	*****/
+
+	char tBuffer[STR_VALUE],tBuffer2[STR_VALUE];
+	
+	//Auxiliar para la expresion
+	strcpy(tBuffer,"@aux"); //valor
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+
+	int pos = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0);
+
+	//Auxiliar total
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int posTotal = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0);
+
+	//valor = expresion
+	int aux1 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxExpresion = CrearTerceto(TERC_ASIG,aux1,expresion_ind,&lista_terceto);
+	
+	//total = valor
+	int auxOtro = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux2 = CrearTerceto(findAuxTS(posTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxTotal = CrearTerceto(TERC_ASIG,aux2,auxOtro,&lista_terceto);
+
+	//Numero de salto
+	int salto = NumeroUltimoTerceto()+1;
+
+	//valor = (valor - 1)
+	int aux3 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux4 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxResta = CrearTerceto(TERC_RESTA,aux3,aux4,&lista_terceto); 
+
+	int aux5 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxExpresion = CrearTerceto(TERC_ASIG,aux5,auxResta,&lista_terceto);	
+	
+	//Multiplicacion por el anterior
+	int aux6 = CrearTerceto(findAuxTS(posTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxMultiplicacion = CrearTerceto(TERC_MULT,aux6,auxExpresion,&lista_terceto);
+
+	int aux7 = CrearTerceto(findAuxTS(posTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxTotal = CrearTerceto(TERC_ASIG,aux7,auxMultiplicacion,&lista_terceto);
+
+	//Salto	
+	int aux8 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux9 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);
+	
+	int auxCmp = CrearTerceto(TERC_CMP,aux8,aux9,&lista_terceto); //cmp auxExpresion, 0
+	int auxJNE = CrearTerceto(TERC_JNE,NumeroUltimoTerceto(),salto,&lista_terceto); //jne INICIO_WHILE
+	
+	int resultadoTotal = CrearTerceto(findAuxTS(posTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+
+	factorial_ind = resultadoTotal;
+
     
   if(DEBUG)  {printf("Función FACTORIAL. \n");    }                        
 };
@@ -733,10 +786,10 @@ int agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 	
 	if(DEBUG)  { printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
 
-	if(type == VRBL)
+	if(type == VRBL || type == VRBL_AUX)
 		pos_token_ts = existeTokenEnTS(n);
 	else if(type == CTE_STR)
-		pos_token_ts = existeCteString(valueString);
+		pos_token_ts = existeCteString(valueString);			
 	else
 		pos_token_ts = existeCteFloat(value);
 
@@ -851,7 +904,7 @@ int main(int argc,char *argv[])
   //Genero la primer tabla de simbolos
  	//Imprimir TS en el txt
   fprintf(pfTablaSimbolos,"\t\t\t ******Tabla de Simbolos******\n\n");
-  fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);@(cte string)***\n");
+  fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);#(cte string)***\n");
   fprintf(pfTablaSimbolos,"****************************************************************************\n\n");
   fprintf(pfTablaSimbolos,"Posicion");
   fprintf(pfTablaSimbolos,"\t\t Nombre ");
@@ -886,7 +939,7 @@ int main(int argc,char *argv[])
 	//Genero la primer tabla de simbolos
 	//Imprimir TS en el txt
   fprintf(pfTablaSimbolos2,"\t\t\t ******Tabla de Simbolos******\n\n");
-  fprintf(pfTablaSimbolos2,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);@(cte string)***\n");
+  fprintf(pfTablaSimbolos2,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);#(cte string)***\n");
   fprintf(pfTablaSimbolos2,"****************************************************************************");
   
   for(i=0;i<topeTS;i++)
@@ -988,9 +1041,15 @@ int findNombreTS(int valorString){
 		i++;
 
 	}
-	
+	printf("%s",valorString);
+	getchar();
 	informeError("No existe constante en TS");
 
+}
+
+//para tokens id
+int findAuxTS(int pos){
+	return tabla[pos].nombre;
 }
 
 

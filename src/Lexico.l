@@ -186,7 +186,7 @@ PUT				["WRITE"]
 							{
 								strcpy(aux2,yytext); //ksh
 								armarValorYNombreToken(aux2,yytext);
-								strcpy(aux,"@cte");
+								strcpy(aux,"#cte");
 								sprintf(bufferItoa,"%d",getiConstantes());
 								strcat(aux,bufferItoa);
 								//strcat(aux,aux2);
@@ -194,7 +194,9 @@ PUT				["WRITE"]
 									printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
 									printf( "string  %s (%s)\n", yytext,yylval.str_val);
 								}						
-								agregarTokenTS(aux,yytext,CTE_STR,strlen(aux2),0);
+																
+
+								agregarTokenTS(aux,aux2,CTE_STR,strlen(aux2),0);
 								//incrementarIConstantes();
 								return CONST_STR;
 							}
