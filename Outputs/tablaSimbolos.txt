@@ -54,11 +54,11 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 
 23			 			 2			 0		 0.000000		 
 
-24			 &cte15			 2			 0		 5.000000		 -
+24			 @aux15			 5			 0		 0.000000		 -
 
-25			 &cte16			 2			 0		 2.000000		 -
+25			 @aux16			 5			 0		 0.000000		 -
 
-26			 @aux17			 5			 0		 0.000000		 -
+26			 &cte17			 2			 0		 5.000000		 -
 
 27			 @aux18			 5			 0		 0.000000		 -
 
@@ -71,6 +71,4 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 31			 @aux22			 5			 0		 0.000000		 -
 
 32			 @aux23			 5			 0		 0.000000		 -
-
-33			 @aux24			 5			 0		 0.000000		 -
 

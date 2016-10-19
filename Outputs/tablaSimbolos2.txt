@@ -221,28 +221,28 @@ Valor String:
 ****************************************************************************
 
 Posicion: 24
-Nombre: &cte15
-Tipo: 2
+Nombre: @aux15
+Tipo: 5
 Longitud: 0
-Valor: 5.000000
+Valor: 0.000000
 Valor String: -
 
 ****************************************************************************
 
 Posicion: 25
-Nombre: &cte16
-Tipo: 2
+Nombre: @aux16
+Tipo: 5
 Longitud: 0
-Valor: 2.000000
+Valor: 0.000000
 Valor String: -
 
 ****************************************************************************
 
 Posicion: 26
-Nombre: @aux17
-Tipo: 5
+Nombre: &cte17
+Tipo: 2
 Longitud: 0
-Valor: 0.000000
+Valor: 5.000000
 Valor String: -
 
 ****************************************************************************
@@ -294,15 +294,6 @@ Valor String: -
 
 Posicion: 32
 Nombre: @aux23
-Tipo: 5
-Longitud: 0
-Valor: 0.000000
-Valor String: -
-
-****************************************************************************
-
-Posicion: 33
-Nombre: @aux24
 Tipo: 5
 Longitud: 0
 Valor: 0.000000

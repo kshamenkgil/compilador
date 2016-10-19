@@ -724,6 +724,23 @@ factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
 	int aux1 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
 	int auxExpresion = CrearTerceto(TERC_ASIG,aux1,expresion_ind,&lista_terceto);
 	
+	//if 1 o 0
+	//inicializo en 1
+	int auxInicializador = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+
+	int aux2Init = CrearTerceto(findAuxTS(posTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxTotalInit = CrearTerceto(TERC_ASIG,aux2Init,auxInicializador,&lista_terceto);	
+
+	int auxConst1 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxOtro1 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxCmp1 = CrearTerceto(TERC_CMP,auxOtro1,auxConst1,&lista_terceto); //cmp auxExpresion, 0	
+	int auxJNE1 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
+	int auxConst0 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxOtro2 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxCmp2 = CrearTerceto(TERC_CMP,auxOtro2,auxConst0,&lista_terceto); //cmp auxExpresion, 0
+	int auxJNE2 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
 	//total = valor
 	int auxOtro = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);
 	int aux2 = CrearTerceto(findAuxTS(posTotal),TERC_NULL,TERC_NULL,&lista_terceto);
@@ -754,6 +771,9 @@ factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
 	int auxCmp = CrearTerceto(TERC_CMP,aux8,aux9,&lista_terceto); //cmp auxExpresion, 0
 	int auxJNE = CrearTerceto(TERC_JNE,NumeroUltimoTerceto(),salto,&lista_terceto); //jne INICIO_WHILE
 	
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE1);
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE2);
+
 	int resultadoTotal = CrearTerceto(findAuxTS(posTotal),TERC_NULL,TERC_NULL,&lista_terceto);
 
 	factorial_ind = resultadoTotal;
