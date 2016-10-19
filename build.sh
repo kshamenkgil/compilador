@@ -1,6 +1,7 @@
 #!/bin/bash
 so="$(uname -o)"
 if [ "$so" == "GNU/Linux" ]; then
+	rm bin/TPEntregable
 	cd src
 	flex Lexico.l
 	bison -dyv Sintactico.y

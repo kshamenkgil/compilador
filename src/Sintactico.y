@@ -642,19 +642,28 @@ asignado: TOKEN_ID CONCAT TOKEN_ID
 
 average: PR_AVERAGE {longitud_cont=0;} PAR_ABRE COR_ABRE lista_expresiones COR_CIERRA PAR_CIERRA
 {
-	avg_ind = CrearTerceto(TERC_AVG, listaexpr_ind, longitud_cont, &lista_terceto);
+
+	agregarTokenTS("&cte_1"	,"-",CTE_INT,0,longitud_cont); //Ver aca
+		incrementarIConstantes();							//Ver aca
+
+	int aux  = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
+	int dividir=CrearTerceto(findFloatTS(existeCteFloat( longitud_cont)),TERC_NULL,TERC_NULL,&lista_terceto);	
+	avg_ind = CrearTerceto(TERC_DIV, aux, dividir, &lista_terceto);
 	if(DEBUG)  {printf("Función AVERAGE. \n");                            }
 };
 
 
 lista_expresiones: expresion {
 		    longitud_cont++;
-         //listaexpr_ind = CrearTerceto(expresion_ind, TERC_NULL, TERC_NULL, &lista_terceto);
+			int aux = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
+         listaexpr_ind =CrearTerceto(TERC_ASIG,aux,expresion_ind, &lista_terceto);
 	    }
         |  lista_expresiones COMA expresion
         {
-        
-         listaexpr_ind = CrearTerceto(TERC_SUMA,listaexpr_ind ,expresion_ind, &lista_terceto);    
+        int aux = 	CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
+         listaexpr_ind = CrearTerceto(TERC_SUMA, expresion_ind ,aux, &lista_terceto);
+		  aux = 	CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);    
+		 listaexpr_ind = CrearTerceto(TERC_ASIG,aux,listaexpr_ind, &lista_terceto); 
 		longitud_cont++;
 	}
 {
@@ -662,9 +671,40 @@ lista_expresiones: expresion {
 };
 
 
+
 factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
-{
-    factorial_ind = CrearTerceto(TERC_FACT, expresion_ind, TERC_NULL, &lista_terceto);
+{	int n = 1;
+	agregarTokenTS("&cte_2"	,"-",CTE_INT,0,n);
+	incrementarIConstantes();
+
+	int resultado_ind;
+	int cant = $<intval>3;
+//	printf("%d",cant);
+
+	if(cant==0 || cant==1) 
+		{
+		int aux = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
+		int uno = CrearTerceto("uno",TERC_NULL,TERC_NULL,&lista_terceto);
+ 		aux =  CrearTerceto(TERC_ASIG,aux,uno,&lista_terceto);
+		resultado_ind = aux; 
+		} 
+	while(cant>2){
+		printf("Entro");
+  int aux = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
+  int fact =  CrearTerceto(TERC_ASIG,aux,expresion_ind,&lista_terceto);
+  int uno = CrearTerceto("uno",TERC_NULL,TERC_NULL,&lista_terceto);
+  
+  int resta = CrearTerceto(TERC_RESTA,aux,uno,&lista_terceto);
+  int aux2 = CrearTerceto("_aux2",TERC_NULL,TERC_NULL,&lista_terceto);
+  int otro =CrearTerceto(TERC_ASIG,aux2,resta,&lista_terceto);
+  int aux3 = CrearTerceto("_aux3",TERC_NULL,TERC_NULL,&lista_terceto);
+  int mult = CrearTerceto(TERC_MULT,aux2,aux,&lista_terceto);
+resultado_ind=CrearTerceto(TERC_ASIG,aux3,mult,&lista_terceto);
+expresion_ind = aux2;
+	cant--;
+	}
+	factorial_ind = resultado_ind;
+    //factorial_ind = CrearTerceto(TERC_FACT, expresion_ind, TERC_NULL, &lista_terceto);
     
   if(DEBUG)  {printf("Función FACTORIAL. \n");    }                        
 };

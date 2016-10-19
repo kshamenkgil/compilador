@@ -1,38 +1,9 @@
 ﻿DECVAR
-	arbol,b,casa,d,e:INT
-	g:FLOAT
-	a_, cotamax_:STRING
-	v4r14bl3: INT
-	superando_la_cota_del_id_para_forzar_error:STRING
-	a19:FLOAT
+	asd: INT
 ENDDEC
 
 BEGIN
-	IF (a < 0 OR b==0) 
-	THEN 
-		
-		WRITE a
-	ENDIF
-	
-	IF(b != a19)
-	THEN
-		WRITE v4r14bl3	
-	ELSE
-		READ v4r14bl3
-	ENDIF
-
-	IF(b != a19 OR a==0)
-	THEN
-		WRITE v4r14bl3
-		WRITE v4r14bl3
-		WRITE v4r14bl3
-		WRITE v4r14bl3	
-	ELSE
-		READ v4r14bl3
-		READ v4r14bl3
-		READ v4r14bl3
-		READ v4r14bl3
-	ENDIF
+asd:= FACTORIAL(2)
 	
 
 END
