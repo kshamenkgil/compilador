@@ -712,13 +712,13 @@ factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
 	sprintf(tBuffer2,"%d",getiConstantes());
 	strcat(tBuffer,tBuffer2);
 
-	int pos = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0);
+	int pos = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
 
 	//Auxiliar total
 	strcpy(tBuffer,"@aux"); //total
 	sprintf(tBuffer2,"%d",getiConstantes());
 	strcat(tBuffer,tBuffer2);
-	int posTotal = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0);
+	int posTotal = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
 
 	//valor = expresion
 	int aux1 = CrearTerceto(findAuxTS(pos),TERC_NULL,TERC_NULL,&lista_terceto);

@@ -221,16 +221,7 @@ Valor String:
 ****************************************************************************
 
 Posicion: 24
-Nombre: #cte15
-Tipo: 4
-Longitud: 8
-Valor: 0.000000
-Valor String: QUE_ONDA
-
-****************************************************************************
-
-Posicion: 25
-Nombre: &cte16
+Nombre: &cte15
 Tipo: 2
 Longitud: 0
 Valor: 5.000000
@@ -238,20 +229,29 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 26
-Nombre: &cte17
+Posicion: 25
+Nombre: &cte16
 Tipo: 2
 Longitud: 0
-Valor: 8.000000
+Valor: 2.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 26
+Nombre: @aux17
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
 Valor String: -
 
 ****************************************************************************
 
 Posicion: 27
-Nombre: &cte18
-Tipo: 2
+Nombre: @aux18
+Tipo: 5
 Longitud: 0
-Valor: 2.000000
+Valor: 0.000000
 Valor String: -
 
 ****************************************************************************
@@ -267,6 +267,42 @@ Valor String: -
 
 Posicion: 29
 Nombre: @aux20
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 30
+Nombre: @aux21
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 31
+Nombre: @aux22
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 32
+Nombre: @aux23
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 33
+Nombre: @aux24
 Tipo: 5
 Longitud: 0
 Valor: 0.000000
