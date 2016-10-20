@@ -18,6 +18,7 @@ int primer_resultado;
 int resultadoTotal;
 int ultimo=0;
 int auxK,auxN, auxCombTotal; 
+int auxiliarAvg;
 
 //para condiciones multiples
 int condicionesMultiples=0;
@@ -647,28 +648,42 @@ asignado: TOKEN_ID CONCAT TOKEN_ID
 average: PR_AVERAGE {longitud_cont=0;} PAR_ABRE COR_ABRE lista_expresiones COR_CIERRA PAR_CIERRA
 {
 
-	agregarTokenTS("&cte_1"	,"-",CTE_INT,0,longitud_cont); //Ver aca
-		//incrementarIConstantes();							//Ver aca
+	char tBuffer[STR_VALUE],tBuffer2[STR_VALUE];
+	
+	//Auxiliar para la expresion
+	strcpy(tBuffer,"@aux"); //valor
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
 
-	int aux  = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
-	int dividir=CrearTerceto(findFloatTS(existeCteFloat( longitud_cont)),TERC_NULL,TERC_NULL,&lista_terceto);	
+	int valor = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,longitud_cont);
+
+
+
+	int aux  = CrearTerceto(findAuxTS(auxiliarAvg),TERC_NULL,TERC_NULL,&lista_terceto);
+	int dividir  = CrearTerceto(findAuxTS(valor),TERC_NULL,TERC_NULL,&lista_terceto);
 	avg_ind = CrearTerceto(TERC_DIV, aux, dividir, &lista_terceto);
 	if(DEBUG)  {printf("Función AVERAGE. \n");                            }
 };
 
 
 lista_expresiones: expresion {
-		    longitud_cont++;
-			int aux = CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
-         listaexpr_ind =CrearTerceto(TERC_ASIG,aux,expresion_ind, &lista_terceto);
+			char tBuffer[STR_VALUE],tBuffer2[STR_VALUE];
+				//Auxiliar total
+				strcpy(tBuffer,"@aux"); //total
+				sprintf(tBuffer2,"%d",getiConstantes());
+				strcat(tBuffer,tBuffer2);
+				auxiliarAvg = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+		  		longitud_cont++;
+				int aux = CrearTerceto(findAuxTS(auxiliarAvg),TERC_NULL,TERC_NULL,&lista_terceto);
+         		listaexpr_ind =CrearTerceto(TERC_ASIG,aux,expresion_ind, &lista_terceto);
 	    }
-        |  lista_expresiones COMA expresion
+|  lista_expresiones COMA expresion
         {
-        int aux = 	CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);
-         listaexpr_ind = CrearTerceto(TERC_SUMA, expresion_ind ,aux, &lista_terceto);
-		  aux = 	CrearTerceto("_aux1",TERC_NULL,TERC_NULL,&lista_terceto);    
-		 listaexpr_ind = CrearTerceto(TERC_ASIG,aux,listaexpr_ind, &lista_terceto); 
-		longitud_cont++;
+       		 int aux = 	CrearTerceto(findAuxTS(auxiliarAvg),TERC_NULL,TERC_NULL,&lista_terceto);
+        	 int listaexpr_ind = CrearTerceto(TERC_SUMA, expresion_ind ,aux, &lista_terceto);
+			  aux = CrearTerceto(findAuxTS(auxiliarAvg),TERC_NULL,TERC_NULL,&lista_terceto);
+		 	listaexpr_ind = CrearTerceto(TERC_ASIG,aux,listaexpr_ind, &lista_terceto); 
+			longitud_cont++;
 	}
 {
   if(DEBUG)  {printf("Expresión o lista de expresiones. \n");    }                        

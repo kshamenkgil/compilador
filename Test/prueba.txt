@@ -1,9 +1,11 @@
 ﻿DECVAR
-	asd: INT
+	asd,a,b: INT
 ENDDEC
 
 BEGIN
-asd:= COMBINATORIO(2,2)
+
+asd := AVERAGE([5,4,3])
+
 	
 
 END
