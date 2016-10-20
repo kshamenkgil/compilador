@@ -13,7 +13,11 @@ int termino_ind, factor_ind, expresion_ind,expresion1_ind,expresion2_ind,avg_ind
 int listaexpr_ind,lista_sentencia_ind,dec_var_ind,dec_var_ind,lista_dec_var_ind,linea_dec_var_ind;
 int sentencia_ind, sent_asignacion_ind, sent_read_ind, sent_repeat_ind, sent_write_ind, lista_sentencia_ind,comienzo_if_ind,seleccion_ind,lista_variables_ind;
 int concatTokenInd,concatTokenInd2,concatConstInd,concatConstInd2;	
+int expresion_primer_comb;
+int primer_resultado;
+int resultadoTotal;
 int ultimo=0;
+int auxK,auxN, auxCombTotal; 
 
 //para condiciones multiples
 int condicionesMultiples=0;
@@ -784,10 +788,293 @@ factorial: PR_FACTORIAL PAR_ABRE expresion PAR_CIERRA
 
 
 
-nrocombinatorio: PR_COMBINATORIO PAR_ABRE expresion COMA expresion PAR_CIERRA
+nrocombinatorio: PR_COMBINATORIO PAR_ABRE expresion{
+	expresion_primer_comb = expresion_ind;
+
+
+	char tBuffer[STR_VALUE],tBuffer2[STR_VALUE];
+	
+	//Auxiliar para la expresion
+	strcpy(tBuffer,"@aux"); //valor
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+
+	 auxN = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	//Auxiliar total
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int auxCombTotal = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	//valor = expresion
+	int aux1 = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxExpresion = CrearTerceto(TERC_ASIG,aux1,expresion_ind,&lista_terceto);
+	
+	//if 1 o 0
+	//inicializo en 1
+	int auxInicializador = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+
+	int aux2Init = CrearTerceto(findAuxTS(auxCombTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxTotalInit = CrearTerceto(TERC_ASIG,aux2Init,auxInicializador,&lista_terceto);	
+
+	int auxConst1 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxOtro1 = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxCmp1 = CrearTerceto(TERC_CMP,auxOtro1,auxConst1,&lista_terceto); //cmp auxExpresion, 0	
+	int auxJNE1 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
+	int auxConst0 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxOtro2 = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxCmp2 = CrearTerceto(TERC_CMP,auxOtro2,auxConst0,&lista_terceto); //cmp auxExpresion, 0
+	int auxJNE2 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
+	//total = valor
+	int auxOtro = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux2 = CrearTerceto(findAuxTS(auxCombTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxTotal = CrearTerceto(TERC_ASIG,aux2,auxOtro,&lista_terceto);
+
+	//Numero de salto
+	int salto = NumeroUltimoTerceto()+1;
+
+	//valor = (valor - 1)
+	int aux3 = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux4 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxResta = CrearTerceto(TERC_RESTA,aux3,aux4,&lista_terceto); 
+
+	int aux5 = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxExpresion = CrearTerceto(TERC_ASIG,aux5,auxResta,&lista_terceto);	
+	
+	//Multiplicacion por el anterior
+	int aux6 = CrearTerceto(findAuxTS(auxCombTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxMultiplicacion = CrearTerceto(TERC_MULT,aux6,auxExpresion,&lista_terceto);
+
+	int aux7 = CrearTerceto(findAuxTS(auxCombTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxTotal = CrearTerceto(TERC_ASIG,aux7,auxMultiplicacion,&lista_terceto);
+
+	//Salto	
+	int aux8 = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux9 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);
+	
+	int auxCmp = CrearTerceto(TERC_CMP,aux8,aux9,&lista_terceto); //cmp auxExpresion, 0
+	int auxJNE = CrearTerceto(TERC_JNE,NumeroUltimoTerceto(),salto,&lista_terceto); //jne INICIO_WHILE
+	
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE1);
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE2);
+
+	//VArianle de nu,erador
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	primer_resultado = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	int resultadoTotal = CrearTerceto(findAuxTS(auxCombTotal),TERC_NULL,TERC_NULL,&lista_terceto);
+	int numerador = CrearTerceto(findAuxTS(primer_resultado),TERC_NULL,TERC_NULL,&lista_terceto);
+	int finalize = CrearTerceto(TERC_ASIG,numerador,resultadoTotal,&lista_terceto);
+
+
+} COMA expresion PAR_CIERRA
 {
-    //VER
-    nrocomb_ind = CrearTerceto(TERC_NROCOMB, expresion_ind, expresion_ind, &lista_terceto);
+
+	char tBuffer[STR_VALUE],tBuffer2[STR_VALUE];
+	
+	//Auxiliar para la expresion
+	strcpy(tBuffer,"@aux"); //valor
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+
+	int auxK = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	//Auxiliar total
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int constDeResta = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int factorialDeResta = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	//Auxiliar resta
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int auxDeResta = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	//valorK = EXPRESION
+	int aux12 = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxExpresion22 = CrearTerceto(TERC_ASIG,aux12,expresion_ind,&lista_terceto);
+
+
+	// asignacionFinal =(n-k)
+
+
+	int tercetoAuxN = CrearTerceto(findAuxTS(auxN),TERC_NULL,TERC_NULL,&lista_terceto);
+	int tercetoAuxK = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	int primeraExpresionComb = CrearTerceto(TERC_RESTA,tercetoAuxN,tercetoAuxK,&lista_terceto);
+	int idGuardar = CrearTerceto(findAuxTS(auxDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int asignacionFinal = CrearTerceto(TERC_ASIG,idGuardar,primeraExpresionComb,&lista_terceto);
+
+
+	//asignacionFinal!
+
+	//valor = expresion
+	int aux1 = CrearTerceto(findAuxTS(constDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux2000 = CrearTerceto(findAuxTS(auxDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxExpresion = CrearTerceto(TERC_ASIG,aux1,aux2000,&lista_terceto);
+	
+	//if 1 o 0
+	//inicializo en 1
+	int auxInicializador = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+
+	int aux2Init = CrearTerceto(findAuxTS(factorialDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxTotalInit = CrearTerceto(TERC_ASIG,aux2Init,auxInicializador,&lista_terceto);	
+
+	int auxConst1 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxOtro1 = CrearTerceto(findAuxTS(constDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxCmp1 = CrearTerceto(TERC_CMP,auxOtro1,auxConst1,&lista_terceto); //cmp auxExpresion, 0	
+	int auxJNE1 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
+	int auxConst0 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxOtro2 = CrearTerceto(findAuxTS(constDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxCmp2 = CrearTerceto(TERC_CMP,auxOtro2,auxConst0,&lista_terceto); //cmp auxExpresion, 0
+	int auxJNE2 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
+	//total = valor
+	int auxOtro = CrearTerceto(findAuxTS(constDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux2 = CrearTerceto(findAuxTS(factorialDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxTotal = CrearTerceto(TERC_ASIG,aux2,auxOtro,&lista_terceto);
+
+	//Numero de salto
+	int salto = NumeroUltimoTerceto()+1;
+
+	//valor = (valor - 1)
+	int aux3 = CrearTerceto(findAuxTS(constDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux4 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	int auxResta = CrearTerceto(TERC_RESTA,aux3,aux4,&lista_terceto); 
+
+	int aux5 = CrearTerceto(findAuxTS(constDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxExpresion = CrearTerceto(TERC_ASIG,aux5,auxResta,&lista_terceto);	
+	
+	//Multiplicacion por el anterior
+	int aux6 = CrearTerceto(findAuxTS(factorialDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int auxMultiplicacion = CrearTerceto(TERC_MULT,aux6,auxExpresion,&lista_terceto);
+
+	int aux7 = CrearTerceto(findAuxTS(factorialDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxTotal = CrearTerceto(TERC_ASIG,aux7,auxMultiplicacion,&lista_terceto);
+
+	//Salto	
+	int aux8 = CrearTerceto(findAuxTS(constDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int aux9 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);
+	
+	int auxCmp = CrearTerceto(TERC_CMP,aux8,aux9,&lista_terceto); //cmp auxExpresion, 0
+	int auxJNE = CrearTerceto(TERC_JNE,NumeroUltimoTerceto(),salto,&lista_terceto); //jne INICIO_WHILE
+	
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE1);
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE2);
+
+	int resultadoTotalX = CrearTerceto(findAuxTS(factorialDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+
+	//(n-k)!
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int nMenosKFactorial = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	int idGuardar2 = CrearTerceto(findAuxTS(nMenosKFactorial),TERC_NULL,TERC_NULL,&lista_terceto);
+	int asignacionFinal2 = CrearTerceto(TERC_ASIG,idGuardar2,resultadoTotalX,&lista_terceto);
+
+	//ahora vamos con el k!
+
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int factorialK = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	auxInicializador = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+
+	aux2Init = CrearTerceto(findAuxTS(factorialK),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxTotalInit = CrearTerceto(TERC_ASIG,aux2Init,auxInicializador,&lista_terceto);	
+
+	auxConst1 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	auxOtro1 = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxCmp1 = CrearTerceto(TERC_CMP,auxOtro1,auxConst1,&lista_terceto); //cmp auxExpresion, 0	
+	auxJNE1 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
+	auxConst0 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	auxOtro2 = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxCmp2 = CrearTerceto(TERC_CMP,auxOtro2,auxConst0,&lista_terceto); //cmp auxExpresion, 0
+	auxJNE2 = CrearTerceto(TERC_JE,NumeroUltimoTerceto(),TERC_NULL,&lista_terceto); //jne INICIO_WHILE
+
+	//total = valor
+	auxOtro = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	aux2 = CrearTerceto(findAuxTS(factorialK),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxTotal = CrearTerceto(TERC_ASIG,aux2,auxOtro,&lista_terceto);
+
+	//Numero de salto
+	salto = NumeroUltimoTerceto()+1;
+
+	//valor = (valor - 1)
+	aux3 = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	aux4 = CrearTerceto("&cte1",TERC_NULL,TERC_NULL,&lista_terceto);//constante que representa el 1
+	auxResta = CrearTerceto(TERC_RESTA,aux3,aux4,&lista_terceto); 
+
+	aux5 = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxExpresion = CrearTerceto(TERC_ASIG,aux5,auxResta,&lista_terceto);	
+	
+	//Multiplicacion por el anterior
+	aux6 = CrearTerceto(findAuxTS(factorialK),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxMultiplicacion = CrearTerceto(TERC_MULT,aux6,auxExpresion,&lista_terceto);
+
+	aux7 = CrearTerceto(findAuxTS(factorialK),TERC_NULL,TERC_NULL,&lista_terceto);
+	auxTotal = CrearTerceto(TERC_ASIG,aux7,auxMultiplicacion,&lista_terceto);
+
+	//Salto	
+	aux8 = CrearTerceto(findAuxTS(auxK),TERC_NULL,TERC_NULL,&lista_terceto);
+	aux9 = CrearTerceto("&cte0",TERC_NULL,TERC_NULL,&lista_terceto);
+	
+	auxCmp = CrearTerceto(TERC_CMP,aux8,aux9,&lista_terceto); //cmp auxExpresion, 0
+	auxJNE = CrearTerceto(TERC_JNE,NumeroUltimoTerceto(),salto,&lista_terceto); //jne INICIO_WHILE
+	
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE1);
+	ModificarTerceto(NO_MODIF,NO_MODIF,NumeroUltimoTerceto()+1,&lista_terceto,auxJNE2);
+
+	int resultadoTotalFactorialK_ind = CrearTerceto(findAuxTS(factorialK),TERC_NULL,TERC_NULL,&lista_terceto);
+
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int resultadoTotalFactorialK = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	int idGuardar3 = CrearTerceto(findAuxTS(resultadoTotalFactorialK),TERC_NULL,TERC_NULL,&lista_terceto);
+	int asignacionFinal3 = CrearTerceto(TERC_ASIG,idGuardar3,resultadoTotalFactorialK_ind,&lista_terceto);
+
+
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int denominador = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+
+	//Ahora k! x (n-k)!
+	int firstStep_ind = CrearTerceto(findAuxTS(resultadoTotalFactorialK),TERC_NULL,TERC_NULL,&lista_terceto);
+	int SecondStep_ind = CrearTerceto(findAuxTS(factorialDeResta),TERC_NULL,TERC_NULL,&lista_terceto);
+	int multiplica = CrearTerceto(TERC_MULT,firstStep_ind,SecondStep_ind,&lista_terceto);
+	int denominador_ind = CrearTerceto(findAuxTS(denominador),TERC_NULL,TERC_NULL,&lista_terceto);
+	int asigna_denominador_ind = CrearTerceto(TERC_ASIG,denominador_ind,multiplica,&lista_terceto);
+
+	///la puta division
+	strcpy(tBuffer,"@aux"); //total
+	sprintf(tBuffer2,"%d",getiConstantes());
+	strcat(tBuffer,tBuffer2);
+	int division = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,0.0);
+
+	firstStep_ind = CrearTerceto(findAuxTS(primer_resultado),TERC_NULL,TERC_NULL,&lista_terceto);
+	SecondStep_ind = CrearTerceto(findAuxTS(denominador),TERC_NULL,TERC_NULL,&lista_terceto);
+	int divide_ind = CrearTerceto(TERC_DIV,firstStep_ind,SecondStep_ind,&lista_terceto);
+
+	nrocomb_ind = divide_ind;
+
   if(DEBUG)  {printf("Función NÚMERO COMBINATORIO. \n");        }                    
 };
 

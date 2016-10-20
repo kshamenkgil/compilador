@@ -3,7 +3,7 @@
 ENDDEC
 
 BEGIN
-asd:= FACTORIAL(2)
+asd:= COMBINATORIO(2,2)
 	
 
 END
