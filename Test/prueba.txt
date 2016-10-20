@@ -4,9 +4,22 @@ ENDDEC
 
 BEGIN
 
-asd := AVERAGE([5,4,3])
+a:=3
 
-	
+IF (a<3 AND b>3) THEN
+	WRITE "Hola"
+ELSE
+	REPEAT
+		asd:= COMBINATORIO(2,2)
+		b := b-asd
+	UNTIL(b<2)
+ENDIF
+		
+
+asd:= FACTORIAL(20)
+
+asd := AVERAGE([5,4,3,2])
+
 
 END
 

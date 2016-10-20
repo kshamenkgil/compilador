@@ -9,7 +9,7 @@
 #include "pila.c"
 
 int pgm_ind, programa_ind,tipo_var,condrepeat_ind, condicion_ind, condsimple_ind, condmult_ind,condsimple1_ind,condsimple2_ind;
-int termino_ind, factor_ind, expresion_ind,expresion1_ind,expresion2_ind,avg_ind,factorial_ind, nrocomb_ind,asignacion_ind,tokenid_ind,asignado_ind,longitud_cont;
+int termino_ind, factor_ind, expresion_ind,expresion1_ind,expresion2_ind,avg_ind,factorial_ind, nrocomb_ind,asignacion_ind,tokenid_ind,asignado_ind;
 int listaexpr_ind,lista_sentencia_ind,dec_var_ind,dec_var_ind,lista_dec_var_ind,linea_dec_var_ind;
 int sentencia_ind, sent_asignacion_ind, sent_read_ind, sent_repeat_ind, sent_write_ind, lista_sentencia_ind,comienzo_if_ind,seleccion_ind,lista_variables_ind;
 int concatTokenInd,concatTokenInd2,concatConstInd,concatConstInd2;	
@@ -19,6 +19,8 @@ int resultadoTotal;
 int ultimo=0;
 int auxK,auxN, auxCombTotal; 
 int auxiliarAvg;
+
+double longitud_cont;
 
 //para condiciones multiples
 int condicionesMultiples=0;

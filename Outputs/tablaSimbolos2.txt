@@ -80,17 +80,17 @@ Posicion: 8
 Nombre: &cte7
 Tipo: 2
 Longitud: 0
-Valor: 5.000000
+Valor: 3.000000
 Valor String: -
 
 ****************************************************************************
 
 Posicion: 9
-Nombre: @aux8
-Tipo: 5
-Longitud: 0
+Nombre: #cte8
+Tipo: 4
+Longitud: 4
 Valor: 0.000000
-Valor String: -
+Valor String: Hola
 
 ****************************************************************************
 
@@ -98,16 +98,16 @@ Posicion: 10
 Nombre: &cte9
 Tipo: 2
 Longitud: 0
-Valor: 4.000000
+Valor: 2.000000
 Valor String: -
 
 ****************************************************************************
 
 Posicion: 11
-Nombre: &cte10
-Tipo: 2
+Nombre: @aux10
+Tipo: 5
 Longitud: 0
-Valor: 3.000000
+Valor: 0.000000
 Valor String: -
 
 ****************************************************************************
@@ -116,7 +116,160 @@ Posicion: 12
 Nombre: @aux11
 Tipo: 5
 Longitud: 0
-Valor: -nan
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 13
+Nombre: @aux12
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 14
+Nombre: @aux13
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 15
+Nombre: @aux14
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 16
+Nombre: @aux15
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 17
+Nombre: @aux16
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 18
+Nombre: @aux17
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 19
+Nombre: @aux18
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 20
+Nombre: @aux19
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 21
+Nombre: @aux20
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 22
+Nombre: @aux21
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 23
+Nombre: &cte22
+Tipo: 2
+Longitud: 0
+Valor: 20.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 24
+Nombre: @aux23
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 25
+Nombre: @aux24
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 26
+Nombre: &cte25
+Tipo: 2
+Longitud: 0
+Valor: 5.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 27
+Nombre: @aux26
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 28
+Nombre: &cte27
+Tipo: 2
+Longitud: 0
+Valor: 4.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 29
+Nombre: @aux28
+Tipo: 5
+Longitud: 0
+Valor: 4.000000
 Valor String: -
 
 ****************************************************************************
