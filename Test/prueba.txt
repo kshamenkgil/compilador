@@ -1,5 +1,7 @@
 ﻿DECVAR
 	asd,a,b: INT
+	jorge: STRING
+	p1,p2: FLOAT
 ENDDEC
 
 BEGIN

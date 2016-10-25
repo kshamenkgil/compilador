@@ -159,20 +159,24 @@ tipo: PR_INT {tipo_var=CTE_INT;}| PR_FLOAT {tipo_var=CTE_FLT;}| PR_STRING{tipo_v
 };																								//Ver aca
 
 lista_variables: TOKEN_ID {
-//	lista_variables_ind= CrearTerceto($1,NULL,NULL,&lista_terceto);	
-	 agregarTipoIDaTS($1,tipo_var);
-	 
-		if(DEBUG)  { printf("Variable. \n");}
+	char aux_[255] = "_";
+	strcat(aux_,$1);
+	
+	agregarTipoIDaTS(aux_,tipo_var);
+	
+	if(DEBUG)  { printf("Variable. \n");}
 
-	}	
-	|  lista_variables COMA TOKEN_ID {
+}	
+|  lista_variables COMA TOKEN_ID {
 
-//	lista_variables_ind= CrearTerceto(lista_variables_ind,$3,NULL,&lista_terceto);
-	 
-	agregarTipoIDaTS($3,tipo_var);
-		 if(DEBUG)  {printf("lista de variables. \n");}
+	char aux_[255] = "_";
+	strcat(aux_,$3);
+	
+	agregarTipoIDaTS(aux_,tipo_var);
 
-	}
+	if(DEBUG)  {printf("lista de variables. \n");}
+
+};
 
 /*Sentencias*/
 
@@ -1107,7 +1111,9 @@ int topeTS = 0;
 /* De no existir el Token en la tabla de simbolos lo agrega */
 int agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 {	int pos_token_ts;
-	
+
+
+
 	if(DEBUG)  { printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
 
 	if(type == VRBL || type == VRBL_AUX)
@@ -1126,6 +1132,7 @@ int agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 			strcat(msg," no declarada previamente");		 
 			informeError(msg);
 		}		
+
 
 		if(DEBUG)  {	 printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);}
 			strcpy(tabla[topeTS].nombre,n);
@@ -1148,15 +1155,15 @@ void agregarTipoIDaTS(char *n,int type)
 {	int pos_token_ts;
 	if(DEBUG)  {	 printf("Verifico si %s existe en la Tabla de Simbolos. \n",n);}
 	pos_token_ts = existeTokenEnTS(n, type);
-	if(pos_token_ts==topeTS)
+	if(pos_token_ts!=topeTS)
 	{
-		if(DEBUG)  {	 printf("\n No existe! Lo agrego en la Posicion: %d. \n",topeTS);}
-			tabla[topeTS].tipo=type;
-			topeTS++;
+		if(DEBUG)  {	 printf("\n Existe! Lo agrego en la Posicion: %d. \n",pos_token_ts);}
+			tabla[pos_token_ts].tipo=type;
+			//topeTS++;
 	}
 	else
 	{
-		informeError("El id ya estaba declarado. ERROR");	
+		informeError("El id no existe en la TS. ERROR");	
 	}
 }
 
