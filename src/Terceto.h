@@ -82,5 +82,4 @@ void EliminarUltimoTerceto(lista_tercetos_t*);
 int informeError(char * error);
 
 
-
 #endif
