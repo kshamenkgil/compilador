@@ -50,7 +50,7 @@ void generarDatos(){
 void generarCodigo(){
     //Encabezado del sector de codigo
     fprintf(pfASM, "\n.CODE; comienzo de la zona de codigo\n");
-    fprintf(pfASM, "\t\nmov AX,@DATA ; inicializa el segmento de datos\n");
+    fprintf(pfASM, "\tmov AX,@DATA ; inicializa el segmento de datos\n");
     fprintf(pfASM, "\tmov DS,AX\n");    
     fprintf(pfASM, "\n;\n;Código assembler resultante de compilar el programa fuente.\n;\n");
 
@@ -64,7 +64,7 @@ void generarFin(){
     fprintf(pfASM, "\n;\n;Fin de ejecución.\n;\n");
     fprintf(pfASM, "TERMINAR:\n");
 
-    fprintf(pfASM, "\t\nmov ax, 4C00h ; termina la ejecución.\n");
+    fprintf(pfASM, "\tmov ax, 4C00h ; termina la ejecución.\n");
     fprintf(pfASM, "\tint 21h; syscall\n");
     fprintf(pfASM, "\nEND ;final del archivo.");    
 }

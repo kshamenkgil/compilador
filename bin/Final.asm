@@ -13,8 +13,7 @@
 ;
 
 .CODE; comienzo de la zona de codigo
-	
-mov AX,@DATA ; inicializa el segmento de datos
+	mov AX,@DATA ; inicializa el segmento de datos
 	mov DS,AX
 
 ;
@@ -25,8 +24,7 @@ mov AX,@DATA ; inicializa el segmento de datos
 ;Fin de ejecución.
 ;
 TERMINAR:
-	
-mov ax, 4C00h ; termina la ejecución.
+	mov ax, 4C00h ; termina la ejecución.
 	int 21h; syscall
 
 END ;final del archivo.
