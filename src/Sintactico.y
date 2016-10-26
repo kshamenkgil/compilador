@@ -7,6 +7,7 @@
 #include "constantes.h"
 #include "Terceto.c"
 #include "pila.c"
+#include "asm.c"
 
 int pgm_ind, programa_ind,tipo_var,condrepeat_ind, condicion_ind, condsimple_ind, condmult_ind,condsimple1_ind,condsimple2_ind;
 int termino_ind, factor_ind, expresion_ind,expresion1_ind,expresion2_ind,avg_ind,factorial_ind, nrocomb_ind,asignacion_ind,tokenid_ind,asignado_ind;
@@ -116,6 +117,8 @@ pgm: programa
  printf("Start symbol - ¡Compilación exitosa!. \n");
  printf("-------------------. \n");
 	DumpLista(&lista_terceto);
+	generarASM();
+
 };
 
 programa: PR_BEGIN{crear_pila(&pila);} lista_sentencia PR_END 
