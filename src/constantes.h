@@ -1,3 +1,6 @@
+#ifndef CONSTANTES_H
+#define CONSTANTES_H
+
 //Cotas de Datos
 #define STR_VALUE 255
 #define COTA_STR 30
@@ -31,3 +34,4 @@ typedef struct tablaS {
        char valorString [COTA_STR]; /*Guarda valor de las variables tipo string. De no ser un string guarda un "-"*/
 }TS;
 
+#endif

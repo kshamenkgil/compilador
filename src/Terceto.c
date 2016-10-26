@@ -1,5 +1,8 @@
 #include "Terceto.h"
 
+int x;
+int tamLista = 0;
+
 int CrearTerceto(int p1, int p2, int p3, lista_tercetos_t *p)
 {
     terceto_t terc;	

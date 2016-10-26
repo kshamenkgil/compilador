@@ -1,6 +1,11 @@
+#ifndef TERCETO_H
+#define TERCETO_H
+
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+
+#include "constantes.h"
 
 #define TERC_ASIG -1
 #define TERC_SUMA -2
@@ -76,5 +81,6 @@ int NumeroUltimoTerceto();
 void EliminarUltimoTerceto(lista_tercetos_t*);
 int informeError(char * error);
 
-int x;
-int tamLista = 0;
+
+
+#endif

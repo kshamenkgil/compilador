@@ -5,9 +5,9 @@
 #include <math.h>
 #include "y.tab.h"
 #include "constantes.h"
-#include "Terceto.c"
-#include "pila.c"
-#include "asm.c"
+#include "Terceto.h"
+#include "pila.h"
+#include "asm.h"
 
 int pgm_ind, programa_ind,tipo_var,condrepeat_ind, condicion_ind, condsimple_ind, condmult_ind,condsimple1_ind,condsimple2_ind;
 int termino_ind, factor_ind, expresion_ind,expresion1_ind,expresion2_ind,avg_ind,factorial_ind, nrocomb_ind,asignacion_ind,tokenid_ind,asignado_ind;

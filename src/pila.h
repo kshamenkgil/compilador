@@ -1,4 +1,8 @@
+#ifndef PILA_H
+#define PILA_H
+
 #include <stdlib.h>
+
 #define PILA_LLENA -1
 #define PILA_VACIA 0
 #define TODO_OK 1
@@ -20,3 +24,5 @@ void vaciar_pila(t_pila *);
 int pila_llena(const t_pila *);
 int pila_vacia(const t_pila *);
 void crear_pila(t_pila *);
+
+#endif
