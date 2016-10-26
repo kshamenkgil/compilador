@@ -8,6 +8,7 @@
 
 #include "constantes.h"
 #include "pila.h"
+#include "tablaSimbolos.h"
 
 FILE * pfASM; //Final.asm
 

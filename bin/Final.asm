@@ -13,9 +13,9 @@
 ;
 
 .CODE; comienzo de la zona de codigo
-
+	
 mov AX,@DATA ; inicializa el segmento de datos
-mov DS,AX
+	mov DS,AX
 
 ;
 ;Código assembler resultante de compilar el programa fuente.
@@ -24,7 +24,9 @@ mov DS,AX
 ;
 ;Fin de ejecución.
 ;
-
+TERMINAR:
+	
 mov ax, 4C00h ; termina la ejecución.
-int 21h; syscall
+	int 21h; syscall
+
 END ;final del archivo.
