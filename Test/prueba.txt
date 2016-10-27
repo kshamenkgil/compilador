@@ -12,16 +12,15 @@ IF (a<3 AND b>3) THEN
 	WRITE "Hola"
 ELSE
 	REPEAT
-		asd:= COMBINATORIO(2,2)
+		-/asd:= COMBINATORIO(2,2)/-
 		b := b-asd
 	UNTIL(b<2)
 ENDIF
+		
 
-p1:=5.45		
+-/asd:= FACTORIAL(20)/-
 
-asd:= FACTORIAL(20)
-
-asd := AVERAGE([5,4,3,2])
+-/asd := AVERAGE([5,4,3,2])/-
 
 
 END

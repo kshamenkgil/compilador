@@ -29,7 +29,9 @@ void generarASM(lista_tercetos_t * lTercetos){
 }
 
 void generarEncabezado(){
-    //Encabezado del archivo    
+    //Encabezado del archivo
+    fprintf(pfASM, "\nINCLUDE macros2.asm\t\t ;incluye macros\n");
+    fprintf(pfASM, "INCLUDE number.asm\t\t ;incluye el asm para impresion de numeros\n");
     fprintf(pfASM, "\n.MODEL LARGE ; tipo del modelo de memoria usado.\n");
     fprintf(pfASM, ".386\n");
     fprintf(pfASM, ".STACK 200h ; bytes en el stack\n");              
@@ -67,9 +69,9 @@ void generarDatos(){
             case CTE_STR:
                 fprintf(pfASM, "\t");
                 if(strcmp(elemento.valorString,"-") == 0)
-                    fprintf(pfASM, "%s db MAXTEXTSIZE dup(?), '$' \n", elemento.nombre, elemento.valorString, (COTA_STR - elemento.longitud));
+                    fprintf(pfASM, "%s db MAXTEXTSIZE dup(?), '$'\n", elemento.nombre, elemento.valorString, (COTA_STR - elemento.longitud));
                 else
-                    fprintf(pfASM, "%s db \"%s\", '$', %d dup(?) \n", elemento.nombre, elemento.valorString, (COTA_STR - elemento.longitud));
+                    fprintf(pfASM, "%s db \"%s\", '$', %d dup(?)\n", elemento.nombre, elemento.valorString, (COTA_STR - elemento.longitud));
                 break;
             case CTE_FLT:
                 fprintf(pfASM, "\t");
