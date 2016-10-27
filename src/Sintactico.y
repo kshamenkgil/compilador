@@ -113,12 +113,13 @@ char *str_val;
 pgm: programa 
 {
  	pgm_ind = programa_ind;
+	 
  	printf("Start symbol - ¡Compilación exitosa!. \n");
 	printf("-------------------. \n");
-
+	
 	imprimirTabla();
-	DumpLista(&lista_terceto);
-	generarASM();
+	DumpLista(&lista_terceto);	
+	generarASM(&lista_terceto);
 
 };
 
@@ -157,26 +158,48 @@ linea_dec_var:  lista_variables DOSPUNTOS tipo
 };
 
 
-tipo: PR_INT {tipo_var=CTE_INT;}| PR_FLOAT {tipo_var=CTE_FLT;}| PR_STRING{tipo_var=CTE_STR;}
+tipo: PR_INT {
+	int i = 0;
+	TS elemento;
+	tipo_var=CTE_INT;
+	for(i = 0; i < getTopeTS(); i++){
+        elemento = getItemTS(i);
+		if(elemento.tipo == VRBL){
+			agregarTipoIDaTS(elemento.nombre,tipo_var);
+		}
+	}
+}
+| PR_FLOAT {
+	int i = 0;
+	TS elemento;
+	tipo_var=CTE_FLT;
+	for(i = 0; i < getTopeTS(); i++){
+        elemento = getItemTS(i);
+		if(elemento.tipo == VRBL){
+			agregarTipoIDaTS(elemento.nombre,tipo_var);
+		}
+	}
+}
+| PR_STRING{
+	int i = 0;
+	TS elemento;
+	tipo_var=CTE_STR;
+	for(i = 0; i < getTopeTS(); i++){
+        elemento = getItemTS(i);
+		if(elemento.tipo == VRBL){
+			agregarTipoIDaTS(elemento.nombre,tipo_var);
+		}
+	}
+}
 {
 	 if(DEBUG)  {printf("Tipo de variable. \n");}
-};																								//Ver aca
+};
 
 lista_variables: TOKEN_ID {
-	char aux_[255] = "_";
-	strcat(aux_,$1);
-	
-	agregarTipoIDaTS(aux_,tipo_var);
-	
 	if(DEBUG)  { printf("Variable. \n");}
 
 }	
 |  lista_variables COMA TOKEN_ID {
-
-	char aux_[255] = "_";
-	strcat(aux_,$3);
-	
-	agregarTipoIDaTS(aux_,tipo_var);
 
 	if(DEBUG)  {printf("lista de variables. \n");}
 
@@ -666,13 +689,13 @@ average: PR_AVERAGE {longitud_cont=0;} PAR_ABRE COR_ABRE lista_expresiones COR_C
 	strcat(tBuffer,tBuffer2);
 
 	int valor = agregarTokenTS(tBuffer,"-",VRBL_AUX,0,longitud_cont);
-
+	
 
 
 	int aux  = CrearTerceto(findAuxTS(auxiliarAvg),TERC_NULL,TERC_NULL,&lista_terceto);
 	int dividir  = CrearTerceto(findAuxTS(valor),TERC_NULL,TERC_NULL,&lista_terceto);
 	avg_ind = CrearTerceto(TERC_DIV, aux, dividir, &lista_terceto);
-	if(DEBUG)  {printf("Función AVERAGE. \n");                            }
+	if(DEBUG)  {printf("Función AVERAGE. \n");}
 };
 
 

@@ -187,7 +187,7 @@ PUT				["WRITE"]
 							{
 								strcpy(aux2,yytext); //ksh
 								armarValorYNombreToken(aux2,yytext);
-								strcpy(aux,"#cte");
+								strcpy(aux,"%cte");
 								sprintf(bufferItoa,"%d",getiConstantes());
 								strcat(aux,bufferItoa);
 								//strcat(aux,aux2);

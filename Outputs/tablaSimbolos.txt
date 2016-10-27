@@ -1,7 +1,7 @@
 			 ******Tabla de Simbolos******
 
 ***El tipo de variable lo determina el caracter que precede a esta Ãºltima:
-	 _(variable);$(cte float);&(cte int);#(cte string)***
+	 _(variable);$(cte float);&(cte int);%(cte string)***
 ****************************************************************************
 
 Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
@@ -10,21 +10,21 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 
 1			 &cte1			 2			 0		 1.000000		 -
 
-2			 _asd			 0			 0		 0.000000		 -
+2			 _asd			 2			 0		 0.000000		 -
 
-3			 _a			 0			 0		 0.000000		 -
+3			 _a			 2			 0		 0.000000		 -
 
-4			 _b			 0			 0		 0.000000		 -
+4			 _b			 2			 0		 0.000000		 -
 
-5			 _jorge			 2			 0		 0.000000		 -
+5			 _jorge			 4			 0		 0.000000		 -
 
-6			 _p1			 4			 0		 0.000000		 -
+6			 _p1			 3			 0		 0.0000000000		 -
 
-7			 _p2			 4			 0		 0.000000		 -
+7			 _p2			 3			 0		 0.0000000000		 -
 
 8			 &cte10			 2			 0		 3.000000		 -
 
-9			 #cte11			 4			 4		 0.000000		 Hola
+9			 ¨te11			 4			 4		 0.000000		 Hola
 
 10			 &cte12			 2			 0		 2.000000		 -
 
@@ -52,17 +52,19 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 
 22			 @aux24			 5			 0		 0.000000		 -
 
-23			 &cte25			 2			 0		 20.000000		 -
+23			 $cte25			 3			 0		 5.4500000000		 -
 
-24			 @aux26			 5			 0		 0.000000		 -
+24			 &cte26			 2			 0		 20.000000		 -
 
 25			 @aux27			 5			 0		 0.000000		 -
 
-26			 &cte28			 2			 0		 5.000000		 -
+26			 @aux28			 5			 0		 0.000000		 -
 
-27			 @aux29			 5			 0		 0.000000		 -
+27			 &cte29			 2			 0		 5.000000		 -
 
-28			 &cte30			 2			 0		 4.000000		 -
+28			 @aux30			 5			 0		 0.000000		 -
 
-29			 @aux31			 5			 0		 4.000000		 -
+29			 &cte31			 2			 0		 4.000000		 -
+
+30			 @aux32			 5			 0		 4.000000		 -
 

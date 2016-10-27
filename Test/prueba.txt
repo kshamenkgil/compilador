@@ -16,7 +16,8 @@ ELSE
 		b := b-asd
 	UNTIL(b<2)
 ENDIF
-		
+
+p1:=5.45		
 
 asd:= FACTORIAL(20)
 

@@ -3,7 +3,7 @@
 
 //Cotas de Datos
 #define STR_VALUE 255
-#define COTA_STR 30
+#define COTA_STR 50
 #define COTA_CTE 65535
 #define COTA_REAL 9999999.9999999999
 #define COTA_ID 30

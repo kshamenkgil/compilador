@@ -8,14 +8,14 @@
 
 #include "constantes.h"
 #include "pila.h"
+#include "Terceto.h"
 #include "tablaSimbolos.h"
-
-FILE * pfASM; //Final.asm
 
 void generarEncabezado();
 void generarFin();
 void generarDatos();
-void generarCodigo();
-void generarASM();
+void generarCodigo(lista_tercetos_t *);
+void generarASM(lista_tercetos_t *);
+void imprimirInstrucciones(terceto_t, int);
 
 #endif

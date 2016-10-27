@@ -1,7 +1,7 @@
 			 ******Tabla de Simbolos******
 
 ***El tipo de variable lo determina el caracter que precede a esta Ãºltima:
-	 _(variable);$(cte float);&(cte int);#(cte string)***
+	 _(variable);$(cte float);&(cte int);%(cte string)***
 ****************************************************************************
 
 Posicion: 0
@@ -24,7 +24,7 @@ Valor String: -
 
 Posicion: 2
 Nombre: _asd
-Tipo: 0
+Tipo: 2
 Longitud: 0
 Valor: 0.000000
 Valor String: -
@@ -33,7 +33,7 @@ Valor String: -
 
 Posicion: 3
 Nombre: _a
-Tipo: 0
+Tipo: 2
 Longitud: 0
 Valor: 0.000000
 Valor String: -
@@ -42,7 +42,7 @@ Valor String: -
 
 Posicion: 4
 Nombre: _b
-Tipo: 0
+Tipo: 2
 Longitud: 0
 Valor: 0.000000
 Valor String: -
@@ -51,7 +51,7 @@ Valor String: -
 
 Posicion: 5
 Nombre: _jorge
-Tipo: 2
+Tipo: 4
 Longitud: 0
 Valor: 0.000000
 Valor String: -
@@ -60,18 +60,18 @@ Valor String: -
 
 Posicion: 6
 Nombre: _p1
-Tipo: 4
+Tipo: 3
 Longitud: 0
-Valor: 0.000000
+Valor: 0.0000000000
 Valor String: -
 
 ****************************************************************************
 
 Posicion: 7
 Nombre: _p2
-Tipo: 4
+Tipo: 3
 Longitud: 0
-Valor: 0.000000
+Valor: 0.0000000000
 Valor String: -
 
 ****************************************************************************
@@ -86,7 +86,7 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 9
-Nombre: #cte11
+Nombre: ¨te11
 Tipo: 4
 Longitud: 4
 Valor: 0.000000
@@ -212,19 +212,19 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 23
-Nombre: &cte25
-Tipo: 2
+Nombre: $cte25
+Tipo: 3
 Longitud: 0
-Valor: 20.000000
+Valor: 5.4500000000
 Valor String: -
 
 ****************************************************************************
 
 Posicion: 24
-Nombre: @aux26
-Tipo: 5
+Nombre: &cte26
+Tipo: 2
 Longitud: 0
-Valor: 0.000000
+Valor: 20.000000
 Valor String: -
 
 ****************************************************************************
@@ -239,16 +239,7 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 26
-Nombre: &cte28
-Tipo: 2
-Longitud: 0
-Valor: 5.000000
-Valor String: -
-
-****************************************************************************
-
-Posicion: 27
-Nombre: @aux29
+Nombre: @aux28
 Tipo: 5
 Longitud: 0
 Valor: 0.000000
@@ -256,8 +247,26 @@ Valor String: -
 
 ****************************************************************************
 
+Posicion: 27
+Nombre: &cte29
+Tipo: 2
+Longitud: 0
+Valor: 5.000000
+Valor String: -
+
+****************************************************************************
+
 Posicion: 28
-Nombre: &cte30
+Nombre: @aux30
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 29
+Nombre: &cte31
 Tipo: 2
 Longitud: 0
 Valor: 4.000000
@@ -265,8 +274,8 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 29
-Nombre: @aux31
+Posicion: 30
+Nombre: @aux32
 Tipo: 5
 Longitud: 0
 Valor: 4.000000

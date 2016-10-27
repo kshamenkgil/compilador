@@ -132,7 +132,7 @@ void imprimirTabla(){
     //Genero la primer tabla de simbolos
     //Imprimir TS en el txt
     fprintf(pfTablaSimbolos,"\t\t\t ******Tabla de Simbolos******\n\n");
-    fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);#(cte string)***\n");
+    fprintf(pfTablaSimbolos,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);%(cte string)***\n");
     fprintf(pfTablaSimbolos,"****************************************************************************\n\n");
     fprintf(pfTablaSimbolos,"Posicion");
     fprintf(pfTablaSimbolos,"\t\t Nombre ");
@@ -169,7 +169,7 @@ void imprimirTabla(){
 	//Genero la primer tabla de simbolos
 	//Imprimir TS en el txt
     fprintf(pfTablaSimbolos2,"\t\t\t ******Tabla de Simbolos******\n\n");
-    fprintf(pfTablaSimbolos2,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);#(cte string)***\n");
+    fprintf(pfTablaSimbolos2,"***El tipo de variable lo determina el caracter que precede a esta última:\n\t _(variable);$(cte float);&(cte int);%(cte string)***\n");
     fprintf(pfTablaSimbolos2,"****************************************************************************");
   
     for(i=0;i<topeTS;i++)
