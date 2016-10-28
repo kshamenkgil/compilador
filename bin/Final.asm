@@ -26,16 +26,15 @@ INCLUDE number.asm		 ;incluye el asm para impresion de numeros
 	_p2 dd 0.0000000000
 	&cte5 dd 3.000000
 	$cte6 dd 5.4000000000
-	%cte7 db "Hola", '$', 46 dup(?)
-	&cte8 dd 2.000000
-	&cte9 dd 9.000000
+	&cte7 dd 2.000000
+	&cte8 dd 9.000000
+	&cte9 dd 8.000000
 
 .CODE ;Comienzo de la zona de codigo
+START: ;Código assembler resultante de compilar el programa fuente.
 	mov AX,@DATA ;Inicializa el segmento de datos
 	mov DS,AX
 	finit
-
-START: ;Código assembler resultante de compilar el programa fuente.
 	;ASIGNACIÓN
 	fld &cte5
 	fstp _a
@@ -57,38 +56,61 @@ START: ;Código assembler resultante de compilar el programa fuente.
 	fwait
 	sahf
 	;WRITE
-	displayString %cte7	;ASIGNACIÓN
+	DisplayFloat _a 2
+	newLine 1
+	;SUMA
 	fld _a
+	fld _b
+	fadd 
+	fstp @aux2
+	;ASIGNACIÓN
+	fld @aux2
 	fstp _b
 	;CMP
 	fld _b
-	fld &cte8
+	fld &cte7
 	fcomp
 	fstsw ax
 	fwait
 	sahf
+	;RESTA
+	fld &cte8
+	fld &cte9
+	fsub 
+	fstp @aux2
+	;ASIGNACIÓN
+	fld @aux2
+	fstp _p2
 	;MULTIPLICACION
-	fld &cte8
-	fld &cte8
+	fld &cte7
+	fld &cte7
 	fmul 
 	fstp @aux3
 	;DIVISION
-	fld &cte8
 	fld @aux3
+	fld &cte7
 	fdiv 
 	fstp @aux3
 	;RESTA
+	fld &cte8
 	fld @aux3
-	fld &cte9
-	fadd 
+	fsub 
 	fstp @aux2
 	;ASIGNACIÓN
 	fld @aux2
 	fstp _p1
 	;WRITE
+	DisplayFloat _p2 2
+	newLine 1
+	;WRITE
+	DisplayFloat _b 2
+	newLine 1
+	;WRITE
 	DisplayFloat _p1 2
+	newLine 1
+
 TERMINAR: ;Fin de ejecución.
 	mov ax, 4C00h ; termina la ejecución.
 	int 21h; syscall
 
-END ;final del archivo.
+END START;final del archivo.

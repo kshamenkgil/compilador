@@ -99,10 +99,10 @@ void generarCodigo(lista_tercetos_t * lTercetos){
 
     //Encabezado del sector de codigo
     fprintf(pfASM, "\n.CODE ;Comienzo de la zona de codigo\n");
+    fprintf(pfASM, "START: ;Código assembler resultante de compilar el programa fuente.\n");
     fprintf(pfASM, "\tmov AX,@DATA ;Inicializa el segmento de datos\n");
     fprintf(pfASM, "\tmov DS,AX\n");
-    fprintf(pfASM, "\tfinit\n"); 
-    fprintf(pfASM, "\nSTART: ;Código assembler resultante de compilar el programa fuente.\n");    
+    fprintf(pfASM, "\tfinit\n");
 
     //Recorrer e imprimir assembler
     if(act)
@@ -182,9 +182,9 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             {
                 if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
                 {
-                    fprintf(pfASM, "\tfld %s\n",aux);
                     fprintf(pfASM, "\tfld %s\n",aux2);
-                    fprintf(pfASM, "\tfadd \n");
+                    fprintf(pfASM, "\tfld %s\n",aux);                   
+                    fprintf(pfASM, "\tfsub \n");
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
@@ -201,7 +201,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 {
                     fprintf(pfASM, "\tfld %s\n",aux);
                     fprintf(pfASM, "\tfld %s\n",aux2);
-                    fprintf(pfASM, "\tfsub \n");
+                    fprintf(pfASM, "\tfadd \n");
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
@@ -237,8 +237,8 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             {
                 if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
                 {
-                    fprintf(pfASM, "\tfld %s\n",aux);
                     fprintf(pfASM, "\tfld %s\n",aux2);
+                    fprintf(pfASM, "\tfld %s\n",aux);                    
                     fprintf(pfASM, "\tfdiv \n");
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
@@ -254,19 +254,24 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             tConst = aux[0];
             switch(tConst){
                 case '%':
-                    fprintf(pfASM,"\tdisplayString %s",aux);
+                    fprintf(pfASM,"\tdisplayString %s\n",aux);
+                    fprintf(pfASM, "\tnewLine 1\n");
                     break;
                 case '_':
-                    fprintf(pfASM,"\tDisplayFloat %s 2",aux);
+                    fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
+                    fprintf(pfASM, "\tnewLine 1\n");
                     break;
                 case '&':
-                    fprintf(pfASM,"\tDisplayInteger %s 2",aux);                    
+                    fprintf(pfASM,"\tDisplayInteger %s 2\n",aux);
+                    fprintf(pfASM, "\tnewLine 1\n");                    
                     break;
                 case '$':
-                    fprintf(pfASM,"\tDisplayFloat %s 2",aux);                    
+                    fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
+                    fprintf(pfASM, "\tnewLine 1\n");                    
                     break;
                 case '@':
-                    fprintf(pfASM,"\tDisplayFloat %s 2",aux);                
+                    fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
+                    fprintf(pfASM, "\tnewLine 1\n");                
                     break;
             }                        
             break;
@@ -290,5 +295,5 @@ void generarFin(){
 
     fprintf(pfASM, "\tmov ax, 4C00h ; termina la ejecución.\n");
     fprintf(pfASM, "\tint 21h; syscall\n");
-    fprintf(pfASM, "\nEND ;final del archivo.");    
+    fprintf(pfASM, "\nEND START;final del archivo.");    
 }
