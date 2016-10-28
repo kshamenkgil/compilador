@@ -1168,12 +1168,22 @@ void agregarCtesGenerales(){
 	
 	strcpy(aux,"&cte0");	
 	agregarTokenTS(aux,"-",CTE_INT,0,0);	
-	incrementarIConstantes();
+	//incrementarIConstantes();
 
 	strcpy(aux,"&cte1");	 
 	float t = 1;
 	agregarTokenTS(aux,"-",CTE_INT,0,t);
-	incrementarIConstantes();
+	//incrementarIConstantes();
+
+	strcpy(aux,"@aux2");	
+	agregarTokenTS(aux,"-",VRBL_AUX,0,0);
+	
+	strcpy(aux,"@aux3");
+	agregarTokenTS(aux,"-",VRBL_AUX,0,0);
+	
+	strcpy(aux,"@aux4STR");
+	agregarTokenTS(aux,"-",VRBL_AUX,0,0);
+	//incrementarIConstantes();
 
 }
 

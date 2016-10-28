@@ -2,6 +2,7 @@
 
 FILE * pfASM; //Final.asm
 t_pila pila;  //Pila saltos
+t_pila pVariables;  //Pila variables
 
 void generarASM(lista_tercetos_t * lTercetos){
     //Abrir archivo
@@ -10,8 +11,9 @@ void generarASM(lista_tercetos_t * lTercetos){
         informeError("Error al crear el archivo Final.asm, verifique los permisos de escritura.");
     }        
 
-    //Crear pila para sacar los tercetos.
+    //Crear pilas para sacar los tercetos.
     crear_pila(&pila);
+    crear_pila(&pVariables);
 
     //Copiar tercetos
     //lista_terceto = &lTercetos;
@@ -78,6 +80,10 @@ void generarDatos(){
                 fprintf(pfASM, "%s dd %.10f\n",elemento.nombre,elemento.valor);
                 break;
             case VRBL_AUX:
+                if(strcmp(elemento.nombre,"@aux4STR") == 0){ //variable aux para strings.
+                    fprintf(pfASM, "\t%s db MAXTEXTSIZE dup(?), '$'\n", elemento.nombre, elemento.valorString, (COTA_STR - elemento.longitud));
+                    break;                
+                }
                 fprintf(pfASM, "\t");
                 fprintf(pfASM, "%s dd %.10f\n",elemento.nombre,elemento.valor);
                 break;
@@ -85,7 +91,8 @@ void generarDatos(){
     }    
 }
 
-void generarCodigo(lista_tercetos_t * lTercetos){    
+void generarCodigo(lista_tercetos_t * lTercetos){
+    
     t_node *act = *lTercetos;
 	terceto_t terc;
     int i = 0;
@@ -93,7 +100,8 @@ void generarCodigo(lista_tercetos_t * lTercetos){
     //Encabezado del sector de codigo
     fprintf(pfASM, "\n.CODE ;Comienzo de la zona de codigo\n");
     fprintf(pfASM, "\tmov AX,@DATA ;Inicializa el segmento de datos\n");
-    fprintf(pfASM, "\tmov DS,AX\n");    
+    fprintf(pfASM, "\tmov DS,AX\n");
+    fprintf(pfASM, "\tfinit\n"); 
     fprintf(pfASM, "\nSTART: ;Código assembler resultante de compilar el programa fuente.\n");    
 
     //Recorrer e imprimir assembler
@@ -127,11 +135,150 @@ typedef struct
 } terceto_t;
 */
 void imprimirInstrucciones(terceto_t terc, int nTerc){
-    
+    char tConst;    
+    char aux[STR_VALUE];
+    char aux2[STR_VALUE];    
     //Verificar operación e imprimir instrucciones. 
     switch(terc.operacion){
-        case TERC_ASIG:        
-            fprintf(pfASM, "\t");
+        case TERC_ASIG:
+            fprintf(pfASM,"\t;ASIGNACIÓN\n");
+            if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
+            {
+                if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
+                {
+                    fprintf(pfASM, "\tfld %s\n",aux2);
+                    fprintf(pfASM, "\tfstp %s\n",aux);
+                }
+            }            
+            break;
+        case TERC_CMP:
+            fprintf(pfASM,"\t;CMP\n");
+            if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
+            {
+                if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
+                {
+                    fprintf(pfASM, "\tfld %s\n",aux2);                    
+                    fprintf(pfASM, "\tfld %s\n",aux);
+                    fprintf(pfASM, "\tfcomp\n");
+                    fprintf(pfASM, "\tfstsw ax\n");
+                    fprintf(pfASM, "\tfwait\n");
+                    fprintf(pfASM, "\tsahf\n");                                    
+                }
+            }            
+            break;
+        case TERC_JNE:
+            break;
+        case TERC_JAE:
+            break;
+        case TERC_JBE:
+            break;
+        case TERC_BRA:
+            break;
+        case TERC_JB:            
+            break;
+        case TERC_RESTA:
+            fprintf(pfASM,"\t;RESTA\n");
+            if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
+            {
+                if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
+                {
+                    fprintf(pfASM, "\tfld %s\n",aux);
+                    fprintf(pfASM, "\tfld %s\n",aux2);
+                    fprintf(pfASM, "\tfadd \n");
+                    //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
+
+                    //guardar valor en aux
+                    fprintf(pfASM, "\tfstp @aux2\n");                    
+                    poner_en_pila(&pVariables,"@aux2",255);
+                }                
+            }                        
+            break;        
+        case TERC_SUMA:
+            fprintf(pfASM,"\t;SUMA\n");
+            if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
+            {
+                if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
+                {
+                    fprintf(pfASM, "\tfld %s\n",aux);
+                    fprintf(pfASM, "\tfld %s\n",aux2);
+                    fprintf(pfASM, "\tfsub \n");
+                    //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
+
+                    //guardar valor en aux
+                    fprintf(pfASM, "\tfstp @aux2\n");                    
+                    poner_en_pila(&pVariables,"@aux2",255);
+                }                
+            }     
+            
+            //crear etiqueta
+            /*fprintf(pfASM, "\tETIQ%d:\n",getiConstantes());
+            incrementarIConstantes();*/            
+            break;
+        case TERC_MULT:
+            fprintf(pfASM,"\t;MULTIPLICACION\n");
+            if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
+            {
+                if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
+                {
+                    fprintf(pfASM, "\tfld %s\n",aux);
+                    fprintf(pfASM, "\tfld %s\n",aux2);
+                    fprintf(pfASM, "\tfmul \n");
+                    //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
+
+                    //guardar valor en aux
+                    fprintf(pfASM, "\tfstp @aux3\n");                    
+                    poner_en_pila(&pVariables,"@aux3",255);
+                }                
+            }  
+            break;
+        case TERC_DIV:
+            fprintf(pfASM,"\t;DIVISION\n");
+            if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
+            {
+                if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
+                {
+                    fprintf(pfASM, "\tfld %s\n",aux);
+                    fprintf(pfASM, "\tfld %s\n",aux2);
+                    fprintf(pfASM, "\tfdiv \n");
+                    //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
+
+                    //guardar valor en aux
+                    fprintf(pfASM, "\tfstp @aux3\n");                    
+                    poner_en_pila(&pVariables,"@aux3",255);
+                }                
+            }  
+            break;
+        case TERC_WRITE:
+            sprintf(aux,"%s",terc.opIzq);            
+            fprintf(pfASM,"\t;WRITE\n");
+            tConst = aux[0];
+            switch(tConst){
+                case '%':
+                    fprintf(pfASM,"\tdisplayString %s",aux);
+                    break;
+                case '_':
+                    fprintf(pfASM,"\tDisplayFloat %s 2",aux);
+                    break;
+                case '&':
+                    fprintf(pfASM,"\tDisplayInteger %s 2",aux);                    
+                    break;
+                case '$':
+                    fprintf(pfASM,"\tDisplayFloat %s 2",aux);                    
+                    break;
+                case '@':
+                    fprintf(pfASM,"\tDisplayFloat %s 2",aux);                
+                    break;
+            }                        
+            break;
+        case TERC_READ:
+            fprintf(pfASM,"\t;READ\n");
+            break;
+        case TERC_END:            
+            //Imprimir pausa?
+            break;
+        default:
+            sprintf(aux,"%s",terc.operacion);            
+            poner_en_pila(&pVariables,&aux,255);
             break;
     }
 }

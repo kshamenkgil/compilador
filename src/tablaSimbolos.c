@@ -47,7 +47,8 @@ int agregarTokenTS(char *n,char *valueString,int type, int l, double value)
 			tabla[topeTS].longitud=l;
 			tabla[topeTS].valor=value;
 			topeTS++;
-			incrementarIConstantes();
+			if(type != VRBL)
+				incrementarIConstantes();
 			return topeTS-1;
 	}
 	else

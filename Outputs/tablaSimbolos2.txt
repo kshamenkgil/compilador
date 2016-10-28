@@ -23,6 +23,33 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 2
+Nombre: @aux2
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 3
+Nombre: @aux3
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 4
+Nombre: @aux4STR
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 5
 Nombre: _asd
 Tipo: 2
 Longitud: 0
@@ -31,7 +58,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 3
+Posicion: 6
 Nombre: _a
 Tipo: 2
 Longitud: 0
@@ -40,7 +67,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 4
+Posicion: 7
 Nombre: _b
 Tipo: 2
 Longitud: 0
@@ -49,7 +76,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 5
+Posicion: 8
 Nombre: _jorge
 Tipo: 4
 Longitud: 0
@@ -58,7 +85,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 6
+Posicion: 9
 Nombre: _p1
 Tipo: 3
 Longitud: 0
@@ -67,7 +94,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 7
+Posicion: 10
 Nombre: _p2
 Tipo: 3
 Longitud: 0
@@ -76,8 +103,8 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 8
-Nombre: &cte10
+Posicion: 11
+Nombre: &cte5
 Tipo: 2
 Longitud: 0
 Valor: 3.000000
@@ -85,8 +112,17 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 9
-Nombre: ¨te11
+Posicion: 12
+Nombre: $cte6
+Tipo: 3
+Longitud: 0
+Valor: 5.4000000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 13
+Nombre: Hte7
 Tipo: 4
 Longitud: 4
 Valor: 0.000000
@@ -94,11 +130,20 @@ Valor String: Hola
 
 ****************************************************************************
 
-Posicion: 10
-Nombre: &cte12
+Posicion: 14
+Nombre: &cte8
 Tipo: 2
 Longitud: 0
 Valor: 2.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 15
+Nombre: &cte9
+Tipo: 2
+Longitud: 0
+Valor: 9.000000
 Valor String: -
 
 ****************************************************************************

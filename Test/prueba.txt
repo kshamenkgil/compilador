@@ -7,21 +7,23 @@ ENDDEC
 BEGIN
 
 a:=3
+b:=5.4
 
 IF (a<3 AND b>3) THEN
 	WRITE "Hola"
 ELSE
 	REPEAT
 		-/asd:= COMBINATORIO(2,2)/-
-		b := b-asd
+		b := a
 	UNTIL(b<2)
 ENDIF
-		
 
 -/asd:= FACTORIAL(20)/-
 
 -/asd := AVERAGE([5,4,3,2])/-
 
+p1:=9-2*2/2
+WRITE p1
 
 END
 
