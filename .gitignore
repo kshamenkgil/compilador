@@ -3,3 +3,6 @@ bin/TPEntregable.exe
 lex.yy.c
 y.output
 bin/*.exe
+*.OBJ
+*.LST
+*.MAP
