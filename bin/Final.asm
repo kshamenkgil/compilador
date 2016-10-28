@@ -26,9 +26,13 @@ INCLUDE number.asm		 ;incluye el asm para impresion de numeros
 	_p2 dd 0.0000000000
 	&cte5 dd 3.000000
 	$cte6 dd 5.4000000000
-	&cte7 dd 2.000000
-	&cte8 dd 9.000000
-	&cte9 dd 8.000000
+	cte7 db "Valor_de_A", '$', 40 dup(?)
+	&cte8 dd 2.000000
+	&cte9 dd 9.000000
+	&cte10 dd 8.000000
+	cte11 db "Valor_de_p2", '$', 39 dup(?)
+	cte12 db "Valor_de_b", '$', 40 dup(?)
+	cte13 db "Valor_de_p1", '$', 39 dup(?)
 
 .CODE ;Comienzo de la zona de codigo
 START: ;Código assembler resultante de compilar el programa fuente.
@@ -56,54 +60,66 @@ START: ;Código assembler resultante de compilar el programa fuente.
 	fwait
 	sahf
 	;WRITE
+	displayString cte7
+	newLine 1
+	;WRITE
 	DisplayFloat _a 2
 	newLine 1
 	;SUMA
 	fld _a
 	fld _b
-	fadd 
+	fadd
 	fstp @aux2
 	;ASIGNACIÓN
 	fld @aux2
 	fstp _b
 	;CMP
 	fld _b
-	fld &cte7
+	fld &cte8
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 	;RESTA
-	fld &cte8
 	fld &cte9
-	fsub 
+	fld &cte10
+	fsub
 	fstp @aux2
 	;ASIGNACIÓN
 	fld @aux2
 	fstp _p2
 	;MULTIPLICACION
-	fld &cte7
-	fld &cte7
-	fmul 
+	fld &cte8
+	fld &cte8
+	fmul
 	fstp @aux3
 	;DIVISION
 	fld @aux3
-	fld &cte7
-	fdiv 
+	fld &cte8
+	fdiv
 	fstp @aux3
 	;RESTA
-	fld &cte8
+	fld &cte9
 	fld @aux3
-	fsub 
+	fsub
 	fstp @aux2
 	;ASIGNACIÓN
 	fld @aux2
 	fstp _p1
 	;WRITE
+	displayString cte11
+	newLine 1
+	;WRITE
 	DisplayFloat _p2 2
 	newLine 1
 	;WRITE
+	displayString cte12
+	newLine 1
+	;WRITE
 	DisplayFloat _b 2
+	newLine 1
+	;WRITE
+	displayString cte13
 	newLine 1
 	;WRITE
 	DisplayFloat _p1 2

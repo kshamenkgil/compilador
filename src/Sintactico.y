@@ -327,7 +327,7 @@ seleccion: comienzo_if lista_sentencia {
 		}
 		
 		//Branch al find
-		int ind_bra = CrearTerceto(TERC_BRA,TERC_NULL,TERC_NULL,&lista_terceto);
+		int ind_bra = CrearTerceto(TERC_JMP,TERC_NULL,TERC_NULL,&lista_terceto);
 		
 		poner_en_pila(&pila,&ind_bra,10);
 }

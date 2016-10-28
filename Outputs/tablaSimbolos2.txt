@@ -1,7 +1,7 @@
 			 ******Tabla de Simbolos******
 
 ***El tipo de variable lo determina el caracter que precede a esta última:
-	 _(variable);$(cte float);&(cte int);(cte string)***
+	 _(variable);$(cte float);&(cte int);(NADA)(cte string)***
 ****************************************************************************
 
 Posicion: 0
@@ -122,11 +122,11 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 13
-Nombre: &cte7
-Tipo: 2
-Longitud: 0
-Valor: 2.000000
-Valor String: -
+Nombre: cte7
+Tipo: 4
+Longitud: 10
+Valor: 0.000000
+Valor String: Valor_de_A
 
 ****************************************************************************
 
@@ -134,7 +134,7 @@ Posicion: 14
 Nombre: &cte8
 Tipo: 2
 Longitud: 0
-Valor: 9.000000
+Valor: 2.000000
 Valor String: -
 
 ****************************************************************************
@@ -143,7 +143,43 @@ Posicion: 15
 Nombre: &cte9
 Tipo: 2
 Longitud: 0
+Valor: 9.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 16
+Nombre: &cte10
+Tipo: 2
+Longitud: 0
 Valor: 8.000000
 Valor String: -
+
+****************************************************************************
+
+Posicion: 17
+Nombre: cte11
+Tipo: 4
+Longitud: 11
+Valor: 0.000000
+Valor String: Valor_de_p2
+
+****************************************************************************
+
+Posicion: 18
+Nombre: cte12
+Tipo: 4
+Longitud: 10
+Valor: 0.000000
+Valor String: Valor_de_b
+
+****************************************************************************
+
+Posicion: 19
+Nombre: cte13
+Tipo: 4
+Longitud: 11
+Valor: 0.000000
+Valor String: Valor_de_p1
 
 ****************************************************************************

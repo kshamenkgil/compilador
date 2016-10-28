@@ -172,7 +172,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             break;
         case TERC_JBE:
             break;
-        case TERC_BRA:
+        case TERC_JMP:
             break;
         case TERC_JB:            
             break;
@@ -184,7 +184,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 {
                     fprintf(pfASM, "\tfld %s\n",aux2);
                     fprintf(pfASM, "\tfld %s\n",aux);                   
-                    fprintf(pfASM, "\tfsub \n");
+                    fprintf(pfASM, "\tfsub\n");
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
@@ -201,7 +201,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 {
                     fprintf(pfASM, "\tfld %s\n",aux);
                     fprintf(pfASM, "\tfld %s\n",aux2);
-                    fprintf(pfASM, "\tfadd \n");
+                    fprintf(pfASM, "\tfadd\n");
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
@@ -222,7 +222,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 {
                     fprintf(pfASM, "\tfld %s\n",aux);
                     fprintf(pfASM, "\tfld %s\n",aux2);
-                    fprintf(pfASM, "\tfmul \n");
+                    fprintf(pfASM, "\tfmul\n");
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
@@ -238,12 +238,12 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
                 {
                     fprintf(pfASM, "\tfld %s\n",aux2);
-                    fprintf(pfASM, "\tfld %s\n",aux);                    
-                    fprintf(pfASM, "\tfdiv \n");
+                    fprintf(pfASM, "\tfld %s\n",aux);
+                    fprintf(pfASM, "\tfdiv\n");
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux3\n");                    
+                    fprintf(pfASM, "\tfstp @aux3\n");
                     poner_en_pila(&pVariables,"@aux3",255);
                 }                
             }  
@@ -252,11 +252,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             sprintf(aux,"%s",terc.opIzq);            
             fprintf(pfASM,"\t;WRITE\n");
             tConst = aux[0];
-            switch(tConst){
-                case '%':
-                    fprintf(pfASM,"\tdisplayString %s\n",aux);
-                    fprintf(pfASM, "\tnewLine 1\n");
-                    break;
+            switch(tConst){                
                 case '_':
                     fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
                     fprintf(pfASM, "\tnewLine 1\n");
@@ -272,6 +268,11 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 case '@':
                     fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
                     fprintf(pfASM, "\tnewLine 1\n");                
+                    break;
+                //case '%':
+                default:
+                    fprintf(pfASM,"\tdisplayString %s\n",aux);
+                    fprintf(pfASM, "\tnewLine 1\n");
                     break;
             }                        
             break;

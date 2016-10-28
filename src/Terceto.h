@@ -23,7 +23,7 @@
 #define TERC_READ -14
 #define TERC_FIN -15
 
-#define TERC_BRA -16
+#define TERC_JMP -16
 #define TERC_JE -17
 #define TERC_JNE -18
 #define TERC_JB -19

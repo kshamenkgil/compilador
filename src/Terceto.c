@@ -219,7 +219,7 @@ int NegarOperador(int op)
 void DumpLista(lista_tercetos_t* p)
 {	
 	if(DEBUG){printf("Volcamos la lista de tercetos a intermedia.txt");}		
-	char* terminales[] = {":=", "+", "-", "*", "/", "<", "<=", "==", ">", ">=", "!=", "++", "WRITE", "READ", "FIN", "BRA", "JE", "JNE", "JB", "JBE", "JA", "JAE", "ETIQ", "==STR", "!=STR", "MU","AND","OR","CMP","AVG","FACT","COMB","END"};
+	char* terminales[] = {":=", "+", "-", "*", "/", "<", "<=", "==", ">", ">=", "!=", "++", "WRITE", "READ", "FIN", "JMP", "JE", "JNE", "JB", "JBE", "JA", "JAE", "ETIQ", "==STR", "!=STR", "MU","AND","OR","CMP","AVG","FACT","COMB","END"};
 	int i = 0;
 	t_node *act = *p;
 	terceto_t terc;

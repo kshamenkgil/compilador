@@ -1,7 +1,7 @@
 			 ******Tabla de Simbolos******
 
 ***El tipo de variable lo determina el caracter que precede a esta última:
-	 _(variable);$(cte float);&(cte int);(cte string)***
+	 _(variable);$(cte float);&(cte int);(NADA)(cte string)***
 ****************************************************************************
 
 Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
@@ -32,9 +32,17 @@ Posicion		 Nombre 		 Tipo		 Longitud		 Valor		 Valor String
 
 12			 $cte6			 3			 0		 5.4000000000		 -
 
-13			 &cte7			 2			 0		 2.000000		 -
+13			 cte7			 4			 10		 0.000000		 Valor_de_A
 
-14			 &cte8			 2			 0		 9.000000		 -
+14			 &cte8			 2			 0		 2.000000		 -
 
-15			 &cte9			 2			 0		 8.000000		 -
+15			 &cte9			 2			 0		 9.000000		 -
+
+16			 &cte10			 2			 0		 8.000000		 -
+
+17			 cte11			 4			 11		 0.000000		 Valor_de_p2
+
+18			 cte12			 4			 10		 0.000000		 Valor_de_b
+
+19			 cte13			 4			 11		 0.000000		 Valor_de_p1
 
