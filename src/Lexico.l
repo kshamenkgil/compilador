@@ -174,8 +174,6 @@ PUT				["WRITE"]
 				}
 				
 {CONST_STR}		{ 		yylval.str_val = strdup(yytext);
-						//strcpy(aux2,yytext);
-						//if(strlen(aux2)>COTA_STR)
 						if(strlen(yytext)>COTA_STR)
 							{	
 								printf("¡ERROR con %s! Supera el maximo de caracteres permitidos %d\n",yytext,COTA_STR);
@@ -186,11 +184,11 @@ PUT				["WRITE"]
 						else
 							{
 								strcpy(aux2,yytext); //ksh
-								armarValorYNombreToken(aux2,yytext);
+								armarValorYNombreToken(aux2,yytext);//el yytext no lo necesitamos mas. Solo lo dejo para no cambiar la funcion
+								printf("constante str : %s",aux2);
 								strcpy(aux,"cte");
 								sprintf(bufferItoa,"%d",getiConstantes());
 								strcat(aux,bufferItoa);
-								//strcat(aux,aux2);
 								if(DEBUG) {
 									printf( "Nuevo elemento en la Tabla de símbolos: %s a partir del ",aux);
 									printf( "string  %s (%s)\n", yytext,yylval.str_val);
@@ -198,7 +196,6 @@ PUT				["WRITE"]
 																
 
 								agregarTokenTS(aux,aux2,CTE_STR,strlen(aux2),0);
-								//incrementarIConstantes();
 								return CONST_STR;
 							}
 				}

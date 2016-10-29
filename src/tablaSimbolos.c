@@ -109,8 +109,8 @@ void armarValorYNombreToken(char *a, char *yt)
 		}
 	nombre_token[j]='\0';
 	valor_token[z]='\0';
-	strcpy(a,nombre_token);
-	strcpy(yt,valor_token);
+	strcpy(a,valor_token);
+	strcpy(yt,nombre_token);
 }
 
 void imprimirTabla(){
