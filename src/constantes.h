@@ -25,4 +25,7 @@
 //Cantidad Total de Palabras Reservadas
 #define TOTAL_PR 18
 
+#define VT_IGUAL = 1
+#define VT_DISTINTO = 0
+
 #endif

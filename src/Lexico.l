@@ -185,7 +185,6 @@ PUT				["WRITE"]
 							{
 								strcpy(aux2,yytext); //ksh
 								armarValorYNombreToken(aux2,yytext);//el yytext no lo necesitamos mas. Solo lo dejo para no cambiar la funcion
-								printf("constante str : %s",aux2);
 								strcpy(aux,"cte");
 								sprintf(bufferItoa,"%d",getiConstantes());
 								strcat(aux,bufferItoa);

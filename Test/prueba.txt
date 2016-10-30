@@ -5,31 +5,7 @@
 ENDDEC
 
 BEGIN
-
-a:=3
-b:=5.4
-
-IF (a<3 AND b>3) THEN
-	WRITE "Valor de A"
-	WRITE a
-ELSE
-	REPEAT
-		-/asd:= COMBINATORIO(2,2)/-
-		b := b+a
-	UNTIL(b<2)
-ENDIF
-
--/asd:= FACTORIAL(20)/-
-
--/asd := AVERAGE([5,4,3,2])/-
-p2:=9-8
-p1:=9-2*2/2
-WRITE "Valor de p2"
-WRITE p2
-WRITE "Valor de b"
-WRITE b
-WRITE "Valor de p1"
-WRITE p1
-
+ jorge:= jorge ++ "a"
+ asd := 22 + 33 +28 + a + p1 * 22/jorge
 END
 

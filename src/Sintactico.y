@@ -23,6 +23,7 @@ int auxK,auxN, auxCombTotal;
 int auxiliarAvg;
 
 double longitud_cont;
+t_pila lastTokenIdPos;
 
 //para condiciones multiples
 int condicionesMultiples=0;
@@ -353,6 +354,7 @@ comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
 sent_repeat: PR_REPEAT{
 	int ultimo = NumeroUltimoTerceto()+1;
 	poner_en_pila(&pila,&ultimo,10);
+	CrearTerceto(TERC_ETIQ,TERC_NULL,TERC_NULL,&lista_terceto);
 
 
 } lista_sentencia PR_UNTIL condRepeat
@@ -588,6 +590,8 @@ factor: CONST_FLOAT
 							
 factor: TOKEN_ID			
 {
+	int pos = existeTokenEnTS(findIdTS($1),NULL);
+	verificarTipos(pos,CTE_STR,0);
 	factor_ind = CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);  
 	if(DEBUG)  {printf("Factor es un ID. \n");}   
 };
@@ -651,6 +655,14 @@ asignado: CONST_STR CONCAT CONST_STR
 /*ID++"pepe2"*/
 asignado: TOKEN_ID CONCAT CONST_STR	
 {
+
+	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
+	int posicionToken = existeTokenEnTS(findIdTS($1),NULL);
+	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
+
+	int posToken = 0;
+	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	verificarTipos(posToken,CTE_STR,1);
 	concatTokenInd=CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
 	concatConstInd=CrearTerceto(findNombreTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
 	asignado_ind = CrearTerceto(TERC_CONCAT, concatTokenInd, concatConstInd, &lista_terceto);
@@ -660,6 +672,14 @@ asignado: TOKEN_ID CONCAT CONST_STR
 /*"pepe1"++ID*/
 asignado: CONST_STR CONCAT TOKEN_ID	
 {	
+
+	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
+	int posicionToken = existeTokenEnTS(findIdTS($3),NULL);
+	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
+
+	int posToken;
+	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	verificarTipos(posToken, CTE_STR,1);
 	concatConstInd=CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
 	concatTokenInd=CrearTerceto(findIdTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
 	asignado_ind = CrearTerceto(TERC_CONCAT,concatConstInd ,concatTokenInd , &lista_terceto);	
@@ -668,7 +688,23 @@ asignado: CONST_STR CONCAT TOKEN_ID
 
 /*ID++ID*/
 asignado: TOKEN_ID CONCAT TOKEN_ID	
-{                             
+{     
+
+	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
+	int posicionToken = existeTokenEnTS(findIdTS($1),NULL);
+	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
+
+	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
+	posicionToken = existeTokenEnTS(findIdTS($3),NULL);
+	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
+
+
+
+	  int posToken;
+	  sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	  verificarTipos(posToken, CTE_STR,1);
+	  sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	  verificarTipos(posToken, CTE_STR,1);                     
 	  concatTokenInd=CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);  
 	  concatTokenInd2=CrearTerceto(findIdTS($3), TERC_NULL, TERC_NULL, &lista_terceto);            
       asignado_ind = CrearTerceto(TERC_CONCAT, concatTokenInd, concatTokenInd2, &lista_terceto);

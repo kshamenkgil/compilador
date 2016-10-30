@@ -51,4 +51,7 @@ int findIdTS(int);
 
 void ObtenerItemTS(int, TS *);
 
+void verificarTipos(int posEnTs, int type, int igual);
+
+
 #endif

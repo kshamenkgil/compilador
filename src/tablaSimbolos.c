@@ -289,7 +289,8 @@ int findIdTS(int nombre){
 	char * ret;
 
     strcpy(t_aux,"_");
-	strcat(t_aux, nombre);										
+	strcat(t_aux, nombre);
+									
 	
 	int i=0;
 	while(i < topeTS){
@@ -305,6 +306,9 @@ int findIdTS(int nombre){
 
 }
 
+
+
+
 void ObtenerItemTS(int ind, TS *reg){
 	int pos=0;
 	while(pos <= topeTS){
@@ -314,4 +318,26 @@ void ObtenerItemTS(int ind, TS *reg){
 		}	
 		pos++;
 	}	
+}
+
+void verificarTipos(int posEnTs, int type, int igual){
+	char* tipos[] = {"Palabra Reservada", "Variable", "Int", "Float", "String", "Variable Aux"};
+
+	if(igual){
+		if(tabla[posEnTs].tipo != type){
+				char msg[STR_VALUE] = "Error de tipos. Se esperaba un ";
+				strcat(msg,tipos[type]);
+				strcat(msg," y se encontro un ");	
+				strcat(msg,tipos[tabla[posEnTs].tipo]);		 
+				informeError(msg);
+		}
+	}
+	if(!igual){
+		if(tabla[posEnTs].tipo == type){
+				char msg[STR_VALUE] = "Error de tipos. La variable no puede ser un ";
+				strcat(msg,tipos[type]);	 
+				informeError(msg);
+		}
+	}
+
 }
