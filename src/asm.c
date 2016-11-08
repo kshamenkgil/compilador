@@ -137,7 +137,8 @@ typedef struct
 void imprimirInstrucciones(terceto_t terc, int nTerc){
     char tConst;    
     char aux[STR_VALUE];
-    char aux2[STR_VALUE];    
+    char aux2[STR_VALUE];
+    char last[STR_VALUE] = "";    
     //Verificar operación e imprimir instrucciones. 
     switch(terc.operacion){
         case TERC_ASIG:
@@ -157,8 +158,8 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             {
                 if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
                 {
-                    fprintf(pfASM, "\tfld %s\n",aux2);                    
                     fprintf(pfASM, "\tfld %s\n",aux);
+                    fprintf(pfASM, "\tfld %s\n",aux2);                    
                     fprintf(pfASM, "\tfcomp\n");
                     fprintf(pfASM, "\tfstsw ax\n");
                     fprintf(pfASM, "\tfwait\n");
@@ -166,15 +167,38 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 }
             }            
             break;
-        case TERC_JNE:
+        case TERC_ETIQ:
+            sprintf(aux,"ETIQUETA%d:",nTerc);                            
+            fprintf(pfASM,"ETIQUETA%d:\n",nTerc);                
+            strcpy(last,aux);            
+            break;    
+        case TERC_JMP:
+            sprintf(aux,"ETIQUETA%d", terc.opIzq);
+            fprintf(pfASM, "\tjmp %s\n",aux);
             break;
-        case TERC_JAE:
+        case TERC_JE:
+            sprintf(aux,"ETIQUETA%d", terc.opDer);
+            fprintf(pfASM, "\tje %s\n",aux);
+            break;
+        case TERC_JNE:
+            sprintf(aux,"ETIQUETA%d", terc.opDer);
+            fprintf(pfASM, "\tjne %s\n",aux);
+            break;
+        case TERC_JB:
+            sprintf(aux,"ETIQUETA%d", terc.opDer);
+            fprintf(pfASM, "\tjb %s\n",aux);
             break;
         case TERC_JBE:
-            break;
-        case TERC_JMP:
-            break;
-        case TERC_JB:            
+            sprintf(aux,"ETIQUETA%d", terc.opDer);
+            fprintf(pfASM, "\tjbe %s\n",aux);
+            break;   
+        case TERC_JA:
+            sprintf(aux,"ETIQUETA%d", terc.opDer);
+            fprintf(pfASM, "\tja %s\n",aux);
+            break;                             
+        case TERC_JAE:
+            sprintf(aux,"ETIQUETA%d", terc.opDer);
+            fprintf(pfASM, "\tjae %s\n",aux);      
             break;
         case TERC_RESTA:
             fprintf(pfASM,"\t;RESTA\n");
@@ -279,8 +303,13 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
         case TERC_READ:
             fprintf(pfASM,"\t;READ\n");
             break;
-        case TERC_END:            
-            //Imprimir pausa?
+        case TERC_END:
+            sprintf(aux,"ETIQUETA%d:",nTerc);                            
+            fprintf(pfASM,"ETIQUETA%d:\n",nTerc);                
+            strcpy(last,aux);            
+            fprintf(pfASM,"\tdisplayString cte5\n");
+            fprintf(pfASM,"\tnewLine 1\n");
+            fprintf(pfASM,"\tgetChar\n");
             break;
         default:
             sprintf(aux,"%s",terc.operacion);            

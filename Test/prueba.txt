@@ -5,7 +5,8 @@
 ENDDEC
 
 BEGIN
- jorge:= jorge ++ "a"
- asd := 22 + 33 +28 + a + p1 * 22/jorge
+ a:=1
+ p1:=2
+ asd := 22 + 33 +28 + a + p1 * 22/9
 END
 

@@ -50,3 +50,14 @@ DisplayInteger            macro  number
 
 endm
 ;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+getChar            macro
+;displays an double word sized variable on the screen
+                            
+                ; pausa, espera que oprima una tecla
+                ; AH=1 es el servicio de lectura
+                mov ah, 1
+                int 21h
+
+endm
+;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++	

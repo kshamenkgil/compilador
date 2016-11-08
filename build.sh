@@ -7,7 +7,7 @@ if [ "$so" == "GNU/Linux" ]; then
 	bison -dyv Sintactico.y
 	cd ..
 	mkdir -p bin
-	gcc src/lex.yy.c src/y.tab.c src/asm.c src/pila.c src/Terceto.c src/tablaSimbolos.c -o bin/TPEntregable
+	gcc src/lex.yy.c src/y.tab.c src/asm.c src/pila.c src/Terceto.c src/tablaSimbolos.c -o bin/TPEntregable -w
 	rm src/lex.yy.c
 	rm src/y.tab.c
 	rm src/y.output
@@ -18,7 +18,7 @@ else
 	c:\GnuWin32\bin\bison -dyv src\Sintactico.y
 	cd ..
 	mkdir -p bin
-	c:\MinGW\bin\gcc.exe src\lex.yy.c src\y.tab.c src\asm.c src\pila.c src\Terceto.c src\tablaSimbolos.c -o bin\TPEntregable.exe
+	c:\MinGW\bin\gcc.exe src\lex.yy.c src\y.tab.c src\asm.c src\pila.c src\Terceto.c src\tablaSimbolos.c -o bin\TPEntregable.exe -w
 	rm src\lex.yy.c
 	rm src\y.tab.c
 	rm src\y.output

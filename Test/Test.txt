@@ -6,8 +6,29 @@ DECVAR
 	a19,x:FLOAT
 ENDDEC
 
-BEGIN	
-	a:=FACTORIAL(1)
-	b:=FACTORIAL(5)
-	arbol:=FACTORIAL(FACTORIAL(0))
+BEGIN
+	a:=9
+	b:=8
+	d:=5
+	REPEAT
+		IF (a > b AND b != 0) THEN
+			WRITE "COMBINATORIO DE 9 y 8"
+			a:=COMBINATORIO(9,b)
+			WRITE a
+			WRITE " "	
+		ELSE
+			WRITE "FACTORIAL de 5"
+			b:=FACTORIAL(5)
+			WRITE b
+			WRITE " "
+			WRITE "FACTORIAL de FACTORIAL de 0"		
+			arbol:=FACTORIAL(FACTORIAL(0))
+			WRITE arbol
+			WRITE " "
+		ENDIF
+		d:=d-1
+		IF (d==2) THEN
+			b:=0
+		ENDIF
+	UNTIL(d >= 1)
 END
