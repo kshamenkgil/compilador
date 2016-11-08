@@ -5,8 +5,12 @@
 ENDDEC
 
 BEGIN
- a:=1
+ -/a:=1/-
  p1:=2
+ READ a
+ READ jorge
+ WRITE jorge
  asd := 22 + 33 +28 + a + p1 * 22/9
+ WRITE asd
 END
 

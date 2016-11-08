@@ -52,7 +52,7 @@ endm
 ;+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 getChar            macro
-;displays an double word sized variable on the screen
+;obtiene un caracter de la pantalla
                             
                 ; pausa, espera que oprima una tecla
                 ; AH=1 es el servicio de lectura

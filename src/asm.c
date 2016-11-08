@@ -34,6 +34,7 @@ void generarEncabezado(){
     //Encabezado del archivo
     fprintf(pfASM, "\nINCLUDE macros2.asm\t\t ;incluye macros\n");
     fprintf(pfASM, "INCLUDE number.asm\t\t ;incluye el asm para impresion de numeros\n");
+    fprintf(pfASM, "INCLUDE string.asm\t\t ;incluye el asm para manejo de strings\n");    		 
     fprintf(pfASM, "\n.MODEL LARGE ; tipo del modelo de memoria usado.\n");
     fprintf(pfASM, ".386\n");
     fprintf(pfASM, ".STACK 200h ; bytes en el stack\n");              
@@ -138,7 +139,9 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
     char tConst;    
     char aux[STR_VALUE];
     char aux2[STR_VALUE];
-    char last[STR_VALUE] = "";    
+    char last[STR_VALUE] = "";
+    TS simbolo;
+    int pos;
     //Verificar operación e imprimir instrucciones. 
     switch(terc.operacion){
         case TERC_ASIG:
@@ -272,14 +275,24 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 }                
             }  
             break;
-        case TERC_WRITE:
+        case TERC_WRITE:            
             sprintf(aux,"%s",terc.opIzq);            
             fprintf(pfASM,"\t;WRITE\n");
             tConst = aux[0];
             switch(tConst){                
                 case '_':
-                    fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
-                    fprintf(pfASM, "\tnewLine 1\n");
+                    pos = existeTokenEnTS(terc.opIzq,VRBL);
+                    ObtenerItemTS(pos,&simbolo);
+                    switch(simbolo.tipo){
+                        case CTE_STR:
+                            fprintf(pfASM,"\tdisplayString %s\n",aux);
+                            fprintf(pfASM, "\tnewLine 1\n");
+                            break;
+                        default:
+                            fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
+                            fprintf(pfASM, "\tnewLine 1\n");
+                            break;
+                    }
                     break;
                 case '&':
                     fprintf(pfASM,"\tDisplayInteger %s 2\n",aux);
@@ -292,8 +305,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                 case '@':
                     fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
                     fprintf(pfASM, "\tnewLine 1\n");                
-                    break;
-                //case '%':
+                    break;                
                 default:
                     fprintf(pfASM,"\tdisplayString %s\n",aux);
                     fprintf(pfASM, "\tnewLine 1\n");
@@ -301,7 +313,18 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             }                        
             break;
         case TERC_READ:
+            sprintf(aux,"%s",terc.opIzq);
             fprintf(pfASM,"\t;READ\n");
+            pos = existeTokenEnTS(terc.opIzq,VRBL);
+            ObtenerItemTS(pos,&simbolo);
+            switch(simbolo.tipo){
+                case CTE_STR:
+                    fprintf(pfASM,"\tgetString %s\n",aux);
+                    break;
+                default:
+                    fprintf(pfASM,"\tGetFloat %s\n",aux);
+                    break;
+            }             
             break;
         case TERC_END:
             sprintf(aux,"ETIQUETA%d:",nTerc);                            
