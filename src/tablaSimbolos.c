@@ -325,16 +325,16 @@ void verificarTipos(int posEnTs, int type, int igual){
 
 	if(igual){
 		if(tabla[posEnTs].tipo != type){
-				char msg[STR_VALUE] = "Error de tipos. Se esperaba un ";
+				char msg[STR_VALUE] = "Error de tipos. Incompatibilidad de estos dos tipos:  ";
 				strcat(msg,tipos[type]);
-				strcat(msg," y se encontro un ");	
+				strcat(msg,"  - ");	
 				strcat(msg,tipos[tabla[posEnTs].tipo]);		 
 				informeError(msg);
 		}
 	}
 	if(!igual){
 		if(tabla[posEnTs].tipo == type){
-				char msg[STR_VALUE] = "Error de tipos. La variable no puede ser un ";
+				char msg[STR_VALUE] = "Error de tipos. No es posible el siguiente tipo:  ";
 				strcat(msg,tipos[type]);	 
 				informeError(msg);
 		}

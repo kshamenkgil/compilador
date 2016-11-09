@@ -628,7 +628,12 @@ factor: nrocombinatorio
 
 /*Asignaciones*/ //Faltan
 
-sent_asignacion: TOKEN_ID OP_ASIGNACION asignado
+sent_asignacion: TOKEN_ID {
+
+	int posicionToken = existeTokenEnTS(findIdTS($1),NULL);
+	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
+
+} OP_ASIGNACION asignado
 {
 	 tokenid_ind = CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
      asignacion_ind = CrearTerceto(TERC_ASIG, tokenid_ind, asignado_ind, &lista_terceto);
@@ -638,12 +643,18 @@ sent_asignacion: TOKEN_ID OP_ASIGNACION asignado
 
 asignado: expresion 
 {
+	int posToken;
+	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	verificarTipos(posToken,CTE_STR,0);
      asignado_ind = expresion_ind;
  	 if(DEBUG)  {printf("Asignacion a partir de una expresion. \n");  }                      
 };
 
 asignado: CONST_STR
 {	
+	int posToken;
+	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	verificarTipos(posToken,CTE_STR,1);
      asignado_ind = CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
      if(DEBUG)  {printf("Asignacion a partir de una Constante String. \n");  }                      
 };
@@ -651,6 +662,9 @@ asignado: CONST_STR
 /*"pepe1"++"pepe2"*/
 asignado: CONST_STR CONCAT CONST_STR	
 {
+	int posToken;
+	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	verificarTipos(posToken,CTE_STR,1);
 	concatFlag = 1;
 	//int concatTokenInd,concatTokenInd2,concatConstInd,concatConstInd2;
 	concatConstInd=CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
@@ -665,11 +679,13 @@ asignado: TOKEN_ID CONCAT CONST_STR
 	concatFlag = 1;
 	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
 	int posicionToken = existeTokenEnTS(findIdTS($1),NULL);
-	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
+	int posToken = posicionToken;
+	verificarTipos(posToken,CTE_STR,1);
 
-	int posToken = 0;
+	posToken;
 	sacar_de_pila(&lastTokenIdPos,&posToken,10);
 	verificarTipos(posToken,CTE_STR,1);
+
 	concatTokenInd=CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
 	concatConstInd=CrearTerceto(findNombreTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
 	asignado_ind = CrearTerceto(TERC_CONCAT, concatTokenInd, concatConstInd, &lista_terceto);
@@ -680,13 +696,14 @@ asignado: TOKEN_ID CONCAT CONST_STR
 asignado: CONST_STR CONCAT TOKEN_ID	
 {	
 	concatFlag = 1;
-	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
 	int posicionToken = existeTokenEnTS(findIdTS($3),NULL);
-	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
-
-	int posToken;
-	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	int posToken = posicionToken;
 	verificarTipos(posToken, CTE_STR,1);
+
+	posToken;
+	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	verificarTipos(posToken,CTE_STR,1);
+
 	concatConstInd=CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
 	concatTokenInd=CrearTerceto(findIdTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
 	asignado_ind = CrearTerceto(TERC_CONCAT,concatConstInd ,concatTokenInd , &lista_terceto);	
@@ -712,7 +729,12 @@ asignado: TOKEN_ID CONCAT TOKEN_ID
 	  sacar_de_pila(&lastTokenIdPos,&posToken,10);
 	  verificarTipos(posToken, CTE_STR,1);
 	  sacar_de_pila(&lastTokenIdPos,&posToken,10);
-	  verificarTipos(posToken, CTE_STR,1);                     
+	  verificarTipos(posToken, CTE_STR,1);        
+
+	sacar_de_pila(&lastTokenIdPos,&posToken,10);
+	verificarTipos(posToken,CTE_STR,1);
+
+
 	  concatTokenInd=CrearTerceto(findIdTS($1), TERC_NULL, TERC_NULL, &lista_terceto);  
 	  concatTokenInd2=CrearTerceto(findIdTS($3), TERC_NULL, TERC_NULL, &lista_terceto);            
       asignado_ind = CrearTerceto(TERC_CONCAT, concatTokenInd, concatTokenInd2, &lista_terceto);

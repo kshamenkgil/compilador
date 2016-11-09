@@ -7,29 +7,5 @@ DECVAR
 ENDDEC
 
 BEGIN
-	a:=9
-	b:=8
-	g:=5	
-	d:=g
-	REPEAT
-		IF (a > b AND b != 0) THEN
-			WRITE "COMBINATORIO DE 9 y 8"
-			a:=COMBINATORIO(9,b)
-			WRITE a
-			WRITE " "	
-		ELSE
-			WRITE "FACTORIAL de 5"
-			b:=FACTORIAL(5)
-			WRITE b
-			WRITE " "
-			WRITE "FACTORIAL de FACTORIAL de 0"		
-			f:=FACTORIAL(FACTORIAL(0))
-			WRITE f
-			WRITE " "
-		ENDIF
-		d:=d-1
-		IF (d==2) THEN
-			b:=0
-		ENDIF
-	UNTIL(d >= 1)
+	g := "Hola" ++ "aaa"
 END
