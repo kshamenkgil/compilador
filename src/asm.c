@@ -9,7 +9,7 @@ void generarASM(lista_tercetos_t * lTercetos, int concatFlag){ //concatFlag se u
     //Abrir archivo
     
     if(!(pfASM = fopen("bin/Final.asm","wt+"))){
-        if(!(pfASM = fopen("Final.asm","wt+"))){
+        if(!(pfASM = fopen("Final.asm","wt+")))
             informeError("Error al crear el archivo Final.asm, verifique los permisos de escritura.");
     }        
 
