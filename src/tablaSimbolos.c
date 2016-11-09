@@ -122,12 +122,14 @@ void imprimirTabla(){
     //Creación del archivo tablaSimbolos.txt
     if((pfTablaSimbolos = fopen("Outputs/tablaSimbolos.txt","w")) == NULL)
     {
-        informeError(". \nError al crear el archivo tablaSimbolos.txt. \n");			
+		if((pfTablaSimbolos = fopen("tablaSimbolos.txt","w")) == NULL)
+        	informeError(". \nError al crear el archivo tablaSimbolos.txt. \n");			
     }
     //Creación del archivo tablaSimbolos2.txt
     if((pfTablaSimbolos2 = fopen("Outputs/tablaSimbolos2.txt","w")) == NULL)
     {
-        informeError(". \nError al crear el archivo tablaSimbolos2.txt. \n");		 
+		if((pfTablaSimbolos2 = fopen("tablaSimbolos2.txt","w")) == NULL)
+        	informeError(". \nError al crear el archivo tablaSimbolos2.txt. \n");		 
     }
 
     //Genero la primer tabla de simbolos

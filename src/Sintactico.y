@@ -1292,12 +1292,10 @@ void agregarCtesGenerales(){
 	
 	strcpy(aux,"&cte0");	
 	agregarTokenTS(aux,"-",CTE_INT,0,0);	
-	//incrementarIConstantes();
 
 	strcpy(aux,"&cte1");	 
 	float t = 1;
-	agregarTokenTS(aux,"-",CTE_INT,0,t);
-	//incrementarIConstantes();
+	agregarTokenTS(aux,"-",CTE_INT,0,t);	
 
 	strcpy(aux,"@aux2");	
 	agregarTokenTS(aux,"-",VRBL_AUX,0,0);
@@ -1309,8 +1307,7 @@ void agregarCtesGenerales(){
 	agregarTokenTS(aux,"-",VRBL_AUX,0,0);
 
 	strcpy(aux,"cte5");
-	agregarTokenTS(aux,"Presione una tecla para finalizar...",CTE_STR,0,0);
-	//incrementarIConstantes();
+	agregarTokenTS(aux,"Presione una tecla para finalizar...",CTE_STR,0,0);	
 
 }
 
