@@ -3,8 +3,9 @@
 FILE * pfASM; //Final.asm
 t_pila pila;  //Pila saltos
 t_pila pVariables;  //Pila variables
+int cFlag = 0;
 
-void generarASM(lista_tercetos_t * lTercetos){
+void generarASM(lista_tercetos_t * lTercetos, int concatFlag){ //concatFlag se utiliza para ver si escribo las funciones de manejo de string
     //Abrir archivo
     
     if(!(pfASM = fopen("bin/Final.asm","wt+"))){
@@ -17,6 +18,9 @@ void generarASM(lista_tercetos_t * lTercetos){
 
     //Copiar tercetos
     //lista_terceto = &lTercetos;
+
+    //Imprimo func de strings?
+    cFlag = concatFlag; 
 
     //Generar archivo ASM
     fprintf(pfASM, ";\n;ARCHIVO FINAL.ASM\n;\n");
@@ -34,7 +38,7 @@ void generarEncabezado(){
     //Encabezado del archivo
     fprintf(pfASM, "\nINCLUDE macros2.asm\t\t ;incluye macros\n");
     fprintf(pfASM, "INCLUDE number.asm\t\t ;incluye el asm para impresion de numeros\n");
-    fprintf(pfASM, "INCLUDE string.asm\t\t ;incluye el asm para manejo de strings\n");    		 
+    //fprintf(pfASM, "INCLUDE string.asm\t\t ;incluye el asm para manejo de strings\n");    		 
     fprintf(pfASM, "\n.MODEL LARGE ; tipo del modelo de memoria usado.\n");
     fprintf(pfASM, ".386\n");
     fprintf(pfASM, ".STACK 200h ; bytes en el stack\n");              
@@ -92,6 +96,34 @@ void generarDatos(){
     }    
 }
 
+void imprimirFuncString(){
+    if(!cFlag)
+        return;
+    
+    int c;
+    FILE *file;
+    file = fopen("bin/string.asm", "r");
+    if (file) {
+        fprintf(pfASM,"\n");
+        while ((c = getc(file)) != EOF)
+            fprintf(pfASM,"%c",c);
+        fprintf(pfASM,"\n\n");
+        fclose(file);
+    }else{        
+        file = fopen("string.asm", "r");
+        if (file) {
+            fprintf(pfASM,"\n");
+            while ((c = getc(file)) != EOF)
+                fprintf(pfASM,"%c",c);
+            fprintf(pfASM,"\n\n");
+            fclose(file);
+        }else{
+            informeError("Error no se puede abrir string.asm");
+        }
+    }
+
+}
+
 void generarCodigo(lista_tercetos_t * lTercetos){
     
     t_node *act = *lTercetos;
@@ -100,10 +132,15 @@ void generarCodigo(lista_tercetos_t * lTercetos){
 
     //Encabezado del sector de codigo
     fprintf(pfASM, "\n.CODE ;Comienzo de la zona de codigo\n");
+
+    //Imprimo funciones de manejo de strings
+    imprimirFuncString();
+
+    //Inicio codigo usuario
     fprintf(pfASM, "START: ;Código assembler resultante de compilar el programa fuente.\n");
     fprintf(pfASM, "\tmov AX,@DATA ;Inicializa el segmento de datos\n");
     fprintf(pfASM, "\tmov DS,AX\n");
-    fprintf(pfASM, "\tfinit\n");
+    fprintf(pfASM, "\tfinit\n\n");
 
     //Recorrer e imprimir assembler
     if(act)
@@ -136,11 +173,12 @@ typedef struct
 } terceto_t;
 */
 void imprimirInstrucciones(terceto_t terc, int nTerc){
-    char tConst;    
+    char tConst,tConst2;
     char aux[STR_VALUE];
-    char aux2[STR_VALUE];
+    char aux2[STR_VALUE] = "";
     char last[STR_VALUE] = "";
-    TS simbolo;
+    char concat[STR_VALUE];
+    TS simbolo,simbolo2;
     int pos;
     //Verificar operación e imprimir instrucciones. 
     switch(terc.operacion){
@@ -148,10 +186,26 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             fprintf(pfASM,"\t;ASIGNACIÓN\n");
             if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
             {
+                pos = existeTokenEnTS(aux,VRBL);
+                ObtenerItemTS(pos,&simbolo);
                 if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
                 {
-                    fprintf(pfASM, "\tfld %s\n",aux2);
-                    fprintf(pfASM, "\tfstp %s\n",aux);
+                    if(strcmp(aux2,"@aux4STR") == 0){                               	                    
+                        fprintf(pfASM, "\tmov ax,@DATA\n");
+                        fprintf(pfASM, "\tmov es,ax\n");
+                        fprintf(pfASM, "\tmov si,OFFSET %s ;apunta el origen al auxiliar\n",aux2);
+                        fprintf(pfASM, "\tmov di,OFFSET %s ;apunta el destino a la cadena\n",aux);
+                        fprintf(pfASM, "\tcall COPIAR ;copia los string\n\n");
+                    }else if(simbolo.tipo == CTE_STR){
+                        fprintf(pfASM, "\tmov ax,@DATA\n");
+                        fprintf(pfASM, "\tmov es,ax\n");
+                        fprintf(pfASM, "\tmov si,OFFSET %s ;apunta el origen al auxiliar\n",aux2);
+                        fprintf(pfASM, "\tmov di,OFFSET %s ;apunta el destino a la cadena\n",aux);
+                        fprintf(pfASM, "\tcall COPIAR ;copia los string\n\n");
+                    }else{
+                        fprintf(pfASM, "\tfld %s\n",aux2);
+                        fprintf(pfASM, "\tfstp %s\n\n",aux);
+                    }
                 }
             }            
             break;
@@ -166,7 +220,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     fprintf(pfASM, "\tfcomp\n");
                     fprintf(pfASM, "\tfstsw ax\n");
                     fprintf(pfASM, "\tfwait\n");
-                    fprintf(pfASM, "\tsahf\n");                                    
+                    fprintf(pfASM, "\tsahf\n\n");                            
                 }
             }            
             break;
@@ -174,7 +228,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             sprintf(aux,"ETIQUETA%d:",nTerc);                            
             fprintf(pfASM,"ETIQUETA%d:\n",nTerc);                
             strcpy(last,aux);            
-            break;    
+            break;
         case TERC_JMP:
             sprintf(aux,"ETIQUETA%d", terc.opIzq);
             fprintf(pfASM, "\tjmp %s\n",aux);
@@ -215,7 +269,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux2\n");                    
+                    fprintf(pfASM, "\tfstp @aux2\n\n");                    
                     poner_en_pila(&pVariables,"@aux2",255);
                 }                
             }                        
@@ -232,14 +286,11 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux2\n");                    
+                    fprintf(pfASM, "\tfstp @aux2\n\n");                    
                     poner_en_pila(&pVariables,"@aux2",255);
                 }                
             }     
-            
-            //crear etiqueta
-            /*fprintf(pfASM, "\tETIQ%d:\n",getiConstantes());
-            incrementarIConstantes();*/            
+                                 
             break;
         case TERC_MULT:
             fprintf(pfASM,"\t;MULTIPLICACION\n");
@@ -253,7 +304,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux3\n");                    
+                    fprintf(pfASM, "\tfstp @aux3\n\n");                    
                     poner_en_pila(&pVariables,"@aux3",255);
                 }                
             }  
@@ -270,10 +321,32 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux3\n");
+                    fprintf(pfASM, "\tfstp @aux3\n\n");
                     poner_en_pila(&pVariables,"@aux3",255);
                 }                
             }  
+            break;
+        case TERC_CONCAT:            
+            if(sacar_de_pila(&pVariables,aux,255) != PILA_VACIA)
+            {
+                if(sacar_de_pila(&pVariables,aux2,255) != PILA_VACIA)
+                {
+                    fprintf(pfASM,"\t;CONCATENACIÓN\n");
+                    fprintf(pfASM, "\tmov ax,@DATA\n");
+                    fprintf(pfASM, "\tmov es,ax\n");
+                    fprintf(pfASM, "\tmov si,OFFSET %s ;apunta el origen a la primer cadena\n",aux2);
+                    fprintf(pfASM, "\tmov di,OFFSET @aux4STR ;apunta el destino al auxiliar\n");
+                    fprintf(pfASM, "\tcall COPIAR ;copia los string\n\n");
+
+                    fprintf(pfASM, "\tmov ax,@DATA\n");
+                    fprintf(pfASM, "\tmov es,ax\n");
+                    fprintf(pfASM, "\tmov si,OFFSET %s ;apunta el origen a la segunda cadena\n",aux);
+                    fprintf(pfASM, "\tmov di,OFFSET @aux4STR ;concatena los string\n");
+                    fprintf(pfASM, "\tcall CONCAT\n\n");
+
+                    poner_en_pila(&pVariables,"@aux4STR",255);
+                }
+            }
             break;
         case TERC_WRITE:            
             sprintf(aux,"%s",terc.opIzq);            
@@ -286,29 +359,29 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     switch(simbolo.tipo){
                         case CTE_STR:
                             fprintf(pfASM,"\tdisplayString %s\n",aux);
-                            fprintf(pfASM, "\tnewLine 1\n");
+                            fprintf(pfASM, "\tnewLine 1\n\n");
                             break;
                         default:
                             fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
-                            fprintf(pfASM, "\tnewLine 1\n");
+                            fprintf(pfASM, "\tnewLine 1\n\n");
                             break;
                     }
                     break;
                 case '&':
                     fprintf(pfASM,"\tDisplayInteger %s 2\n",aux);
-                    fprintf(pfASM, "\tnewLine 1\n");                    
+                    fprintf(pfASM, "\tnewLine 1\n\n");                    
                     break;
                 case '$':
                     fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
-                    fprintf(pfASM, "\tnewLine 1\n");                    
+                    fprintf(pfASM, "\tnewLine 1\n\n");                    
                     break;
                 case '@':
                     fprintf(pfASM,"\tDisplayFloat %s 2\n",aux);
-                    fprintf(pfASM, "\tnewLine 1\n");                
+                    fprintf(pfASM, "\tnewLine 1\n\n");                
                     break;                
                 default:
                     fprintf(pfASM,"\tdisplayString %s\n",aux);
-                    fprintf(pfASM, "\tnewLine 1\n");
+                    fprintf(pfASM, "\tnewLine 1\n\n");
                     break;
             }                        
             break;
@@ -319,10 +392,10 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             ObtenerItemTS(pos,&simbolo);
             switch(simbolo.tipo){
                 case CTE_STR:
-                    fprintf(pfASM,"\tgetString %s\n",aux);
+                    fprintf(pfASM,"\tgetString %s\n\n",aux);
                     break;
                 default:
-                    fprintf(pfASM,"\tGetFloat %s\n",aux);
+                    fprintf(pfASM,"\tGetFloat %s\n\n",aux);
                     break;
             }             
             break;
@@ -333,7 +406,7 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
             fprintf(pfASM,"\tdisplayString cte5\n");
             fprintf(pfASM,"\tnewLine 1\n");
             fprintf(pfASM,"\tgetChar\n");
-            break;
+            break;        
         default:
             sprintf(aux,"%s",terc.operacion);            
             poner_en_pila(&pVariables,&aux,255);

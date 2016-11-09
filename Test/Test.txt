@@ -1,7 +1,7 @@
 DECVAR
-	b,arbol,casa,d,e,a:INT	
-	g:FLOAT
-	a_:STRING
+	a,b,c:INT	
+	d,e,f:FLOAT
+	g,h,i:STRING
 	v4r14bl3: INT
 	a19,x:FLOAT
 ENDDEC
@@ -9,7 +9,8 @@ ENDDEC
 BEGIN
 	a:=9
 	b:=8
-	d:=5
+	g:=5	
+	d:=g
 	REPEAT
 		IF (a > b AND b != 0) THEN
 			WRITE "COMBINATORIO DE 9 y 8"
@@ -22,8 +23,8 @@ BEGIN
 			WRITE b
 			WRITE " "
 			WRITE "FACTORIAL de FACTORIAL de 0"		
-			arbol:=FACTORIAL(FACTORIAL(0))
-			WRITE arbol
+			f:=FACTORIAL(FACTORIAL(0))
+			WRITE f
 			WRITE " "
 		ENDIF
 		d:=d-1

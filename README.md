@@ -8,9 +8,7 @@ Ver TODOs.
 TODOs:
 --------------------
 
-* VERIFICAR REGEX DE CTES STRING
-* Generación de asm.    
-    * Generación de concatenaciones.    
+* VERIFICAR REGEX DE CTES STRING 
 
 Generar compilador:
 ----------------------

@@ -19,13 +19,15 @@
 * Generar tercetos de funcion especial FACTORIAL. DONE
 * Arreglar TS, imprime vacíos. DONE
 * VERIFICAR QUE EN LAS CTES STRING EN LOS ESPACIOS LE CLAVA DONE
-* Poner los macros de concatenación junto con el resto. DONE
-* Generación de READS. DONE
-* Generación de saltos. DONE
-* Generación de WRITES. DONE
-* Generación de CMP. DONE
-* Generación de operaciones aritméticas. DONE    
-* Ver como se incluyen los macros en asm. DONE
-* Ver si los @, #, etc, se usan para direccionamiento o no joden. DONE
-* Hacer bat que compile asm. DONE
 * Verificación de tipos. DONE
+* Hacer bat que compile asm. DONE
+* Generación de asm. DONE    
+    * Generación de concatenaciones. DONE
+    * Poner los macros de concatenación junto con el resto. DONE
+    * Generación de READS. DONE
+    * Generación de saltos. DONE
+    * Generación de WRITES. DONE
+    * Generación de CMP. DONE
+    * Generación de operaciones aritméticas. DONE    
+    * Ver como se incluyen los macros en asm. DONE
+    * Ver si los @, #, etc, se usan para direccionamiento o no joden. DONE

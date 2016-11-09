@@ -4,37 +4,35 @@
 ;************************************************************
 STRLEN PROC
     mov bx,0
-    STRL01:
+
+STRL01:
     cmp BYTE PTR [SI+BX],'$'
     je STREND
     inc BX
     jmp STRL01
-    STREND:
+STREND:
     ret
+
 STRLEN ENDP
 
 ;************************************************************
 ; copia DS:SI a ES:DI; busca la cantidad de caracteres
 ;************************************************************
 COPIAR PROC
-    call STRLEN
-    ; busco la cantidad de caracteres
+    call STRLEN    ; busco la cantidad de caracteres
     cmp bx,MAXTEXTSIZE
     jle COPIARSIZEOK
+
     mov bx,MAXTEXTSIZE
-    COPIARSIZEOK:
+
+COPIARSIZEOK:
     mov cx,bx
     cld
+
     rep movsb
     mov al,'$'
     mov BYTE PTR [DI],al
-    ;la copia se hace de 'CX' caracteres
-    ;cld es para que la copia se realice
-    ;hacia adelante"
-    ;copia la cadea
-    ;carácter terminador
-    ;el registro DI quedo apuntando al
-    ;final
+
     ret
 COPIAR ENDP
 
@@ -68,27 +66,22 @@ CONCAT PROC
 CONCATSIZEOK:
         mov cx,dx
         jmp CONCATSIGO
+
 CONCATSIZEMAL:
         sub bx,MAXTEXTSIZE
         sub dx,bx
         mov cx,dx
 
-        ; excede el tama#o maximo?
-        ; La suma no excede el maximo, copio
-        ; todos
-        ; los caracteres del segundo string.
-        ; La suma de caracteres de los 2 strings
-        ; exceden el maximo
-        ; copio lo maximo permitido el resto
-        ;se pierde.
 CONCATSIGO:
         push ds
         pop es
         pop si
         pop ds
         cld ; cld es para que la copia se realice hacia adelante
+        
         rep movsb ; copia la cadena
         mov al,'$' ; carácter terminador
-        mov BYTE PTR [DI],al ; el registro DI quedo apuntando al                
-        ret ;final
+        mov BYTE PTR [DI],al ; el registro DI quedo apuntando al final
+
+        ret ;return
 CONCAT ENDP

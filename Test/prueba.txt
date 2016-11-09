@@ -1,16 +1,39 @@
 ﻿DECVAR
 	asd,a,b: INT
-	jorge: STRING
+	jorge,c,d: STRING
 	p1,p2: FLOAT
 ENDDEC
 
 BEGIN
  -/a:=1/-
  p1:=2
+ WRITE "INGRESE UN ENTERO"
  READ a
+
+ WRITE " "	
+
+ WRITE "INGRESE UN STRING"
  READ jorge
+
+ WRITE " "
+
+ jorge:=jorge++"hola"
+ jorge:="JORGE tiene"++jorge
  WRITE jorge
+ WRITE " "
+ 
  asd := 22 + 33 +28 + a + p1 * 22/9
+ WRITE "VALOR DE ASD"
+ 
  WRITE asd
+
+ c:="hola"
+ d:="ksh"
+ c:=c++d
+
+ WRITE "C TIENE "
+ WRITE c
+
+
 END
 

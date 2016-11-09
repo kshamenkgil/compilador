@@ -22,6 +22,8 @@ int ultimo=0;
 int auxK,auxN, auxCombTotal,auxNValor;
 int auxiliarAvg;
 
+int concatFlag = 0;
+
 double longitud_cont;
 t_pila lastTokenIdPos;
 
@@ -120,7 +122,7 @@ pgm: programa
 	
 	imprimirTabla();
 	DumpLista(&lista_terceto);	
-	generarASM(&lista_terceto);
+	generarASM(&lista_terceto,concatFlag);
 
 };
 
@@ -649,6 +651,7 @@ asignado: CONST_STR
 /*"pepe1"++"pepe2"*/
 asignado: CONST_STR CONCAT CONST_STR	
 {
+	concatFlag = 1;
 	//int concatTokenInd,concatTokenInd2,concatConstInd,concatConstInd2;
 	concatConstInd=CrearTerceto(findNombreTS($1), TERC_NULL, TERC_NULL, &lista_terceto);
 	concatConstInd2=CrearTerceto(findNombreTS($3), TERC_NULL, TERC_NULL, &lista_terceto);
@@ -659,7 +662,7 @@ asignado: CONST_STR CONCAT CONST_STR
 /*ID++"pepe2"*/
 asignado: TOKEN_ID CONCAT CONST_STR	
 {
-
+	concatFlag = 1;
 	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
 	int posicionToken = existeTokenEnTS(findIdTS($1),NULL);
 	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
@@ -676,7 +679,7 @@ asignado: TOKEN_ID CONCAT CONST_STR
 /*"pepe1"++ID*/
 asignado: CONST_STR CONCAT TOKEN_ID	
 {	
-
+	concatFlag = 1;
 	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
 	int posicionToken = existeTokenEnTS(findIdTS($3),NULL);
 	poner_en_pila(&lastTokenIdPos,&posicionToken,10);
@@ -694,6 +697,7 @@ asignado: CONST_STR CONCAT TOKEN_ID
 asignado: TOKEN_ID CONCAT TOKEN_ID	
 {     
 
+	concatFlag = 1;
 	//Lo pongo en pila por convencion. Asi queda todo igual #NoMePuteen
 	int posicionToken = existeTokenEnTS(findIdTS($1),NULL);
 	poner_en_pila(&lastTokenIdPos,&posicionToken,10);

@@ -15,7 +15,8 @@ void generarEncabezado();
 void generarFin();
 void generarDatos();
 void generarCodigo(lista_tercetos_t *);
-void generarASM(lista_tercetos_t *);
+void generarASM(lista_tercetos_t *, int);
 void imprimirInstrucciones(terceto_t, int);
+void imprimirFuncString();
 
 #endif
