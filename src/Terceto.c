@@ -225,12 +225,13 @@ void DumpLista(lista_tercetos_t* p)
 	int i = 0;
 	t_node *act = *p;
 	terceto_t terc;
-	FILE* pf = fopen("Outputs/intermedia.txt", "wt+");
+	FILE* pf;
 	
 	
-	if(!pf)
+	if(!(pf=fopen("Outputs/intermedia.txt", "wt+")))
 	{
-        informeError("Error creando el archivo de notacion intermedia");		
+		if(!(pf=fopen("intermedia.txt", "wt+")))
+        	informeError("Error creando el archivo de notacion intermedia");		
 	}
 	if(act)
 	{
