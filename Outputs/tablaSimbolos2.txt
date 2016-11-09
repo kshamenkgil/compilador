@@ -113,6 +113,42 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 12
+Nombre: _j
+Tipo: 3
+Longitud: 0
+Valor: 0.0000000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 13
+Nombre: _n1
+Tipo: 3
+Longitud: 0
+Valor: 0.0000000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 14
+Nombre: _n2
+Tipo: 3
+Longitud: 0
+Valor: 0.0000000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 15
+Nombre: _n3
+Tipo: 3
+Longitud: 0
+Valor: 0.0000000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 16
 Nombre: _g
 Tipo: 4
 Longitud: 0
@@ -121,7 +157,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 13
+Posicion: 17
 Nombre: _h
 Tipo: 4
 Longitud: 0
@@ -130,7 +166,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 14
+Posicion: 18
 Nombre: _i
 Tipo: 4
 Longitud: 0
@@ -139,7 +175,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 15
+Posicion: 19
 Nombre: _v4r14bl3
 Tipo: 2
 Longitud: 0
@@ -148,7 +184,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 16
+Posicion: 20
 Nombre: _a19
 Tipo: 3
 Longitud: 0
@@ -157,7 +193,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 17
+Posicion: 21
 Nombre: _x
 Tipo: 3
 Longitud: 0
@@ -166,7 +202,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 18
+Posicion: 22
 Nombre: &cte6
 Tipo: 2
 Longitud: 0
@@ -175,17 +211,8 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 19
+Posicion: 23
 Nombre: &cte7
-Tipo: 2
-Longitud: 0
-Valor: 8.000000
-Valor String: -
-
-****************************************************************************
-
-Posicion: 20
-Nombre: &cte8
 Tipo: 2
 Longitud: 0
 Valor: 5.000000
@@ -193,34 +220,43 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 21
-Nombre: cte9
+Posicion: 24
+Nombre: cte8
 Tipo: 4
-Longitud: 5
+Longitud: 9
 Valor: 0.000000
-Valor String: ERROR
+Valor String: INGRESE a
 
 ****************************************************************************
 
-Posicion: 22
+Posicion: 25
+Nombre: cte9
+Tipo: 4
+Longitud: 0
+Valor: 0.000000
+Valor String: 
+
+****************************************************************************
+
+Posicion: 26
 Nombre: cte10
+Tipo: 4
+Longitud: 9
+Valor: 0.000000
+Valor String: INGRESE b
+
+****************************************************************************
+
+Posicion: 27
+Nombre: cte11
 Tipo: 4
 Longitud: 21
 Valor: 0.000000
-Valor String: COMBINATORIO DE 9 y 8
+Valor String: COMBINATORIO DE a Y b
 
 ****************************************************************************
 
-Posicion: 23
-Nombre: @aux11
-Tipo: 5
-Longitud: 0
-Valor: 0.000000
-Valor String: -
-
-****************************************************************************
-
-Posicion: 24
+Posicion: 28
 Nombre: @aux12
 Tipo: 5
 Longitud: 0
@@ -229,7 +265,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 25
+Posicion: 29
 Nombre: @aux13
 Tipo: 5
 Longitud: 0
@@ -238,7 +274,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 26
+Posicion: 30
 Nombre: @aux14
 Tipo: 5
 Longitud: 0
@@ -247,7 +283,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 27
+Posicion: 31
 Nombre: @aux15
 Tipo: 5
 Longitud: 0
@@ -256,7 +292,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 28
+Posicion: 32
 Nombre: @aux16
 Tipo: 5
 Longitud: 0
@@ -265,7 +301,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 29
+Posicion: 33
 Nombre: @aux17
 Tipo: 5
 Longitud: 0
@@ -274,7 +310,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 30
+Posicion: 34
 Nombre: @aux18
 Tipo: 5
 Longitud: 0
@@ -283,7 +319,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 31
+Posicion: 35
 Nombre: @aux19
 Tipo: 5
 Longitud: 0
@@ -292,7 +328,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 32
+Posicion: 36
 Nombre: @aux20
 Tipo: 5
 Longitud: 0
@@ -301,7 +337,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 33
+Posicion: 37
 Nombre: @aux21
 Tipo: 5
 Longitud: 0
@@ -310,7 +346,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 34
+Posicion: 38
 Nombre: @aux22
 Tipo: 5
 Longitud: 0
@@ -319,7 +355,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 35
+Posicion: 39
 Nombre: @aux23
 Tipo: 5
 Longitud: 0
@@ -328,7 +364,7 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 36
+Posicion: 40
 Nombre: @aux24
 Tipo: 5
 Longitud: 0
@@ -337,26 +373,8 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 37
-Nombre: cte25
-Tipo: 4
-Longitud: 1
-Valor: 0.000000
-Valor String:  
-
-****************************************************************************
-
-Posicion: 38
-Nombre: cte26
-Tipo: 4
-Longitud: 14
-Valor: 0.000000
-Valor String: FACTORIAL de 5
-
-****************************************************************************
-
-Posicion: 39
-Nombre: @aux27
+Posicion: 41
+Nombre: @aux25
 Tipo: 5
 Longitud: 0
 Valor: 0.000000
@@ -364,7 +382,25 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 40
+Posicion: 42
+Nombre: cte26
+Tipo: 4
+Longitud: 1
+Valor: 0.000000
+Valor String:  
+
+****************************************************************************
+
+Posicion: 43
+Nombre: cte27
+Tipo: 4
+Longitud: 14
+Valor: 0.000000
+Valor String: FACTORIAL de 5
+
+****************************************************************************
+
+Posicion: 44
 Nombre: @aux28
 Tipo: 5
 Longitud: 0
@@ -373,44 +409,8 @@ Valor String: -
 
 ****************************************************************************
 
-Posicion: 41
-Nombre: cte29
-Tipo: 4
-Longitud: 27
-Valor: 0.000000
-Valor String: FACTORIAL de FACTORIAL de 0
-
-****************************************************************************
-
-Posicion: 42
-Nombre: @aux30
-Tipo: 5
-Longitud: 0
-Valor: 0.000000
-Valor String: -
-
-****************************************************************************
-
-Posicion: 43
-Nombre: @aux31
-Tipo: 5
-Longitud: 0
-Valor: 0.000000
-Valor String: -
-
-****************************************************************************
-
-Posicion: 44
-Nombre: @aux32
-Tipo: 5
-Longitud: 0
-Valor: 0.000000
-Valor String: -
-
-****************************************************************************
-
 Posicion: 45
-Nombre: @aux33
+Nombre: @aux29
 Tipo: 5
 Longitud: 0
 Valor: 0.000000
@@ -419,10 +419,154 @@ Valor String: -
 ****************************************************************************
 
 Posicion: 46
-Nombre: &cte34
+Nombre: cte30
+Tipo: 4
+Longitud: 22
+Valor: 0.000000
+Valor String: FACTORIAL de FACTORIAL
+
+****************************************************************************
+
+Posicion: 47
+Nombre: &cte31
 Tipo: 2
 Longitud: 0
 Valor: 2.000000
 Valor String: -
+
+****************************************************************************
+
+Posicion: 48
+Nombre: @aux32
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 49
+Nombre: @aux33
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 50
+Nombre: &cte34
+Tipo: 2
+Longitud: 0
+Valor: 4.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 51
+Nombre: @aux35
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 52
+Nombre: @aux36
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 53
+Nombre: cte37
+Tipo: 4
+Longitud: 8
+Valor: 0.000000
+Valor String: IMPRIMIR
+
+****************************************************************************
+
+Posicion: 54
+Nombre: cte38
+Tipo: 4
+Longitud: 17
+Valor: 0.000000
+Valor String: INGRESE 3 NUMEROS
+
+****************************************************************************
+
+Posicion: 55
+Nombre: @aux39
+Tipo: 5
+Longitud: 0
+Valor: 0.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 56
+Nombre: @aux40
+Tipo: 5
+Longitud: 0
+Valor: 3.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 57
+Nombre: cte41
+Tipo: 4
+Longitud: 14
+Valor: 0.000000
+Valor String: EL PROMEDIO ES
+
+****************************************************************************
+
+Posicion: 58
+Nombre: cte42
+Tipo: 4
+Longitud: 15
+Valor: 0.000000
+Valor String: CUENTA COMPLEJA
+
+****************************************************************************
+
+Posicion: 59
+Nombre: &cte43
+Tipo: 2
+Longitud: 0
+Valor: 8.000000
+Valor String: -
+
+****************************************************************************
+
+Posicion: 60
+Nombre: cte44
+Tipo: 4
+Longitud: 5
+Valor: 0.000000
+Valor String: Hola 
+
+****************************************************************************
+
+Posicion: 61
+Nombre: cte45
+Tipo: 4
+Longitud: 5
+Valor: 0.000000
+Valor String: Mundo
+
+****************************************************************************
+
+Posicion: 62
+Nombre: cte46
+Tipo: 4
+Longitud: 10
+Valor: 0.000000
+Valor String: CONCATENO 
 
 ****************************************************************************

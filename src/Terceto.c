@@ -125,14 +125,14 @@ void ObtenerItemLT(lista_tercetos_t* p, int pos, terceto_t* nodo)
 void ModificarTerceto(int op, int li, int ld, lista_tercetos_t *p, int pos)
 {
 	t_node *act = *p;
-	int cont = 0;
-
+	int cont = 0;	
+	
 	if(act)
 	{
 		while(act->ant)
 			act = act->ant;
 		while(act)
-		{
+		{									
 			if(cont == pos)
 			{
 			    if(op != NO_MODIF && op != NEGAR){
@@ -141,10 +141,12 @@ void ModificarTerceto(int op, int li, int ld, lista_tercetos_t *p, int pos)
 				if(op == NEGAR){
 					act->info.operacion = NegarOperador(act->info.operacion);
 				}
-				if(li != NO_MODIF)
+				if(li != NO_MODIF){
                     act->info.opIzq = li;
-                if(ld != NO_MODIF)
+				}
+                if(ld != NO_MODIF){					
                     act->info.opDer = ld;
+				}
                 return;
 			}
 			else

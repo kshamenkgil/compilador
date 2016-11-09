@@ -1,11 +1,97 @@
 DECVAR
 	a,b,c:INT	
-	d,e,f:FLOAT
+	d,e,f,j:FLOAT
+	n1,n2,n3:FLOAT
 	g,h,i:STRING
 	v4r14bl3: INT
 	a19,x:FLOAT
 ENDDEC
 
 BEGIN
-	g := "Hola" ++ "aaa"
+	a:=9
+	b:=5
+
+	e:=0
+	
+	WRITE "INGRESE a"
+	READ a
+	WRITE ""
+	
+	WRITE "INGRESE b"
+	READ b	
+	WRITE ""
+
+	-/ERRORES DE TIPO/-
+	-/c:="ERROR"/-
+	-/g:=5/-
+	-/d:=g/-
+
+	d:=5	
+
+	REPEAT
+		IF (a > b AND b != 0) THEN
+			WRITE "COMBINATORIO DE a Y b"
+			j:=COMBINATORIO(a,b)
+			WRITE j
+			WRITE " "
+			READ f
+			a:=a-1
+			b:=b-1			
+		ELSE
+			WRITE "FACTORIAL de 5"
+			j:=FACTORIAL(5)
+			WRITE j
+			WRITE " "
+			READ f
+
+			WRITE "FACTORIAL de FACTORIAL"		
+			j:=FACTORIAL(FACTORIAL(2)+4)
+			WRITE j
+			WRITE " "
+			READ f
+		ENDIF
+		d:=d-1
+		IF (d==2) THEN
+			b:=0
+			e:=5
+		ENDIF		
+		REPEAT			
+			WRITE "IMPRIMIR"
+			WRITE " "
+			READ f
+			e:=e-1
+		UNTIL(e >= 1)
+	UNTIL(d >= 1)
+	
+	WRITE "INGRESE 3 NUMEROS"
+	WRITE " "
+	READ n1
+	WRITE " "
+	READ n2
+	WRITE " "
+	READ n3
+
+	j:=AVERAGE([n1,n2,n3])
+
+	WRITE "EL PROMEDIO ES"
+	WRITE j
+
+	j:=0
+	d:=1
+	WRITE "CUENTA COMPLEJA"	
+	j:=((8-(d*2))/(9-5))*2
+	WRITE j
+	WRITE " "
+	READ f
+
+	g := "Hola " ++ "Mundo"
+	WRITE g
+	WRITE " "
+	READ f
+
+	h := "CONCATENO "
+	h := h++g
+	WRITE h
+	WRITE " "
+	READ f
 END

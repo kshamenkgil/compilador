@@ -25,6 +25,10 @@ INCLUDE number.asm		 ;incluye el asm para impresion de numeros
 	_d dd 0.0000000000
 	_e dd 0.0000000000
 	_f dd 0.0000000000
+	_j dd 0.0000000000
+	_n1 dd 0.0000000000
+	_n2 dd 0.0000000000
+	_n3 dd 0.0000000000
 	_g db MAXTEXTSIZE dup(?), '$'
 	_h db MAXTEXTSIZE dup(?), '$'
 	_i db MAXTEXTSIZE dup(?), '$'
@@ -32,11 +36,11 @@ INCLUDE number.asm		 ;incluye el asm para impresion de numeros
 	_a19 dd 0.0000000000
 	_x dd 0.0000000000
 	&cte6 dd 9.000000
-	&cte7 dd 8.000000
-	&cte8 dd 5.000000
-	cte9 db "ERROR", '$', 45 dup(?)
-	cte10 db "COMBINATORIO DE 9 y 8", '$', 29 dup(?)
-	@aux11 dd 0.0000000000
+	&cte7 dd 5.000000
+	cte8 db "INGRESE a", '$', 41 dup(?)
+	cte9 db "", '$', 50 dup(?)
+	cte10 db "INGRESE b", '$', 41 dup(?)
+	cte11 db "COMBINATORIO DE a Y b", '$', 29 dup(?)
 	@aux12 dd 0.0000000000
 	@aux13 dd 0.0000000000
 	@aux14 dd 0.0000000000
@@ -50,18 +54,119 @@ INCLUDE number.asm		 ;incluye el asm para impresion de numeros
 	@aux22 dd 0.0000000000
 	@aux23 dd 0.0000000000
 	@aux24 dd 0.0000000000
-	cte25 db " ", '$', 49 dup(?)
-	cte26 db "FACTORIAL de 5", '$', 36 dup(?)
-	@aux27 dd 0.0000000000
+	@aux25 dd 0.0000000000
+	cte26 db " ", '$', 49 dup(?)
+	cte27 db "FACTORIAL de 5", '$', 36 dup(?)
 	@aux28 dd 0.0000000000
-	cte29 db "FACTORIAL de FACTORIAL de 0", '$', 23 dup(?)
-	@aux30 dd 0.0000000000
-	@aux31 dd 0.0000000000
+	@aux29 dd 0.0000000000
+	cte30 db "FACTORIAL de FACTORIAL", '$', 28 dup(?)
+	&cte31 dd 2.000000
 	@aux32 dd 0.0000000000
 	@aux33 dd 0.0000000000
-	&cte34 dd 2.000000
+	&cte34 dd 4.000000
+	@aux35 dd 0.0000000000
+	@aux36 dd 0.0000000000
+	cte37 db "IMPRIMIR", '$', 42 dup(?)
+	cte38 db "INGRESE 3 NUMEROS", '$', 33 dup(?)
+	@aux39 dd 0.0000000000
+	@aux40 dd 3.0000000000
+	cte41 db "EL PROMEDIO ES", '$', 36 dup(?)
+	cte42 db "CUENTA COMPLEJA", '$', 35 dup(?)
+	&cte43 dd 8.000000
+	cte44 db "Hola ", '$', 45 dup(?)
+	cte45 db "Mundo", '$', 45 dup(?)
+	cte46 db "CONCATENO ", '$', 40 dup(?)
 
 .CODE ;Comienzo de la zona de codigo
+
+;************************************************************
+; devuelve en BX la cantidad de caracteres que tiene un string
+; DS:SI apunta al string.
+;************************************************************
+STRLEN PROC
+    mov bx,0
+
+STRL01:
+    cmp BYTE PTR [SI+BX],'$'
+    je STREND
+    inc BX
+    jmp STRL01
+STREND:
+    ret
+
+STRLEN ENDP
+
+;************************************************************
+; copia DS:SI a ES:DI; busca la cantidad de caracteres
+;************************************************************
+COPIAR PROC
+    call STRLEN    ; busco la cantidad de caracteres
+    cmp bx,MAXTEXTSIZE
+    jle COPIARSIZEOK
+
+    mov bx,MAXTEXTSIZE
+
+COPIARSIZEOK:
+    mov cx,bx
+    cld
+
+    rep movsb
+    mov al,'$'
+    mov BYTE PTR [DI],al
+
+    ret
+COPIAR ENDP
+
+;************************************************************
+; concatena DS:SI al final de ES:DI.
+;
+; busco el size del primer string
+; sumo el size del segundo string
+; si la suma excede MAXTEXTSIZE, copio solamente MAXTEXTSIZE caracteres
+; si la suma NO excede MAXTEXTSIZE, copio el total de caracteres que tiene el segundo string
+;************************************************************
+CONCAT PROC
+    push ds
+    push si
+    
+    call STRLEN ; busco la cantidad de caracteres del 2do string
+
+    mov dx,bx  ; guardo en DX la cantidad de caracteres en el origen.
+    mov si,di
+    push es
+    pop ds
+
+    call STRLEN ; tamaño del 1er string
+        
+    add di,bx ; DI ya queda apuntando al final del primer string    
+    add bx,dx ; tamaño total
+
+    cmp bx,MAXTEXTSIZE
+    jg CONCATSIZEMAL
+
+CONCATSIZEOK:
+        mov cx,dx
+        jmp CONCATSIGO
+
+CONCATSIZEMAL:
+        sub bx,MAXTEXTSIZE
+        sub dx,bx
+        mov cx,dx
+
+CONCATSIGO:
+        push ds
+        pop es
+        pop si
+        pop ds
+        cld ; cld es para que la copia se realice hacia adelante
+        
+        rep movsb ; copia la cadena
+        mov al,'$' ; carácter terminador
+        mov BYTE PTR [DI],al ; el registro DI quedo apuntando al final
+
+        ret ;return
+CONCAT ENDP
+
 START: ;Código assembler resultante de compilar el programa fuente.
 	mov AX,@DATA ;Inicializa el segmento de datos
 	mov DS,AX
@@ -76,17 +181,36 @@ START: ;Código assembler resultante de compilar el programa fuente.
 	fstp _b
 
 	;ASIGNACIÓN
-	mov ax,@DATA
-	mov es,ax
-	mov si,OFFSET &cte8 ;apunta el origen al auxiliar
-	mov di,OFFSET _g ;apunta el destino a la cadena
-	call COPIAR ;copia los string
+	fld &cte0
+	fstp _e
+
+	;WRITE
+	displayString cte8
+	newLine 1
+
+	;READ
+	GetFloat _a
+
+	;WRITE
+	displayString cte9
+	newLine 1
+
+	;WRITE
+	displayString cte10
+	newLine 1
+
+	;READ
+	GetFloat _b
+
+	;WRITE
+	displayString cte9
+	newLine 1
 
 	;ASIGNACIÓN
-	fld cte9
+	fld &cte7
 	fstp _d
 
-ETIQUETA12:
+ETIQUETA18:
 	;CMP
 	fld _b
 	fld _a
@@ -95,8 +219,8 @@ ETIQUETA12:
 	fwait
 	sahf
 
-	jbe ETIQUETA153
-ETIQUETA17:
+	jbe ETIQUETA170
+ETIQUETA23:
 	;CMP
 	fld &cte0
 	fld _b
@@ -105,395 +229,360 @@ ETIQUETA17:
 	fwait
 	sahf
 
-	je ETIQUETA153
-ETIQUETA22:
+	je ETIQUETA170
+ETIQUETA28:
 	;WRITE
-	displayString cte10
+	displayString cte11
 	newLine 1
 
 	;ASIGNACIÓN
-	fld &cte6
+	fld _a
+	fstp @aux13
+
+	;ASIGNACIÓN
+	fld @aux13
 	fstp @aux12
 
 	;ASIGNACIÓN
-	fld @aux12
-	fstp @aux11
-
-	;ASIGNACIÓN
 	fld &cte1
-	fstp @aux13
+	fstp @aux14
 
 	;CMP
-	fld @aux11
+	fld @aux12
 	fld &cte1
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	je ETIQUETA59
+	je ETIQUETA65
 	;CMP
-	fld @aux11
+	fld @aux12
 	fld &cte0
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	je ETIQUETA59
+	je ETIQUETA65
 	;ASIGNACIÓN
-	fld @aux11
-	fstp @aux13
+	fld @aux12
+	fstp @aux14
 
-ETIQUETA44:
+ETIQUETA50:
 	;RESTA
-	fld @aux11
+	fld @aux12
 	fld &cte1
 	fsub
 	fstp @aux2
 
 	;ASIGNACIÓN
 	fld @aux2
-	fstp @aux11
+	fstp @aux12
 
 	;MULTIPLICACION
-	fld @aux13
-	fld @aux11
+	fld @aux14
+	fld @aux12
 	fmul
-	fstp @aux3
+	fstp @aux2
 
 	;ASIGNACIÓN
-	fld @aux3
-	fstp @aux13
+	fld @aux2
+	fstp @aux14
 
 	;CMP
 	fld &cte1
-	fld @aux11
+	fld @aux12
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	jne ETIQUETA44
-ETIQUETA59:
+	jne ETIQUETA50
+ETIQUETA65:
 	;ASIGNACIÓN
-	fld @aux13
-	fstp @aux14
+	fld @aux14
+	fstp @aux15
 
 	;ASIGNACIÓN
 	fld _b
-	fstp @aux15
+	fstp @aux16
 
 	;RESTA
-	fld @aux12
-	fld @aux15
+	fld @aux13
+	fld @aux16
 	fsub
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux19
+
+	;ASIGNACIÓN
+	fld @aux19
+	fstp @aux17
+
+	;ASIGNACIÓN
+	fld &cte1
+	fstp @aux18
+
+	;CMP
+	fld @aux17
+	fld &cte1
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	je ETIQUETA109
+	;CMP
+	fld @aux17
+	fld &cte0
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	je ETIQUETA109
+	;ASIGNACIÓN
+	fld @aux17
+	fstp @aux18
+
+ETIQUETA94:
+	;RESTA
+	fld @aux17
+	fld &cte1
+	fsub
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux17
+
+	;MULTIPLICACION
+	fld @aux18
+	fld @aux17
+	fmul
 	fstp @aux2
 
 	;ASIGNACIÓN
 	fld @aux2
 	fstp @aux18
 
+	;CMP
+	fld &cte1
+	fld @aux17
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	jne ETIQUETA94
+ETIQUETA109:
 	;ASIGNACIÓN
 	fld @aux18
-	fstp @aux16
-
-	;ASIGNACIÓN
-	fld &cte1
-	fstp @aux17
-
-	;CMP
-	fld @aux16
-	fld &cte1
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	je ETIQUETA103
-	;CMP
-	fld @aux16
-	fld &cte0
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	je ETIQUETA103
-	;ASIGNACIÓN
-	fld @aux16
-	fstp @aux17
-
-ETIQUETA88:
-	;RESTA
-	fld @aux16
-	fld &cte1
-	fsub
-	fstp @aux2
-
-	;ASIGNACIÓN
-	fld @aux2
-	fstp @aux16
-
-	;MULTIPLICACION
-	fld @aux17
-	fld @aux16
-	fmul
-	fstp @aux3
-
-	;ASIGNACIÓN
-	fld @aux3
-	fstp @aux17
-
-	;CMP
-	fld &cte1
-	fld @aux16
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	jne ETIQUETA88
-ETIQUETA103:
-	;ASIGNACIÓN
-	fld @aux17
-	fstp @aux20
-
-	;ASIGNACIÓN
-	fld &cte1
 	fstp @aux21
 
-	;CMP
-	fld @aux15
+	;ASIGNACIÓN
 	fld &cte1
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	je ETIQUETA136
-	;CMP
-	fld @aux15
-	fld &cte0
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	je ETIQUETA136
-	;ASIGNACIÓN
-	fld @aux15
-	fstp @aux21
-
-ETIQUETA121:
-	;RESTA
-	fld @aux15
-	fld &cte1
-	fsub
-	fstp @aux2
-
-	;ASIGNACIÓN
-	fld @aux2
-	fstp @aux15
-
-	;MULTIPLICACION
-	fld @aux21
-	fld @aux15
-	fmul
-	fstp @aux3
-
-	;ASIGNACIÓN
-	fld @aux3
-	fstp @aux21
-
-	;CMP
-	fld &cte1
-	fld @aux15
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	jne ETIQUETA121
-ETIQUETA136:
-	;ASIGNACIÓN
-	fld @aux21
 	fstp @aux22
 
-	;MULTIPLICACION
-	fld @aux17
-	fld @aux22
-	fmul
-	fstp @aux3
+	;CMP
+	fld @aux16
+	fld &cte1
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	je ETIQUETA142
+	;CMP
+	fld @aux16
+	fld &cte0
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	je ETIQUETA142
+	;ASIGNACIÓN
+	fld @aux16
+	fstp @aux22
+
+ETIQUETA127:
+	;RESTA
+	fld @aux16
+	fld &cte1
+	fsub
+	fstp @aux2
 
 	;ASIGNACIÓN
-	fld @aux3
+	fld @aux2
+	fstp @aux16
+
+	;MULTIPLICACION
+	fld @aux22
+	fld @aux16
+	fmul
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux22
+
+	;CMP
+	fld &cte1
+	fld @aux16
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	jne ETIQUETA127
+ETIQUETA142:
+	;ASIGNACIÓN
+	fld @aux22
 	fstp @aux23
 
-	;DIVISION
-	fld @aux14
+	;MULTIPLICACION
+	fld @aux18
 	fld @aux23
-	fdiv
-	fstp @aux3
+	fmul
+	fstp @aux2
 
 	;ASIGNACIÓN
-	fld @aux3
-	fstp _a
+	fld @aux2
+	fstp @aux24
+
+	;DIVISION
+	fld @aux15
+	fld @aux24
+	fdiv
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp _j
 
 	;WRITE
-	DisplayFloat _a 2
+	DisplayFloat _j 2
 	newLine 1
 
-	;WRITE
-	displayString cte25
-	newLine 1
-
-	jmp ETIQUETA265
-ETIQUETA153:
 	;WRITE
 	displayString cte26
 	newLine 1
 
-	;ASIGNACIÓN
-	fld &cte8
-	fstp @aux27
+	;READ
+	GetFloat _f
 
-	;ASIGNACIÓN
-	fld &cte1
-	fstp @aux28
-
-	;CMP
-	fld @aux27
-	fld &cte1
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	je ETIQUETA187
-	;CMP
-	fld @aux27
-	fld &cte0
-	fcomp
-	fstsw ax
-	fwait
-	sahf
-
-	je ETIQUETA187
-	;ASIGNACIÓN
-	fld @aux27
-	fstp @aux28
-
-ETIQUETA172:
 	;RESTA
-	fld @aux27
+	fld _a
 	fld &cte1
 	fsub
 	fstp @aux2
 
 	;ASIGNACIÓN
 	fld @aux2
-	fstp @aux27
+	fstp _a
 
-	;MULTIPLICACION
-	fld @aux28
-	fld @aux27
-	fmul
-	fstp @aux3
-
-	;ASIGNACIÓN
-	fld @aux3
-	fstp @aux28
-
-	;CMP
+	;RESTA
+	fld _b
 	fld &cte1
-	fld @aux27
-	fcomp
-	fstsw ax
-	fwait
-	sahf
+	fsub
+	fstp @aux2
 
-	jne ETIQUETA172
-ETIQUETA187:
 	;ASIGNACIÓN
-	fld @aux28
+	fld @aux2
 	fstp _b
 
+	jmp ETIQUETA286
+ETIQUETA170:
 	;WRITE
-	DisplayFloat _b 2
-	newLine 1
-
-	;WRITE
-	displayString cte25
-	newLine 1
-
-	;WRITE
-	displayString cte29
+	displayString cte27
 	newLine 1
 
 	;ASIGNACIÓN
-	fld &cte0
-	fstp @aux30
+	fld &cte7
+	fstp @aux28
 
 	;ASIGNACIÓN
 	fld &cte1
-	fstp @aux31
+	fstp @aux29
 
 	;CMP
-	fld @aux30
+	fld @aux28
 	fld &cte1
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	je ETIQUETA226
+	je ETIQUETA204
 	;CMP
-	fld @aux30
+	fld @aux28
 	fld &cte0
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	je ETIQUETA226
+	je ETIQUETA204
 	;ASIGNACIÓN
-	fld @aux30
-	fstp @aux31
+	fld @aux28
+	fstp @aux29
 
-ETIQUETA211:
+ETIQUETA189:
 	;RESTA
-	fld @aux30
+	fld @aux28
 	fld &cte1
 	fsub
 	fstp @aux2
 
 	;ASIGNACIÓN
 	fld @aux2
-	fstp @aux30
+	fstp @aux28
 
 	;MULTIPLICACION
-	fld @aux31
-	fld @aux30
+	fld @aux29
+	fld @aux28
 	fmul
-	fstp @aux3
+	fstp @aux2
 
 	;ASIGNACIÓN
-	fld @aux3
-	fstp @aux31
+	fld @aux2
+	fstp @aux29
 
 	;CMP
 	fld &cte1
-	fld @aux30
+	fld @aux28
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	jne ETIQUETA211
-ETIQUETA226:
+	jne ETIQUETA189
+ETIQUETA204:
 	;ASIGNACIÓN
-	fld @aux31
+	fld @aux29
+	fstp _j
+
+	;WRITE
+	DisplayFloat _j 2
+	newLine 1
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _f
+
+	;WRITE
+	displayString cte30
+	newLine 1
+
+	;ASIGNACIÓN
+	fld &cte31
 	fstp @aux32
 
 	;ASIGNACIÓN
@@ -508,7 +597,7 @@ ETIQUETA226:
 	fwait
 	sahf
 
-	je ETIQUETA259
+	je ETIQUETA244
 	;CMP
 	fld @aux32
 	fld &cte0
@@ -517,55 +606,125 @@ ETIQUETA226:
 	fwait
 	sahf
 
-	je ETIQUETA259
+	je ETIQUETA244
 	;ASIGNACIÓN
 	fld @aux32
 	fstp @aux33
 
+ETIQUETA229:
+	;RESTA
+	fld @aux32
+	fld &cte1
+	fsub
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux32
+
+	;MULTIPLICACION
+	fld @aux33
+	fld @aux32
+	fmul
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux33
+
+	;CMP
+	fld &cte1
+	fld @aux32
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	jne ETIQUETA229
 ETIQUETA244:
+	;SUMA
+	fld &cte34
+	fld @aux33
+	fadd
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux35
+
+	;ASIGNACIÓN
+	fld &cte1
+	fstp @aux36
+
+	;CMP
+	fld @aux35
+	fld &cte1
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	je ETIQUETA279
+	;CMP
+	fld @aux35
+	fld &cte0
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	je ETIQUETA279
+	;ASIGNACIÓN
+	fld @aux35
+	fstp @aux36
+
+ETIQUETA264:
 	;RESTA
-	fld @aux32
+	fld @aux35
 	fld &cte1
 	fsub
 	fstp @aux2
 
 	;ASIGNACIÓN
 	fld @aux2
-	fstp @aux32
+	fstp @aux35
 
 	;MULTIPLICACION
-	fld @aux33
-	fld @aux32
+	fld @aux36
+	fld @aux35
 	fmul
-	fstp @aux3
+	fstp @aux2
 
 	;ASIGNACIÓN
-	fld @aux3
-	fstp @aux33
+	fld @aux2
+	fstp @aux36
 
 	;CMP
 	fld &cte1
-	fld @aux32
+	fld @aux35
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	jne ETIQUETA244
-ETIQUETA259:
+	jne ETIQUETA264
+ETIQUETA279:
 	;ASIGNACIÓN
-	fld @aux33
-	fstp _f
+	fld @aux36
+	fstp _j
 
 	;WRITE
-	DisplayFloat _f 2
+	DisplayFloat _j 2
 	newLine 1
 
 	;WRITE
-	displayString cte25
+	displayString cte26
 	newLine 1
 
-ETIQUETA265:
+	;READ
+	GetFloat _f
+
+ETIQUETA286:
 	;RESTA
 	fld _d
 	fld &cte1
@@ -577,20 +736,56 @@ ETIQUETA265:
 	fstp _d
 
 	;CMP
-	fld &cte34
+	fld &cte31
 	fld _d
 	fcomp
 	fstsw ax
 	fwait
 	sahf
 
-	jne ETIQUETA279
-ETIQUETA275:
+	jne ETIQUETA303
+ETIQUETA296:
 	;ASIGNACIÓN
 	fld &cte0
 	fstp _b
 
-ETIQUETA279:
+	;ASIGNACIÓN
+	fld &cte7
+	fstp _e
+
+ETIQUETA303:
+ETIQUETA304:
+	;WRITE
+	displayString cte37
+	newLine 1
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _f
+
+	;RESTA
+	fld _e
+	fld &cte1
+	fsub
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp _e
+
+	;CMP
+	fld &cte1
+	fld _e
+	fcomp
+	fstsw ax
+	fwait
+	sahf
+
+	jae ETIQUETA304
+ETIQUETA317:
 	;CMP
 	fld &cte1
 	fld _d
@@ -599,9 +794,202 @@ ETIQUETA279:
 	fwait
 	sahf
 
-	jae ETIQUETA12
-ETIQUETA284:
-ETIQUETA285:
+	jae ETIQUETA18
+ETIQUETA322:
+	;WRITE
+	displayString cte38
+	newLine 1
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _n1
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _n2
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _n3
+
+	;ASIGNACIÓN
+	fld _n1
+	fstp @aux39
+
+	;SUMA
+	fld @aux39
+	fld _n2
+	fadd
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux39
+
+	;SUMA
+	fld @aux39
+	fld _n3
+	fadd
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp @aux39
+
+	;DIVISION
+	fld @aux39
+	fld @aux40
+	fdiv
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp _j
+
+	;WRITE
+	displayString cte41
+	newLine 1
+
+	;WRITE
+	DisplayFloat _j 2
+	newLine 1
+
+	;ASIGNACIÓN
+	fld &cte0
+	fstp _j
+
+	;ASIGNACIÓN
+	fld &cte1
+	fstp _d
+
+	;WRITE
+	displayString cte42
+	newLine 1
+
+	;MULTIPLICACION
+	fld &cte31
+	fld _d
+	fmul
+	fstp @aux2
+
+	;RESTA
+	fld &cte43
+	fld @aux2
+	fsub
+	fstp @aux3
+
+	;RESTA
+	fld &cte6
+	fld &cte7
+	fsub
+	fstp @aux2
+
+	;DIVISION
+	fld @aux3
+	fld @aux2
+	fdiv
+	fstp @aux3
+
+	;MULTIPLICACION
+	fld &cte31
+	fld @aux3
+	fmul
+	fstp @aux2
+
+	;ASIGNACIÓN
+	fld @aux2
+	fstp _j
+
+	;WRITE
+	DisplayFloat _j 2
+	newLine 1
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _f
+
+	;CONCATENACIÓN
+	mov ax,@DATA
+	mov es,ax
+	mov si,OFFSET cte44 ;apunta el origen a la primer cadena
+	mov di,OFFSET @aux4STR ;apunta el destino al auxiliar
+	call COPIAR ;copia los string
+
+	mov ax,@DATA
+	mov es,ax
+	mov si,OFFSET cte45 ;apunta el origen a la segunda cadena
+	mov di,OFFSET @aux4STR ;concatena los string
+	call CONCAT
+
+	;ASIGNACIÓN
+	mov ax,@DATA
+	mov es,ax
+	mov si,OFFSET @aux4STR ;apunta el origen al auxiliar
+	mov di,OFFSET _g ;apunta el destino a la cadena
+	call COPIAR ;copia los string
+
+	;WRITE
+	displayString _g
+	newLine 1
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _f
+
+	;ASIGNACIÓN
+	mov ax,@DATA
+	mov es,ax
+	mov si,OFFSET cte46 ;apunta el origen al auxiliar
+	mov di,OFFSET _h ;apunta el destino a la cadena
+	call COPIAR ;copia los string
+
+	;CONCATENACIÓN
+	mov ax,@DATA
+	mov es,ax
+	mov si,OFFSET _h ;apunta el origen a la primer cadena
+	mov di,OFFSET @aux4STR ;apunta el destino al auxiliar
+	call COPIAR ;copia los string
+
+	mov ax,@DATA
+	mov es,ax
+	mov si,OFFSET _g ;apunta el origen a la segunda cadena
+	mov di,OFFSET @aux4STR ;concatena los string
+	call CONCAT
+
+	;ASIGNACIÓN
+	mov ax,@DATA
+	mov es,ax
+	mov si,OFFSET @aux4STR ;apunta el origen al auxiliar
+	mov di,OFFSET _h ;apunta el destino a la cadena
+	call COPIAR ;copia los string
+
+	;WRITE
+	displayString _h
+	newLine 1
+
+	;WRITE
+	displayString cte26
+	newLine 1
+
+	;READ
+	GetFloat _f
+
+ETIQUETA392:
 	displayString cte5
 	newLine 1
 	getChar

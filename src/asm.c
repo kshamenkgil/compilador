@@ -269,8 +269,13 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux2\n\n");                    
-                    poner_en_pila(&pVariables,"@aux2",255);
+                    if(strcmp(aux,"@aux2") == 0){
+                        fprintf(pfASM, "\tfstp @aux3\n\n");                    
+                        poner_en_pila(&pVariables,"@aux3",255);
+                    }else{
+                        fprintf(pfASM, "\tfstp @aux2\n\n");                    
+                        poner_en_pila(&pVariables,"@aux2",255);
+                    }
                 }                
             }                        
             break;        
@@ -286,8 +291,13 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux2\n\n");                    
-                    poner_en_pila(&pVariables,"@aux2",255);
+                    if(strcmp(aux,"@aux2") == 0){
+                        fprintf(pfASM, "\tfstp @aux3\n\n");                    
+                        poner_en_pila(&pVariables,"@aux3",255);
+                    }else{
+                        fprintf(pfASM, "\tfstp @aux2\n\n");                    
+                        poner_en_pila(&pVariables,"@aux2",255);
+                    }
                 }                
             }     
                                  
@@ -304,8 +314,13 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux3\n\n");                    
-                    poner_en_pila(&pVariables,"@aux3",255);
+                    if(strcmp(aux,"@aux2") == 0){
+                        fprintf(pfASM, "\tfstp @aux3\n\n");                    
+                        poner_en_pila(&pVariables,"@aux3",255);
+                    }else{
+                        fprintf(pfASM, "\tfstp @aux2\n\n");                    
+                        poner_en_pila(&pVariables,"@aux2",255);
+                    }
                 }                
             }  
             break;
@@ -321,8 +336,13 @@ void imprimirInstrucciones(terceto_t terc, int nTerc){
                     //fprintf(pfASM, "\tlocal %s\n",aux); // Variable local en vez de los aux de arriba
 
                     //guardar valor en aux
-                    fprintf(pfASM, "\tfstp @aux3\n\n");
-                    poner_en_pila(&pVariables,"@aux3",255);
+                    if(strcmp(aux,"@aux2") == 0){
+                        fprintf(pfASM, "\tfstp @aux3\n\n");                    
+                        poner_en_pila(&pVariables,"@aux3",255);
+                    }else{
+                        fprintf(pfASM, "\tfstp @aux2\n\n");                    
+                        poner_en_pila(&pVariables,"@aux2",255);
+                    }
                 }                
             }  
             break;

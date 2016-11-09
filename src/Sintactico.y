@@ -21,7 +21,7 @@ int resultadoTotal;
 int ultimo=0;
 int auxK,auxN, auxCombTotal,auxNValor;
 int auxiliarAvg;
-
+int t2=0, t1=0;
 int concatFlag = 0;
 
 double longitud_cont;
@@ -358,6 +358,8 @@ comienzo_if: PR_IF PAR_ABRE Condicion PAR_CIERRA PR_THEN
 
 sent_repeat: PR_REPEAT{
 	int ultimo = NumeroUltimoTerceto()+1;
+	/*printf("ultimo: %d\n",ultimo);
+	getchar();*/
 	poner_en_pila(&pila,&ultimo,10);
 	CrearTerceto(TERC_ETIQ,TERC_NULL,TERC_NULL,&lista_terceto);
 
@@ -377,31 +379,49 @@ sent_repeat: PR_REPEAT{
 		sacar_de_pila(&pila,&enPila2,10);
 		toModificar = 0;
 		sacar_de_pila(&pila,&toModificar,10);
-		if(isAnd){				
+		if(isAnd){
 				ModificarTerceto(NEGAR, NO_MODIF, enPila2+1, &lista_terceto, enPila2);
-				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);	
+				//ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);	
+				ModificarTerceto(NEGAR, NO_MODIF, enPila, &lista_terceto, toModificar);
 			}else{
-				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila2);				
-				ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);
-
+				//ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila2);				
+				ModificarTerceto(NEGAR, NO_MODIF, enPila2, &lista_terceto,toModificar);
+				//ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);
+				ModificarTerceto(NEGAR, NO_MODIF, enPila, &lista_terceto, toModificar);
 		}
-	}else{
+	}else{		
 		enPila  = 0;
+		/*printf("---------------------");
+		while(tope_pila(&pila,&enPila,10) != PILA_VACIA){
+			sacar_de_pila(&pila,&enPila,10);
+			printf("?: %d",enPila);
+			getchar();
+		}
+		printf("---------------------");*/
 		sacar_de_pila(&pila,&enPila,10);
+		//sacar_de_pila(&pila,&enPila,10);
+		
+		//printf("enPila: %d\n",enPila);
+		t1 = enPila;
+		
 		toModificar = 0;
 		sacar_de_pila(&pila,&toModificar,10);
-		ModificarTerceto(NEGAR, NO_MODIF, toModificar, &lista_terceto, enPila);
+		//sacar_de_pila(&pila,&toModificar,10);
+		//printf("to modif:%d\n",toModificar);
+		t2 = toModificar;
+		ModificarTerceto(NEGAR, NO_MODIF, t2, &lista_terceto, t1);
+		//ModificarTerceto(NEGAR, NO_MODIF, enPila, &lista_terceto, toModificar);
 	}
 
 	condicionesMultiples = 0;
 	isAnd = 0;
-	 if(DEBUG)  {printf("Sentencia REPEAT completa. \n");}
+	if(DEBUG)  {printf("Sentencia REPEAT completa. \n");}
 };
 
 condRepeat: PAR_ABRE Condicion PAR_CIERRA 
 {
     condrepeat_ind = condicion_ind;
-	 if(DEBUG)  {printf("Condicion del REPEAT. \n");}
+	if(DEBUG)  {printf("Condicion del REPEAT. \n");}
 };
 
 
